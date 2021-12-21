@@ -17,8 +17,9 @@ const Navbar = () => {
           <Link href="/"><a><h1 className="font-extrabold text-4xl text-slate-500 ml-2">NXT</h1></a></Link>
         </div>
         <div className="w-2/3 items-center">
-          <form method="get" action="/results" className="w-full ml-10 mr-6 mt-2 flex flex-y items-center border border-zinc-900 bg-zinc-900 rounded-lg">
-            <input type="text" className="w-full rounded-lg" />
+          <form method="get" action="/results" className="w-full ml-10 mr-6 mt-2 flex flex-y items-center border border-zinc-900 bg-zinc-900 rounded-lg"
+                noValidate>
+            <input name="search_query" type="text" className="w-full rounded-lg" autoComplete="on" required={true} />
             <button type="submit" className="w-16 flex justify-center" >
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" focusable={false}>
                 <path d="M12.5 11H11.71L11.43 10.73C12.41 9.59 13 8.11 13 6.5C13 2.91 10.09 0 6.5 0C2.91 0 0 2.91 0 6.5C0 10.09 2.91 13 6.5 13C8.11 13 9.59 12.41 10.73 11.43L11 11.71V12.5L16 17.49L17.49 16L12.5 11ZM6.5 11C4.01 11 2 8.99 2 6.5C2 4.01 4.01 2 6.5 2C8.99 2 11 4.01 11 6.5C11 8.99 8.99 11 6.5 11Z" fill="#808080"/>
