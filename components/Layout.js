@@ -1,14 +1,13 @@
 import Footer from "./Footer"
 import { Toaster } from 'react-hot-toast'
+import Navbar from "./Navbar";
 
 const Layout = ({ children }) => {
   return (
     <>
-      <div className="content">
-        { children }
-      </div>
+      <Navbar />
+      { children }
       <Toaster/>
-      <Footer />
     </>
   );
 }
