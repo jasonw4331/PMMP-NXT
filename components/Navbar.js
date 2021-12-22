@@ -265,7 +265,7 @@ const Navbar = () => {
           </button>
           <button className="h-10 w-10">
             <div className="h-[38px] w-[48px] pt-px pb-px pl-[6px] pr-[6px]">
-              <Image src={AuthUser.photoURL || '/missing.png'} width="32px" height="32px" alt="Avatar Image" className="rounded-full" />
+              <Image src={AuthUser.photoURL || '/icons/missing.png'} width="32px" height="32px" alt="Avatar Image" className="rounded-full" />
             </div>
           </button>
         </div>
