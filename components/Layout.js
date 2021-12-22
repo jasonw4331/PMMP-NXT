@@ -1,4 +1,3 @@
-import Footer from "./Footer"
 import { Toaster } from 'react-hot-toast'
 import Navbar from "./Navbar";
 
@@ -6,7 +5,9 @@ const Layout = ({ children }) => {
   return (
     <>
       <Navbar />
-      { children }
+      <main className="relative">
+        { children }
+      </main>
       <Toaster/>
     </>
   );
