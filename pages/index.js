@@ -12,10 +12,10 @@ import ErrorCard from "../components/ErrorCard";
 const Home = ({ data = [] }) => {
   const AuthUser = useAuthUser()
   return (
-    <main>
+    <div>
       <Metatags title='Home' tagline={'Currently showing '+data.length+' reviewed plugins'} image='' />
-      {...data}
-    </main>
+      {data}
+    </div>
   )
 }
 
