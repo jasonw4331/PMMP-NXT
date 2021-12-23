@@ -1,7 +1,8 @@
 import '../styles/globals.css'
-import Layout from "../components/Layout"
 import Head from 'next/head'
-import initAuth from "../lib/firebase/initAuth";
+import initAuth from '../lib/firebase/initAuth'
+import { LazyMotion, domAnimation} from 'framer-motion'
+import {Toaster} from 'react-hot-toast'
 
 initAuth()
 
@@ -42,9 +43,10 @@ const MyApp = ({ Component, pageProps }) => (
 
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     </Head>
-    <Layout>
+    <LazyMotion strict features={domAnimation}>
       <Component {...pageProps} />
-    </Layout>
+    </LazyMotion>
+    <Toaster/>
   </>
 )
 
