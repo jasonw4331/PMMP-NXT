@@ -6,6 +6,7 @@ import Notification from './Notification'
 import AppLink from './AppLink'
 import { m } from 'framer-motion'
 import {useState} from 'react'
+import missingImage from '../public/icons/missing.png'
 
 const Navbar = () => {
   const AuthUser = useAuthUser()
@@ -265,7 +266,7 @@ const Navbar = () => {
           </button>
           <button className="h-10 w-10">
             <div className="h-[38px] w-[48px] pt-px pb-px pl-[6px] pr-[6px]">
-              <Image src={AuthUser.photoURL || '/icons/missing.png'} width="32px" height="32px" alt="Avatar Image" className="rounded-full" />
+              <Image src={AuthUser.photoURL || missingImage} width="32px" height="32px" alt="Avatar Image" className="rounded-full" />
             </div>
           </button>
         </div>
@@ -313,7 +314,7 @@ const Navbar = () => {
         <div id="user" className="absolute max-h-[694px] w-[300px] ml-56 bg-zinc-800/80 bg-cover ring-zinc-500 ring-1 overflow-hidden hidden">
           <div className="min-h-[48px] my-2 flex gap-2 align-items-center">
             <div className="ml-4 mt-2">
-              <Image src={AuthUser.photoURL || "/icons/missing.png"} width={40} height={40} alt="User Icon" className="rounded-full"/>
+              <Image src={AuthUser.photoURL || missingImage} width={40} height={40} alt="User Icon" className="rounded-full"/>
             </div>
             <div>
               <h2 className="text-lg">{AuthUser.displayName || "Not logged in"}</h2>
