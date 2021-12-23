@@ -10,13 +10,16 @@ import missingImage from '../public/icons/missing.png'
 
 const Navbar = () => {
   const AuthUser = useAuthUser()
-  const [isOpen, setIsOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  let [appsOpen, setAppsOpen] = useState(false)
+  let [notifsOpen, setNotifsOpen] = useState(false)
+  let [userOpen, setUserOpen] = useState(false)
   // TODO: notifications logic
   const notifications = [(<Notification key={0} name="MyPlot" version="3.0.0" timestamp={120000} redirectUrl="/" iconUrl="/icons/missing.png" />)]
   notifications.push((<Notification key={1} name="WorldEdit" version="4.1.2" timestamp={0} redirectUrl="/" />))
   return (
     <header className="sticky top-0 text-white font-medium">
-      <m.div initial="hidden" animate={isOpen ? "visible" : "hidden"} transition={{ type: "tween", duration: 0.3 }} variants={{
+      <m.div initial="hidden" animate={sidebarOpen ? "visible" : "hidden"} transition={{ type: "tween", duration: 0.3 }} variants={{
         hidden: {
           x: "-240px"
         },
@@ -216,7 +219,7 @@ const Navbar = () => {
       <div id="navbar" className="absolute top-0 h-14 w-full px-4 flex align-center justify-between bg-zinc-800 bg-cover drop-shadow-lg">
         <div id="nav-left" className="flex items-center">
           <button className="p-2 flex justify-center"
-          onClick={() => setIsOpen(!isOpen)}>
+          onClick={() => setSidebarOpen(!sidebarOpen)}>
             <svg width="18" height="12" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path fillRule="evenodd" clipRule="evenodd" d="M0 12H18V10H0V12ZM0 7H18V5H0V7ZM0 0V2H18V0H0Z" fill="white" fillOpacity="0.87"/>
             </svg>
@@ -249,22 +252,39 @@ const Navbar = () => {
           </form>
         </div>
         <div id="nav-right" className="min-w-[250px] flex gap-2 items-center justify-end">
-          <button className="mr-2 h-6 w-6">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path fillRule="evenodd" clipRule="evenodd" d="M12.0898 2.91002C10.0798 0.900015 7.06976 0.490015 4.64976 1.67002L8.98976 6.01002L5.98976 9.01002L1.64976 4.67002C0.479759 7.10002 0.889759 10.09 2.89976 12.1C4.75976 13.96 7.47976 14.45 9.78976 13.58L18.8998 22.69C19.2898 23.08 19.9198 23.08 20.3098 22.69L22.6098 20.39C22.9998 20 22.9998 19.37 22.6098 18.98L13.5398 9.90001C14.4598 7.56001 13.9798 4.80002 12.0898 2.91002Z" fill="white" fillOpacity="0.6"/>
-            </svg>
-          </button>
-          <button className="mr-2 h-6 w-6">
+          <Link href="/publish">
+            <a className="mr-2 h-6 w-6">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fillRule="evenodd" clipRule="evenodd" d="M12.0898 2.91002C10.0798 0.900015 7.06976 0.490015 4.64976 1.67002L8.98976 6.01002L5.98976 9.01002L1.64976 4.67002C0.479759 7.10002 0.889759 10.09 2.89976 12.1C4.75976 13.96 7.47976 14.45 9.78976 13.58L18.8998 22.69C19.2898 23.08 19.9198 23.08 20.3098 22.69L22.6098 20.39C22.9998 20 22.9998 19.37 22.6098 18.98L13.5398 9.90001C14.4598 7.56001 13.9798 4.80002 12.0898 2.91002Z" fill="white" fillOpacity="0.6"/>
+              </svg>
+            </a>
+          </Link>
+          <button className="mr-2 h-6 w-6"
+                  onClick={() => {
+                    setAppsOpen(!appsOpen)
+                    setNotifsOpen(false)
+                    setUserOpen(false)
+                  }}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path fillRule="evenodd" clipRule="evenodd" d="M4 8H8V4H4V8ZM10 20H14V16H10V20ZM4 20H8V16H4V20ZM4 14H8V10H4V14ZM10 14H14V10H10V14ZM16 4V8H20V4H16ZM10 8H14V4H10V8ZM16 14H20V10H16V14ZM16 20H20V16H16V20Z" fill="white" fillOpacity="0.6"/>
             </svg>
           </button>
-          <button className="mr-2 h-6 w-6">
+          <button className="mr-2 h-6 w-6"
+                  onClick={() => {
+                    setNotifsOpen(!notifsOpen)
+                    setAppsOpen(false)
+                    setUserOpen(false)
+                  }}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path fillRule="evenodd" clipRule="evenodd" d="M12 22C13.1 22 14 21.1 14 20H10C10 21.1 10.89 22 12 22ZM18 16V11C18 7.93 16.36 5.36 13.5 4.68V4C13.5 3.17 12.83 2.5 12 2.5C11.17 2.5 10.5 3.17 10.5 4V4.68C7.63 5.36 6 7.92 6 11V16L4 18V19H20V18L18 16Z" fill="white" fillOpacity="0.6"/>
             </svg>
           </button>
-          <button className="h-10 w-10">
+          <button className="h-10 w-10"
+                  onClick={() => {
+                    setUserOpen(!userOpen)
+                    setAppsOpen(false)
+                    setNotifsOpen(false)
+                  }}>
             <div className="h-[38px] w-[48px] pt-px pb-px pl-[6px] pr-[6px]">
               <Image src={AuthUser.photoURL || missingImage} width="32px" height="32px" alt="Avatar Image" className="rounded-full" />
             </div>
@@ -272,7 +292,7 @@ const Navbar = () => {
         </div>
       </div>
       <div id="dropdowns" className="absolute top-12 right-0 w-[564px]">
-        <div id="apps" className="absolute max-h-[436px] w-80 ml-20 bg-zinc-800/80 bg-cover ring-zinc-500 ring-1 overflow-hidden hidden">
+        <div id="apps" className={"absolute max-h-[436px] w-80 ml-32 bg-zinc-800/80 bg-cover ring-zinc-500 ring-1 overflow-hidden " + (appsOpen ? "" : "hidden")}>
           <ul className="max-h-[436px] py-4 grid grid-cols-3 gap-2 items-center justify-center overflow-y-auto snap-y">
             <AppLink appName="PMMP" redirectLink="https://pmmp.io" />
             <AppLink appName="Forums" redirectLink="https://forums.pmmp.io" />
@@ -282,7 +302,7 @@ const Navbar = () => {
             <AppLink appName="Discord" redirectLink="https://poggit.pmmp.io" iconUrl="/icons/Discord-Logo-White.png" />
           </ul>
         </div>
-        <div id="notifications" className="absolute max-h-[642px] w-[384px] ml-28 bg-zinc-800/80 bg-cover ring-zinc-500 ring-1 overflow-hidden hidden">
+        <div id="notifications" className={"absolute max-h-[642px] w-[384px] ml-28 bg-zinc-800/80 bg-cover ring-zinc-500 ring-1 overflow-hidden " + (notifsOpen ? "" : "hidden")}>
           <div className="flex justify-between align-items-center min-h-[48px]">
             <h2 className="ml-4 mt-2 text-lg">Notifications</h2>
             <button className="mr-4 mt-1">
@@ -311,7 +331,7 @@ const Navbar = () => {
             {notifications}
           </ul>
         </div>
-        <div id="user" className="absolute max-h-[694px] w-[300px] ml-56 bg-zinc-800/80 bg-cover ring-zinc-500 ring-1 overflow-hidden hidden">
+        <div id="user" className={"absolute max-h-[694px] w-[300px] ml-56 bg-zinc-800/80 bg-cover ring-zinc-500 ring-1 overflow-hidden " + (userOpen ? "" : "hidden")}>
           <div className="min-h-[48px] my-2 flex gap-2 align-items-center">
             <div className="ml-4 mt-2">
               <Image src={AuthUser.photoURL || missingImage} width={40} height={40} alt="User Icon" className="rounded-full"/>
