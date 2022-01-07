@@ -11,7 +11,13 @@ const handler = async (req, res) => {
   }
 
   try {
-    const {latestOnly = false, name, author} = req.body
+    let {latestOnly = false, name, author} = req.body
+
+    if (name !== undefined)
+      name = decodeURI(name)
+
+    if (author !== undefined)
+      author = decodeURI(author)
 
     const snapshot = await getFirebaseAdmin().firestore().collectionGroup('plugins').get()
     let latestVersions = []
