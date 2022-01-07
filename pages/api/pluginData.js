@@ -23,8 +23,6 @@ const handler = async (req, res) => {
     const userQuery = await getFirebaseAdmin().firestore().collection('users').limit(1).get()
     const userDoc = userQuery.docs[0]
 
-    console.log(userDoc)
-    console.log("After user doc")
     if (userDoc === undefined)
       return res.status(200).json({docs: [{description: "User data could not be found"}]})
 
@@ -59,7 +57,6 @@ const handler = async (req, res) => {
     })
     return res.status(200).json({docs})
   } catch (e) {
-    console.log(e)
     return res.status(400).json({error: e.message})
   }
 }
