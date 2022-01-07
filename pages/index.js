@@ -1,15 +1,14 @@
-import {useAuthUser, withAuthUser, withAuthUserTokenSSR,} from 'next-firebase-auth'
+import {withAuthUser, withAuthUserTokenSSR,} from 'next-firebase-auth'
 import Metatags from '../components/Metatags'
 import getAbsoluteURL from '../lib/getAbsoluteURL'
 import toast from 'react-hot-toast'
 import PluginCard from '../components/PluginCard'
 import ErrorCard from '../components/ErrorCard'
-import Navbar from '../components/Navbar'
-import {useState} from 'react'
+import {useContext} from "react";
+import {SidebarContext} from "../lib/sidebarContext";
 
 const Home = ({data = []}) => {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const AuthUser = useAuthUser()
+  const {sidebarOpen} = useContext(SidebarContext)
 
   data = data.map(doc => (
     <PluginCard key={doc.id} name={doc.id.split('_v')[0]} author={doc.author} tagline={doc.tagline}
@@ -36,13 +35,9 @@ const Home = ({data = []}) => {
   return (
     <>
       <Metatags title='Home' tagline={'Currently showing ' + data.length + ' reviewed plugins'}/>
-      <Navbar AuthUser={AuthUser} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen}/>
-      <main
-        className={"absolute top-14 max-h-[94vh] right-0 overflow-x-hidden overflow-y-auto overscroll-contain pt-2 pr-2"}>
-        <ul className={"flex flex-col"}>
-          {data}
-        </ul>
-      </main>
+      <ul className={"flex flex-col"}>
+        {data}
+      </ul>
     </>
   )
 }
