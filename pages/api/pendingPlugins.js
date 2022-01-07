@@ -11,30 +11,30 @@ const handler = async (req, res) => {
   }
 
   try {
-    const { latestOnly = undefined, name = undefined, author = undefined } = req.body
+    const {latestOnly = false, name, author} = req.body
 
     const snapshot = await getFirebaseAdmin().firestore().collectionGroup('plugins').get()
     let latestVersions = []
     let docs = []
     snapshot.docs.forEach((doc) => {
-      if(name !== undefined && !doc.id.includes(name)) {
+      if (name && !doc.id.includes(name)) {
         return
       }
       const { author: author1, releaseStatus } = postToJSON(doc)
       const name1 = doc.id.split('_v')[0]
       const version = doc.id.split('_v')[1]
-      if(releaseStatus < 2 && releaseStatus > 0) { // ignore drafts and releases
+      if (releaseStatus < 2 && releaseStatus > 0) { // ignore drafts and releases
         return
       }
-      if(author !== undefined && author !== author1) {
+      if (author && author !== author1) {
         return
       }
-      if(latestOnly === true) {
-        if(latestVersions[name1] === undefined || semver.satisfies(version, '>' + latestVersions[name], { includePrerelease: true })) {
+      if (latestOnly === true) {
+        if (latestVersions[name1] === undefined || semver.satisfies(version, '>' + latestVersions[name], {includePrerelease: true})) {
           latestVersions[name1] = version
           docs[name1] = doc
         }
-      }else{
+      } else {
         docs[name1] = doc
         docs.push(doc)
       }
