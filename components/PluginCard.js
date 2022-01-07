@@ -14,7 +14,7 @@ const PluginCard = ({name, author, tagline, downloadUrl = "/404", iconUrl = miss
       <p className="w-5/6 h-[48px] break-words text-clip overflow-hidden">{tagline}</p>
       <div className="h-9 flex justify-center gap-2">
         <button className="text-purple-400 p-2 font-roboto uppercase">
-          <Link href={"/" + encodeURI(author) + "/" + encodeURI(name)}>
+          <Link href={"/plugin/" + encodeURI(author) + "/" + encodeURI(name)}>
             <a>
               More Details
             </a>
