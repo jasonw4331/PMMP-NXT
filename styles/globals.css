@@ -6,3 +6,9 @@ body {
     background-image: url("/background.png");
     background-repeat: repeat;
 }
+
+.font-roboto {
+    font-family: 'Roboto', serif;
+    font-weight: 500;
+    font-style: normal;
+}
