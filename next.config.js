@@ -11,5 +11,14 @@ module.exports = withPWA({
     buildExcludes: [/chunks\/images\/.*$/],
     publicExcludes: ['!noprecache/**/*'],
     cacheOnFrontEndNav: true
-  }
+  },
+  async redirects() {
+    return [
+      {
+        source: '/releases',
+        destination: '/',
+        permanent: true,
+      },
+    ]
+  },
 })
