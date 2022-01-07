@@ -5,8 +5,11 @@ module.exports = withPWA({
   images: {
     domains: ['lh3.googleusercontent.com', 'raw.githubusercontent.com'],
   },
-  dynamicStartUrl: false,
-  buildExcludes: [
-    /chunks\/images\/.*$/,
-  ],
+  pwa: {
+    dest: 'public',
+    disable: process.env.NODE_ENV === 'development',
+    buildExcludes: [/chunks\/images\/.*$/],
+    publicExcludes: ['!noprecache/**/*'],
+    cacheOnFrontEndNav: true
+  }
 })
