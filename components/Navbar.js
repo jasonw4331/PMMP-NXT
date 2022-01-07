@@ -1,32 +1,36 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import {useAuthUser} from 'next-firebase-auth'
 import Footer from './Footer'
 import Notification from './Notification'
 import AppLink from './AppLink'
-import { m } from 'framer-motion'
+import {m} from 'framer-motion'
 import {useState} from 'react'
 import missingImage from '../public/icons/missing.png'
+import menuDrawer from '../public/material_icons/menu_drawer.svg'
+import magnifyingGlass from '../public/material_icons/magnifying_glass.svg'
+import wrench from '../public/material_icons/wrench.svg'
+import matrix from '../public/material_icons/matrix.svg'
+import bell from '../public/material_icons/bell.svg'
 
-const Navbar = () => {
-  const AuthUser = useAuthUser()
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+const Navbar = ({AuthUser, sidebarOpen, setSidebarOpen}) => {
   let [appsOpen, setAppsOpen] = useState(false)
   let [notifsOpen, setNotifsOpen] = useState(false)
   let [userOpen, setUserOpen] = useState(false)
   // TODO: notifications logic
-  const notifications = [(<Notification key={0} name="MyPlot" version="3.0.0" timestamp={120000} redirectUrl="/" iconUrl="/icons/missing.png" />)]
-  notifications.push((<Notification key={1} name="WorldEdit" version="4.1.2" timestamp={0} redirectUrl="/" />))
+  const notifications = [(<Notification key={0} name="MyPlot" version="3.0.0" timestamp={120000} redirectUrl="/"
+                                        iconUrl="/icons/missing.png"/>)]
+  notifications.push((<Notification key={1} name="WorldEdit" version="4.1.2" timestamp={0} redirectUrl="/"/>))
   return (
-    <header className="sticky top-0 text-white font-medium">
-      <m.div initial="hidden" animate={sidebarOpen ? "visible" : "hidden"} transition={{ type: "tween", duration: 0.3 }} variants={{
-        hidden: {
-          x: "-240px"
-        },
-        visible: {
-          x: "0"
-        },
-      }}>
+    <header className="sticky max-h-screen top-0 text-white font-medium">
+      <m.div initial="hidden" animate={sidebarOpen ? "visible" : "hidden"} transition={{type: "tween", duration: 0.3}}
+             variants={{
+               hidden: {
+                 x: "-240px"
+               },
+               visible: {
+                 x: "0"
+               },
+             }}>
         <div id="sidebar" className="h-screen w-60 pt-14 flex flex-x bg-zinc-800 bg-cover">
           <ul className="relative">
             <li className="p-2 hover:bg-zinc-600">
@@ -212,51 +216,34 @@ const Navbar = () => {
                 <rect opacity="0.12" x="-2" width="304" height="2" fill="white"/>
               </svg>
             </li>
-            <li className="absolute bottom-6"><Footer /></li>
+            <li className="absolute bottom-6"><Footer/></li>
           </ul>
         </div>
       </m.div>
-      <div id="navbar" className="absolute top-0 h-14 w-full px-4 flex align-center justify-between bg-zinc-800 bg-cover drop-shadow-lg">
-        <div id="nav-left" className="flex items-center">
-          <button className="p-2 flex justify-center"
-          onClick={() => setSidebarOpen(!sidebarOpen)}>
-            <svg width="18" height="12" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path fillRule="evenodd" clipRule="evenodd" d="M0 12H18V10H0V12ZM0 7H18V5H0V7ZM0 0V2H18V0H0Z" fill="white" fillOpacity="0.87"/>
-            </svg>
+      <div id="navbar"
+           className="absolute top-0 h-14 w-full px-4 flex align-center justify-between bg-zinc-800 bg-cover drop-shadow-lg">
+        <div id="nav-left" className="flex items-center pr-10">
+          <button className="w-6 h-6 flex justify-center"
+                  onClick={() => setSidebarOpen(!sidebarOpen)}>
+            <Image src={menuDrawer} alt={"Menu Drawer"} width={24} height={24}/>
           </button>
           <Link href="/"><a><h1 className="font-extrabold text-4xl text-slate-500 ml-2">NXT</h1></a></Link>
         </div>
         <div id="nav-center" className="w-3/5 items-center">
-          <form method="get" action="/results" className="w-full ml-10 mr-6 mt-2 flex flex-y items-center border border-zinc-900 bg-zinc-900 rounded-lg"
+          <form method="get" action="/results"
+                className="w-full h-7 mt-2 flex flex-y items-center object-contain border border-zinc-900 bg-zinc-900 rounded-lg"
                 noValidate>
-            <input name="search_query" type="text" className="w-full h-7 ml-0 rounded-l-lg" autoComplete="on" required={true} />
-            <button type="submit" className="w-16 flex justify-center" >
-              <svg width="72" height="31" viewBox="0 0 72 31" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g filter="url(#filter0_i_116_988)">
-                  <rect width="72" height="31" fill="#18181b"/>
-                  <path d="M39.5 18H38.71L38.43 17.73C39.41 16.59 40 15.11 40 13.5C40 9.91 37.09 7 33.5 7C29.91 7 27 9.91 27 13.5C27 17.09 29.91 20 33.5 20C35.11 20 36.59 19.41 37.73 18.43L38 18.71V19.5L43 24.49L44.49 23L39.5 18ZM33.5 18C31.01 18 29 15.99 29 13.5C29 11.01 31.01 9 33.5 9C35.99 9 38 11.01 38 13.5C38 15.99 35.99 18 33.5 18Z" fill="#808080"/>
-                </g>
-                <defs>
-                  <filter id="filter0_i_116_988" x="0" y="0" width="72" height="31" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
-                    <feFlood floodOpacity="0" result="BackgroundImageFix"/>
-                    <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
-                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-                    <feOffset dx="1"/>
-                    <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
-                    <feColorMatrix type="matrix" values="0 0 0 0 0.698039 0 0 0 0 0.698039 0 0 0 0 0.698039 0 0 0 1 0"/>
-                    <feBlend mode="normal" in2="shape" result="effect1_innerShadow_116_988"/>
-                  </filter>
-                </defs>
-              </svg>
+            <input name="search_query" type="text" className="w-full h-full pl-0 rounded-l-lg" autoComplete="on"
+                   required={true}/>
+            <button type="submit" className="h-full w-16 flex justify-center items-center rounded-l-lg">
+              <Image src={magnifyingGlass} alt={"Submit"} className={"h-full w-full rounded-l-lg"}/>
             </button>
           </form>
         </div>
-        <div id="nav-right" className="min-w-[250px] flex gap-2 items-center justify-end">
+        <div id="nav-right" className="w-[250px] flex gap-2 items-center justify-end">
           <Link href="/publish">
             <a className="mr-2 h-6 w-6">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fillRule="evenodd" clipRule="evenodd" d="M12.0898 2.91002C10.0798 0.900015 7.06976 0.490015 4.64976 1.67002L8.98976 6.01002L5.98976 9.01002L1.64976 4.67002C0.479759 7.10002 0.889759 10.09 2.89976 12.1C4.75976 13.96 7.47976 14.45 9.78976 13.58L18.8998 22.69C19.2898 23.08 19.9198 23.08 20.3098 22.69L22.6098 20.39C22.9998 20 22.9998 19.37 22.6098 18.98L13.5398 9.90001C14.4598 7.56001 13.9798 4.80002 12.0898 2.91002Z" fill="white" fillOpacity="0.6"/>
-              </svg>
+              <Image src={wrench} alt={"Publish a plugin"}/>
             </a>
           </Link>
           <button className="mr-2 h-6 w-6"
@@ -265,9 +252,7 @@ const Navbar = () => {
                     setNotifsOpen(false)
                     setUserOpen(false)
                   }}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path fillRule="evenodd" clipRule="evenodd" d="M4 8H8V4H4V8ZM10 20H14V16H10V20ZM4 20H8V16H4V20ZM4 14H8V10H4V14ZM10 14H14V10H10V14ZM16 4V8H20V4H16ZM10 8H14V4H10V8ZM16 14H20V10H16V14ZM16 20H20V16H16V20Z" fill="white" fillOpacity="0.6"/>
-            </svg>
+            <Image src={matrix} alt={"Related Apps"}/>
           </button>
           <button className="mr-2 h-6 w-6"
                   onClick={() => {
@@ -275,9 +260,7 @@ const Navbar = () => {
                     setAppsOpen(false)
                     setUserOpen(false)
                   }}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path fillRule="evenodd" clipRule="evenodd" d="M12 22C13.1 22 14 21.1 14 20H10C10 21.1 10.89 22 12 22ZM18 16V11C18 7.93 16.36 5.36 13.5 4.68V4C13.5 3.17 12.83 2.5 12 2.5C11.17 2.5 10.5 3.17 10.5 4V4.68C7.63 5.36 6 7.92 6 11V16L4 18V19H20V18L18 16Z" fill="white" fillOpacity="0.6"/>
-            </svg>
+            <Image src={bell} alt={"Notifications"}/>
           </button>
           <button className="h-10 w-10"
                   onClick={() => {
@@ -444,5 +427,4 @@ const Navbar = () => {
     </header>
   );
 }
-
 export default Navbar;
