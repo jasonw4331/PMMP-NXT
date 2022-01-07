@@ -35,10 +35,10 @@ const Home = ({data = []}) => {
 
   return (
     <>
+      <Metatags title='Home' tagline={'Currently showing ' + data.length + ' reviewed plugins'}/>
       <Navbar AuthUser={AuthUser} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen}/>
       <main
         className={"absolute top-14 max-h-[94vh] right-0 overflow-x-hidden overflow-y-auto overscroll-contain pt-2 pr-2"}>
-        <Metatags title='Home' tagline={'Currently showing ' + data.length + ' reviewed plugins'}/>
         <ul className={"flex flex-col"}>
           {data}
         </ul>
