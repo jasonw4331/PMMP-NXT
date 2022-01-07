@@ -20,26 +20,26 @@ const handler = async (req, res) => {
       if (name && !doc.id.includes(name)) {
         return
       }
-      const { author: author1, releaseStatus } = postToJSON(doc)
+      const data = postToJSON(doc)
       const name1 = doc.id.split('_v')[0]
       const version = doc.id.split('_v')[1]
-      if (releaseStatus < 2 && releaseStatus > 0) { // ignore drafts and releases
+      if (data.releaseStatus !== 1) { // ignore drafts
         return
       }
-      if (author && author !== author1) {
+      if (author && data.author !== author) {
         return
       }
       if (latestOnly === true) {
         if (latestVersions[name1] === undefined || semver.satisfies(version, '>' + latestVersions[name], {includePrerelease: true})) {
           latestVersions[name1] = version
-          docs[name1] = doc
+          latestVersions.push(version)
+          docs.push(data)
+          return
         }
-      } else {
-        docs[name1] = doc
-        docs.push(doc)
       }
+      docs.push(data)
     })
-    return res.status(200).json(docs.map(doc => postToJSON(doc)))
+    return res.status(200).json({docs})
   } catch (e) {
     return res.status(400).json({ error: e.message })
   }
