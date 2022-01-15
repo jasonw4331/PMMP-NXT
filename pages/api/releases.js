@@ -2,16 +2,24 @@ import {getFirebaseAdmin} from 'next-firebase-auth'
 import initAuth from '../../lib/firebase/initAuth'
 import semver from 'semver'
 import {postToJSON} from '../../lib/firebase/firestoreFuncs'
+import initMiddleware from "../../lib/initMiddleware";
+import Cors from "cors";
 
 initAuth()
 
+const cors = initMiddleware(
+  Cors({
+    origin: "*",
+    methods: ['GET', 'OPTIONS', 'HEAD'],
+    allowedHeaders: ['Authorization'],
+  })
+)
+
 const handler = async (req, res) => {
-  if (req.method !== 'GET' && req.method !== 'POST') {
-    return res.status(400).json({error: 'Bad request method'})
-  }
+  await cors(req, res)
 
   try {
-    let {latestOnly = false, name, author} = req.body
+    let {latestOnly = false, name, author} = req.query
 
     if (name !== undefined)
       name = decodeURI(name)

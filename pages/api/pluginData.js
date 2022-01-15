@@ -6,12 +6,12 @@ import {postToJSON} from '../../lib/firebase/firestoreFuncs'
 initAuth()
 
 const handler = async (req, res) => {
-  if (req.method !== 'GET' && req.method !== 'POST') {
+  if (req.method !== 'GET') {
     return res.status(400).json({error: 'Bad request method'})
   }
 
   try {
-    let {latestOnly = false, name, author} = req.body
+    let {name, author} = req.query
 
     if (name === undefined || author === undefined) {
       return res.status(400).json({error: 'Missing required information'})

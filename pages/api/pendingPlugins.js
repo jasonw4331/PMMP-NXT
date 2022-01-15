@@ -6,8 +6,8 @@ import semver from "semver";
 initAuth()
 
 const handler = async (req, res) => {
-  if(req.method !== 'GET' && req.method !== 'POST') {
-    return res.status(400).json({ error: 'Bad request method' })
+  if (req.method !== 'GET') {
+    return res.status(400).json({error: 'Bad request method'})
   }
 
   try {
