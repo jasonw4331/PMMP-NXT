@@ -4,6 +4,7 @@ import toast from 'react-hot-toast'
 import PluginCard from '../components/PluginCard'
 import Navbar from "../components/Navbar";
 import {useState} from "react";
+import ErrorCard from "../components/ErrorCard";
 
 const Review = ({data}) => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -63,9 +64,10 @@ export const getServerSideProps = withAuthUserTokenSSR({
   if (!response.ok) {
     toast.error(JSON.stringify(data))
     return {
-      redirect: {
-        destination: '/',
-        permanent: false,
+      props: {
+        data: [
+          <ErrorCard key={0}/>
+        ]
       }
     }
   }
