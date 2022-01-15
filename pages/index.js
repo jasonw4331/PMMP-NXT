@@ -45,16 +45,12 @@ const Home = ({data = []}) => {
 export const getServerSideProps = withAuthUserTokenSSR()(
   async ({ AuthUser, req }) => {
     const token = await AuthUser.getIdToken()
-    const endpoint = getAbsoluteURL('/api/releases', req)
+    const endpoint = getAbsoluteURL('/api/releases?readOnly=true', req)
     const response = await fetch(endpoint, {
-      method: 'POST',
+      method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
         Authorization: token || 'unauthenticated',
-      },
-      body: JSON.stringify({
-        latestOnly: true
-      })
+      }
     })
     const data = await response.json()
     if (!response.ok) {
