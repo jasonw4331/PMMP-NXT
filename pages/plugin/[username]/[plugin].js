@@ -34,13 +34,7 @@ export const getServerSideProps = withAuthUserTokenSSR()(
     if (!response.ok) {
       toast.error(JSON.stringify(data))
       return {
-        props: {
-          data: [
-            {
-              description: "Not OK"
-            }
-          ]
-        }
+        notFound: true
       }
     }
     return {
