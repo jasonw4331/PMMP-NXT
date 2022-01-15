@@ -2,8 +2,12 @@
 import React, { useEffect, useState } from 'react'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 import { getApp } from 'firebase/app'
-import { getAuth, EmailAuthProvider, GoogleAuthProvider, GithubAuthProvider } from 'firebase/auth'
-import { getFirestore } from 'firebase/firestore'
+import {
+  EmailAuthProvider,
+  getAuth,
+  GithubAuthProvider,
+  GoogleAuthProvider,
+} from 'firebase/auth'
 
 // Note that next-firebase-auth inits Firebase for us,
 // so we don't need to.
@@ -18,7 +22,7 @@ const firebaseAuthConfig = {
       requireDisplayName: true,
     },
     GoogleAuthProvider.PROVIDER_ID,
-    GithubAuthProvider.PROVIDER_ID
+    GithubAuthProvider.PROVIDER_ID,
   ],
   signInSuccessUrl: '/',
   credentialHelper: 'none',
@@ -47,7 +51,6 @@ const FirebaseAuth = () => {
         <StyledFirebaseAuth
           uiConfig={firebaseAuthConfig}
           firebaseAuth={getAuth(getApp())}
-
         />
       ) : null}
     </div>
