@@ -11,7 +11,7 @@ const Home = ({data = []}) => {
   const {sidebarOpen} = useContext(SidebarContext)
 
   data = data.map(doc => (
-    <PluginCard key={doc.id} name={doc.id.split('_v')[0]} author={doc.author} tagline={doc.tagline}
+    <PluginCard key={doc.id} name={doc.id} author={doc.author} tagline={doc.tagline}
                 iconUrl={doc.iconUrl} downloadUrl={doc.downloadUrl}/>))
 
   let remapped = []

@@ -6,7 +6,7 @@ const PluginCard = ({name, author, tagline, downloadUrl = "/404", iconUrl = miss
   return (
     <li
       className="h-[382px] w-[281px] p-2 flex flex-col justify-between items-center bg-zinc-800 bg-cover text-white rounded-lg mb-10 mr-5 last:mr-0">
-      <h1 className="w-full px-4 mb-2 font-roboto truncate text-lg">{name}</h1>
+      <h1 className="w-full px-4 mb-2 font-roboto truncate text-lg">{name.split('_v')[0]}</h1>
       <h2 className="w-full px-5 mb-2 text-zinc-400 font-roboto truncate text-sm">{author}</h2>
       <div className="w-[208px] h-[208px] mb-2">
         <Image src={iconUrl} alt='Plugin Icon' width={208} height={208}/>
