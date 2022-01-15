@@ -52,16 +52,12 @@ export const getServerSideProps = withAuthUserTokenSSR({
   // `getServerSideProps`, including redirects.
   // https://nextjs.org/docs/basic-features/data-fetching#getserversideprops-server-side-rendering
   const token = await AuthUser.getIdToken()
-  const endpoint = getAbsoluteURL('/api/pendingPlugins', req)
+  const endpoint = getAbsoluteURL('/api/pendingPlugins?latestOnly=true', req)
   const response = await fetch(endpoint, {
-    method: 'POST',
+    method: 'GET',
     headers: {
-      'Content-Type': 'application/json',
       Authorization: token || 'unauthenticated',
-    },
-    body: JSON.stringify({
-      latestOnly: true
-    })
+    }
   })
   const data = await response.json()
   if (!response.ok) {
