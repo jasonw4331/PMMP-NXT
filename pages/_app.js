@@ -29,22 +29,14 @@ const MyApp = ({Component, pageProps}) => {
         <meta name='msapplication-tap-highlight' content='no'/>
         <meta name='theme-color' content='#121212'/>
 
-        <link rel='apple-touch-icon' sizes='16x16' href='/icons/logo/icon-16x16.png'/>
-        <link rel='apple-touch-icon' sizes='32x32' href='/icons/logo/icon-32x32.png'/>
-        <link rel='apple-touch-icon' sizes='72x72' href='/icons/logo/icon-72x72.png'/>
-        <link rel='apple-touch-icon' sizes='96x96' href='/icons/logo/icon-96x96.png'/>
-        <link rel='apple-touch-icon' sizes='144x144' href='/icons/logo/icon-144x144.png'/>
-        <link rel='apple-touch-icon' sizes='152x152' href='/icons/logo/icon-152x152.png'/>
-        <link rel='apple-touch-icon' sizes='192x192' href='/icons/logo/icon-192x192.png'/>
-        <link rel='apple-touch-icon' sizes='384x384' href='/icons/logo/icon-384x384.png'/>
-        <link rel='apple-touch-icon' sizes='512x512' href='/icons/logo/icon-512x512.png'/>
-
-        <link rel='icon' type='image/png' sizes='16x16' href='/icons/logo/icon-16x16.png'/>
-        <link rel='icon' type='image/png' sizes='32x32' href='/icons/logo/icon-32x32.png'/>
+        <link rel='apple-touch-icon' type='image/svg+xml' sizes='200x200' href='/icons/logo/icon.svg'/>
 
         <link rel='manifest' href='/manifest.json'/>
-        <link rel='mask-icon' href='/icons/logo/safari-pinned-tab.svg' color='#5bbad5'/>
-        <link rel='shortcut icon' href='/favicon.ico'/>
+        <link rel='mask-icon' type='image/svg+xml' href='/icons/logo/icon.svg' color='#5bbad5'/>
+        <link rel='shortcut icon' type='image/svg+xml' href='/icons/logo/icon.svg'/>
+
+        <link rel='icon' type='image/svg+xml' sizes='200x200' href='/icons/logo/icon.svg'/>
+
         <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500'/>
 
         <title>PMMP NXT</title>
