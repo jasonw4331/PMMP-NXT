@@ -13,35 +13,35 @@ const UserData = ({ data, plugins = [] }) => {
 }
 
 export const getServerSideProps = withAuthUserTokenSSR()(
-    async ({ AuthUser, req, query }) => {
-        // Optionally, get other props.
-        // You can return anything you'd normally return from
-        // `getServerSideProps`, including redirects.
-        // https://nextjs.org/docs/basic-features/data-fetching#getserversideprops-server-side-rendering
-        const token = await AuthUser.getIdToken()
-        const endpoint = getAbsoluteURL(
-            '/api/userData?name=' + encodeURI(query.username),
-            req
-        )
-        const, response = await fetch(endpoint, {
-            method: 'GET',
-            headers: {
-                Authorization: token || 'unauthenticated',
+  async ({ AuthUser, req, query }) => {
+    // Optionally, get other props.
+    // You can return anything you'd normally return from
+    // `getServerSideProps`, including redirects.
+    // https://nextjs.org/docs/basic-features/data-fetching#getserversideprops-server-side-rendering
+    const token = await AuthUser.getIdToken()
+    const endpoint = getAbsoluteURL(
+      '/api/userData?name=' + encodeURI(query.username),
+      req
+    )
+    const response = await fetch(endpoint, {
+      method: 'GET',
+      headers: {
+        Authorization: token || 'unauthenticated',
+      },
+    })
+    const data = await response.json()
+    if (!response.ok) {
+      toast.error(JSON.stringify(data))
+      return {
+        props: {
+          data: [
+            {
+              description: 'Not OK',
             },
-        })
-        const data = await response.json()
-        if (!response.ok) {
-            toast.error(JSON.stringify(data))
-            return {
-                props: {
-                    data: [
-                        {
-                            description: 'Not OK',
-                        },
-                    ],
-                    plugins: [],
-                },
-            }
+          ],
+          plugins: [],
+        },
+      }
     }
     return {
       props: {

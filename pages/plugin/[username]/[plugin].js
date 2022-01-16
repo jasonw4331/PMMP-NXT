@@ -69,37 +69,37 @@ const PluginData = ({ data, description, changelog = null }) => {
 }
 
 export const getServerSideProps = withAuthUserTokenSSR()(
-    async ({ AuthUser, req, query }) => {
-        // Optionally, get other props.
-        // You can return anything you'd normally return from
-        // `getServerSideProps`, including redirects.
-        // https://nextjs.org/docs/basic-features/data-fetching#getserversideprops-server-side-rendering
-        const token = await AuthUser.getIdToken()
-        const endpoint = getAbsoluteURL(
-            '/api/pluginData?name=' +
-            encodeURI(query.plugin) +
-            '&author=' +
-            encodeURI(query.username),
-            req
-        )
-        const response = await fetch(endpoint, {
-            method: 'GET',
-            headers: {
-                Authorization: token || 'unauthenticated',
-            },
-        })
-        const data = await response.json()
-        if (!response.ok) {
-            toast.error(JSON.stringify(data))
-            return {
-                notFound: true,
-            }
+  async ({ AuthUser, req, query }) => {
+    // Optionally, get other props.
+    // You can return anything you'd normally return from
+    // `getServerSideProps`, including redirects.
+    // https://nextjs.org/docs/basic-features/data-fetching#getserversideprops-server-side-rendering
+    const token = await AuthUser.getIdToken()
+    const endpoint = getAbsoluteURL(
+      '/api/pluginData?name=' +
+        encodeURI(query.plugin) +
+        '&author=' +
+        encodeURI(query.username),
+      req
+    )
+    const response = await fetch(endpoint, {
+      method: 'GET',
+      headers: {
+        Authorization: token || 'unauthenticated',
+      },
+    })
+    const data = await response.json()
+    if (!response.ok) {
+      toast.error(JSON.stringify(data))
+      return {
+        notFound: true,
+      }
     }
     return {
       props: {
-          data,
-          description: await serialize(data.description),
-          changelog: data.changel,og ? await serialize(data.changelog) : null,
+        data,
+        description: await serialize(data.description),
+        changelog: data.changelog ? await serialize(data.changelog) : null,
       },
     }
   }
