@@ -1,23 +1,18 @@
 import { AuthAction, withAuthUser } from 'next-firebase-auth'
 import Metatags from '../components/Metatags'
 import { useCallback, useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
 import debounce from 'lodash.debounce'
 import { Octokit } from '@octokit/rest'
 import semantic from 'semver'
+import IdentifyRepoHost from '../lib/repo_hosts/identifyRepoHost'
 
 const Publish = () => {
-  const router = useRouter()
   const [url, setUrl] = useState('')
   const [tag, setTag] = useState('')
   const [options, setOptions] = useState([])
   const [needsPath, setNeedsPath] = useState(false)
   const [path, setPath] = useState('')
   const [validPath, setValidPath] = useState(false)
-  const octokit = new Octokit({
-    //auth: 'secret123', // TODO: get git auth token from firebase auth
-    userAgent: 'PMMP-NXT v1.0',
-  })
 
   const onSubmit = async e => {
     e.preventDefault()
@@ -25,151 +20,166 @@ const Publish = () => {
     const form = new FormData(e.target)
     const formData = Object.fromEntries(form.entries())
     console.log(formData)
+    // TODO: validate formData.path
 
-    const regex =
-      /^(?:http[s]?:\/\/)?github\.com\/(.+?)\/(.+?)(?:$|\.git|\/.+?\/(.+?)\/).*$/im
-
-    if (
-      formData.url.length > 10 &&
-      formData.commit !== '' &&
-      regex.test(formData.url)
-    ) {
-      const results = regex.exec(formData.url)
-      try {
-        const { data = [] } = await octokit.rest.repos.getContent({
-          owner: results[1],
-          repo: results[2],
-          ref: formData.commit,
-          path: formData.path,
-        })
-        console.log(data)
-        let manifest_url = ''
-        let readme_url = ''
-        let changelog_url = ''
-        data.forEach(({ name, download_url }) => {
-          if (name.toLowerCase() === 'plugin.yml') manifest_url = download_url
-          if (name.toLowerCase() === 'readme.md') readme_url = download_url
-          if (name.toLowerCase() === 'changelog.md')
-            changelog_url = download_url
-        })
-        await router.push(
-          `/draft?manifest=${encodeURI(manifest_url)}&description=${
-            formData.enableReadme ? encodeURI(readme_url) : 'null'
-          }&changelog=${
-            formData.enableChangelog ? encodeURI(changelog_url) : 'null'
-          }`
-        )
-      } catch (e) {
-        console.log(e)
-      }
+    const { domain, namespace, repo, commit, host } = {
+      ...(await IdentifyRepoHost(url)),
+      commit: formData.commit,
     }
+
+    const manifestUrl = await host.getRepoFileUrl({
+      domain,
+      namespace,
+      repo,
+      commit,
+      auth: null,
+      path,
+      file: 'plugin.yml',
+    })
+    if (formData.enableDescription) {
+      const descriptionUrl = await host.getRepoFileUrl({
+        domain,
+        namespace,
+        repo,
+        commit,
+        auth: null,
+        path,
+        file: 'readme.md',
+      })
+    } else {
+      const descriptionUrl = null
+    }
+    if (formData.enableChangelog) {
+      const changelogUrl = await host.getRepoFileUrl({
+        domain,
+        namespace,
+        repo,
+        commit,
+        auth: null,
+        path: path,
+        file: 'changelog.md',
+      })
+    } else {
+      const changelogUrl = null
+    }
+
+    // TODO: display draft with imported info
   }
 
-  useEffect(() => {
-    checkRepository(url, octokit, setTag, setOptions)
-  }, [url])
-
-  useEffect(() => {
-    checkFiles(url, tag, octokit, setNeedsPath)
-  }, [tag, url])
-
-  useEffect(() => {
-    checkPathFiles(url, tag, needsPath, path, octokit, setValidPath)
-  }, [path, tag, url])
-
+  // prevent new debounce being created every page render
   const checkRepository = useCallback(
-    debounce(async (url, octokit, setTag, setOptions) => {
-      const regex =
-        /^(?:http[s]?:\/\/)?github\.com\/(.+?)\/(.+?)(?:$|\.git|\/.+?\/(.+?)\/).*$/im
+    debounce(
+      async (
+        url,
+        tag,
+        needsPath,
+        path,
+        setTag,
+        setOptions,
+        setNeedsPath,
+        setValidPath
+      ) => {
+        const octokit = new Octokit({
+          //auth: 'secret123', // TODO: get git auth token from firebase auth
+          userAgent: 'PMMP-NXT v1.0',
+          baseUrl: 'git.ad5001.eu',
+        })
 
-      if (url.length > 10 && regex.test(url)) {
-        const results = regex.exec(url)
-        try {
-          let { data = [] } = await octokit.rest.repos.listTags({
-            owner: results[1],
-            repo: results[2],
-          })
-          const tags = data.filter(({ name }) =>
-            semantic.valid(name, { includePrerelease: true })
-          )
-          setTag(tags[0].commit.sha)
-          setOptions(
-            tags.map(({ name, commit: { sha } }) => {
-              return (
-                <option
-                  key={sha}
-                  value={sha}
-                  className={
-                    'bg-zinc-100 appearance-none border-2 border-zinc-200 rounded w-full py-2 px-4 text-zinc-700 leading-tight focus:outline-none focus:bg-white focus:border-slate-500'
-                  }>
-                  {name}
-                </option>
-              )
+        const regex =
+          /^(?:http[s]?:\/\/)?github\.com\/(.+?)\/(.+?)(?:$|\.git|\/.+?\/(.+?)\/).*$/im
+
+        if (url.length > 10 && regex.test(url) && tag === '') {
+          const results = regex.exec(url)
+          try {
+            let { data = [] } = await octokit.rest.repos.listTags({
+              owner: results[1],
+              repo: results[2],
             })
-          )
-        } catch (e) {
-          setTag('')
-          setOptions([])
+            const tags = data.filter(({ name }) =>
+              semantic.valid(name, { includePrerelease: true })
+            )
+            setTag(tags[0].commit.sha)
+            setOptions(
+              tags.map(({ name, commit: { sha } }) => {
+                return (
+                  <option
+                    key={sha}
+                    value={sha}
+                    className={
+                      'bg-zinc-100 appearance-none border-2 border-zinc-200 rounded w-full py-2 px-4 text-zinc-700 leading-tight focus:outline-none focus:bg-white focus:border-slate-500'
+                    }>
+                    {name}
+                  </option>
+                )
+              })
+            )
+          } catch (e) {
+            setTag('')
+            setOptions([])
+            return
+          }
         }
-      }
-    }, 500),
-    []
-  )
 
-  const checkFiles = useCallback(
-    debounce(async (url, tag, octokit, setNeedsPath) => {
-      const regex =
-        /^(?:http[s]?:\/\/)?github\.com\/(.+?)\/(.+?)(?:$|\.git|\/.+?\/(.+?)\/).*$/im
-
-      if (tag !== '' && url.length > 10 && regex.test(url)) {
-        const results = regex.exec(url)
-        try {
-          await octokit.rest.repos.getContent({
-            owner: results[1],
-            repo: results[2],
-            ref: tag,
-            path: 'plugin.yml',
-          })
-          setNeedsPath(false)
-        } catch (e) {
-          // TODO: set false if 404
-          setNeedsPath(true)
+        if (tag !== '' && url.length > 10 && regex.test(url) && path === '') {
+          const results = regex.exec(url)
+          try {
+            await octokit.rest.repos.getContent({
+              owner: results[1],
+              repo: results[2],
+              ref: tag,
+              path: 'plugin.yml',
+            })
+            setNeedsPath(false)
+          } catch (e) {
+            // TODO: set false if 404
+            setNeedsPath(true)
+            return
+          }
         }
-      }
-    }, 500),
-    []
-  )
 
-  const checkPathFiles = useCallback(
-    debounce(async (url, tag, needsPath, path, octokit, setValidPath) => {
-      const regex =
-        /^(?:http[s]?:\/\/)?github\.com\/(.+?)\/(.+?)(?:$|\.git|\/.+?\/(.+?)\/).*$/im
-
-      if (
-        needsPath &&
-        url.length > 10 &&
-        tag !== '' &&
-        path !== '' &&
-        regex.test(url)
-      ) {
-        const results = regex.exec(url)
-        try {
-          await octokit.rest.repos.getContent({
-            owner: results[1],
-            repo: results[2],
-            ref: tag,
-            path: path + 'plugin.yml',
-          })
+        if (
+          needsPath &&
+          url.length > 10 &&
+          tag !== '' &&
+          path !== '' &&
+          regex.test(url)
+        ) {
+          const results = regex.exec(url)
+          try {
+            await octokit.rest.repos.getContent({
+              owner: results[1],
+              repo: results[2],
+              ref: tag,
+              path: path + 'plugin.yml',
+            })
+            setValidPath(true)
+          } catch (e) {
+            setValidPath(false)
+          }
+        }
+        if (!needsPath) {
           setValidPath(true)
-        } catch (e) {
-          setValidPath(false)
         }
-      }
-      if (!needsPath) {
-        setValidPath(true)
-      }
-    }, 500),
+      },
+      1000
+    ),
     []
+  )
+
+  // trigger repository check on any field update
+  useEffect(
+    () =>
+      checkRepository(
+        url,
+        tag,
+        needsPath,
+        path,
+        setTag,
+        setOptions,
+        setNeedsPath,
+        setValidPath
+      ),
+    [path, tag, url]
   )
 
   return (
@@ -254,7 +264,7 @@ const Publish = () => {
             <input
               className='mr-2 leading-tight'
               type='checkbox'
-              name={'enableReadme'}
+              name={'enableDescription'}
               defaultChecked={true}
               required={false}
             />
