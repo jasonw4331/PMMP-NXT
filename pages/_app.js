@@ -4,7 +4,7 @@ import initAuth from '../lib/firebase/initAuth'
 import { domAnimation, LazyMotion } from 'framer-motion'
 import { Toaster } from 'react-hot-toast'
 import Navbar from '../components/Navbar'
-import { useAuthUser } from 'next-firebase-auth'
+import { useAuthUser, withAuthUser } from 'next-firebase-auth'
 import { useEffect, useState } from 'react'
 import { SidebarContext } from '../lib/sidebarContext'
 import * as gtag from '../lib/gtag'
@@ -120,4 +120,4 @@ const MyApp = ({ Component, pageProps }) => {
   )
 }
 
-export default MyApp
+export default withAuthUser()(MyApp)
