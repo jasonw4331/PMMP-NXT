@@ -5,17 +5,27 @@ import { domAnimation, LazyMotion } from 'framer-motion'
 import { Toaster } from 'react-hot-toast'
 import Navbar from '../components/Navbar'
 import { useAuthUser } from 'next-firebase-auth'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SidebarContext } from '../lib/sidebarContext'
-import { getPerformance } from 'firebase/performance'
-import { getApp } from 'firebase/app'
+import * as gtag from '../lib/gtag'
+import Script from 'next/script'
+import { useRouter } from 'next/router'
 
 initAuth()
 
 const MyApp = ({ Component, pageProps }) => {
-  const perf = getPerformance(getApp())
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const AuthUser = useAuthUser()
+  const router = useRouter()
+  useEffect(() => {
+    const handleRouteChange = url => {
+      gtag.pageview(url)
+    }
+    router.events.on('routeChangeComplete', handleRouteChange)
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange)
+    }
+  }, [router.events])
 
   return (
     <>
@@ -71,6 +81,24 @@ const MyApp = ({ Component, pageProps }) => {
 
         <meta name='viewport' content='initial-scale=1.0, width=device-width' />
       </Head>
+      <Script
+        strategy='afterInteractive'
+        src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
+      />
+      <Script
+        id='gtag-init'
+        strategy='afterInteractive'
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${gtag.GA_TRACKING_ID}', {
+              page_path: window.location.pathname,
+            });
+          `,
+        }}
+      />
       <LazyMotion strict features={domAnimation}>
         <SidebarContext.Provider value={{ sidebarOpen, setSidebarOpen }}>
           <Navbar
