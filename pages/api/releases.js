@@ -1,7 +1,7 @@
 import { getFirebaseAdmin } from 'next-firebase-auth'
 import initAuth from '../../lib/firebase/initAuth'
 import semver from 'semver'
-import { postToJSON } from '../../lib/firebase/firestoreFuncs'
+import { postToJSON } from '../../lib/firebase/server/firestoreFuncs'
 import initMiddleware from '../../lib/initMiddleware'
 import Cors from 'cors'
 

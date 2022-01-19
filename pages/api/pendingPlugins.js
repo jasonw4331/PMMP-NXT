@@ -1,6 +1,6 @@
 import { getFirebaseAdmin } from 'next-firebase-auth'
 import initAuth from '../../lib/firebase/initAuth'
-import { postToJSON } from '../../lib/firebase/firestoreFuncs'
+import { postToJSON } from '../../lib/firebase/server/firestoreFuncs'
 import semver from 'semver'
 
 initAuth()
