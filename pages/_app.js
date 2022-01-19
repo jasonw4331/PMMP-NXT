@@ -7,10 +7,13 @@ import Navbar from '../components/Navbar'
 import { useAuthUser } from 'next-firebase-auth'
 import { useState } from 'react'
 import { SidebarContext } from '../lib/sidebarContext'
+import { getPerformance } from 'firebase/performance'
+import { getApp } from 'firebase/app'
 
 initAuth()
 
 const MyApp = ({ Component, pageProps }) => {
+  const perf = getPerformance(getApp())
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const AuthUser = useAuthUser()
 
