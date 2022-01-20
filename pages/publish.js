@@ -4,6 +4,10 @@ import { useCallback, useEffect, useState } from 'react'
 import debounce from 'lodash.debounce'
 import semantic from 'semver'
 import IdentifyRepoHost from '../lib/repo_hosts/identifyRepoHost'
+import Image from 'next/image'
+import githubMark from '../public/icons/GitHub-Mark.svg'
+import gitlabIcon from '../public/icons/GitLab-Icon.svg'
+import bitbucketMark from '../public/icons/Bitbucket-Mark.svg'
 
 const Publish = () => {
   const [url, setUrl] = useState('')
@@ -22,7 +26,7 @@ const Publish = () => {
     // TODO: validate formData.path
 
     const { domain, namespace, repo, commit, host } = {
-      ...(await IdentifyRepoHost(url)),
+      ...(await IdentifyRepoHost(formData.host, url)),
       commit: formData.commit,
     }
 
@@ -215,39 +219,60 @@ const Publish = () => {
                 required={false}
               />
             </div>
-            <div className='mb-6 flex flex-row justify-between'>
-              <label className='block text-zinc-500 font-bold'>
+            <fieldset className='mb-6 flex flex-row justify-between'>
+              <legend className='sr-only'>Optional Imports</legend>
+              <div className='flex items-center mb-4'>
                 <input
-                  className='mr-2 leading-tight'
+                  id='checkbox-1'
+                  aria-describedby='checkbox-1'
                   type='checkbox'
                   name={'enableManifest'}
                   defaultChecked={true}
                   required={true}
                   disabled={true}
+                  className='w-4 h-4 text-green-600 bg-white dark:bg-gray-900 rounded border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
                 />
-                <span className='text-sm'>Import plugin.yml</span>
-              </label>
-              <label className='block text-zinc-500 font-bold'>
+                <label
+                  htmlFor='checkbox-1'
+                  className='ml-3 text-sm font-medium text-gray-900 dark:text-gray-300'>
+                  Import plugin.yml
+                </label>
+              </div>
+
+              <div className='flex items-center mb-4'>
                 <input
-                  className='mr-2 leading-tight'
+                  id='checkbox-2'
+                  aria-describedby='checkbox-2'
                   type='checkbox'
-                  name={'enableDescription'}
+                  name={'enableReadme'}
                   defaultChecked={true}
-                  required={false}
+                  required={true}
+                  className='w-4 h-4 text-green-600 bg-white dark:bg-gray-900 rounded border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
                 />
-                <span className='text-sm'>Import readme.md</span>
-              </label>
-              <label className='block text-zinc-500 font-bold'>
+                <label
+                  htmlFor='checkbox-2'
+                  className='ml-3 text-sm font-medium text-gray-900 dark:text-gray-300'>
+                  Import README.md
+                </label>
+              </div>
+
+              <div className='flex items-center mb-4'>
                 <input
-                  className='mr-2 leading-tight'
+                  id='checkbox-3'
+                  aria-describedby='checkbox-3'
                   type='checkbox'
                   name={'enableChangelog'}
                   defaultChecked={true}
-                  required={false}
+                  required={true}
+                  className='w-4 h-4 text-green-600 bg-white dark:bg-gray-900 rounded border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
                 />
-                <span className='text-sm'>Import changelog.md</span>
-              </label>
-            </div>
+                <label
+                  htmlFor='checkbox-3'
+                  className='ml-3 text-sm font-medium text-gray-900 dark:text-gray-300'>
+                  Import CHANGELOG.md
+                </label>
+              </div>
+            </fieldset>
             <button
               className='shadow bg-slate-500 hover:bg-slate-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded'
               type='submit'
@@ -255,57 +280,70 @@ const Publish = () => {
               Publish
             </button>
           </div>
-          <fieldset className={'max-w-sm flex flex-col ml-2 mt-10'}>
+          <fieldset className={'max-w-sm flex flex-col pl-3'}>
             <legend className='sr-only'>Git Host Sites</legend>
 
-            <div className='flex items-center mb-4'>
+            <div className='relative inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:ring-green-200 dark:focus:ring-green-800'>
               <input
                 id='host-option-1'
                 type='radio'
                 name='hosts'
                 value='GitHub'
-                className='w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600'
-                aria-labelledby='host-option-1'
-                aria-describedby='host-option-1'
+                role={'radio'}
                 defaultChecked
+                className={'peer hidden invisible'}
               />
               <label
-                htmlFor='host-option-1'
-                className='block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300'>
-                GitHub
+                htmlFor={'host-option-1'}
+                className='relative px-5 py-2.5 justify-between transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0 peer-checked:bg-opacity-0'>
+                <Image
+                  src={githubMark}
+                  width={24}
+                  height={24}
+                  alt={'GitHub Logo'}
+                />
+                Github
               </label>
             </div>
-
-            <div className='flex items-center mb-4'>
+            <div className='relative inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:ring-green-200 dark:focus:ring-green-800'>
               <input
                 id='host-option-2'
                 type='radio'
                 name='hosts'
                 value='GitLab'
-                className='w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600'
-                aria-labelledby='host-option-2'
-                aria-describedby='host-option-2'
+                role={'radio'}
+                className={'peer hidden invisible'}
               />
               <label
-                htmlFor='host-option-2'
-                className='block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300'>
+                htmlFor={'host-option-2'}
+                className='relative px-5 py-2.5 justify-between transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0 peer-checked:bg-opacity-0'>
+                <Image
+                  src={gitlabIcon}
+                  width={24}
+                  height={24}
+                  alt={'GitLab Logo'}
+                />
                 GitLab
               </label>
             </div>
-
-            <div className='flex items-center mb-4'>
+            <div className='relative inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:ring-green-200 dark:focus:ring-green-800'>
               <input
                 id='host-option-3'
                 type='radio'
                 name='hosts'
                 value='Bitbucket'
-                className='w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:bg-gray-700 dark:border-gray-600'
-                aria-labelledby='host-option-3'
-                aria-describedby='host-option-3'
+                role={'radio'}
+                className={'peer hidden invisible'}
               />
               <label
-                htmlFor='host-option-3'
-                className='block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300'>
+                htmlFor={'host-option-3'}
+                className='relative px-5 py-2.5 justify-between transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0 peer-checked:bg-opacity-0'>
+                <Image
+                  src={bitbucketMark}
+                  width={23}
+                  height={23}
+                  alt={'Bitbucket Logo'}
+                />
                 Bitbucket
               </label>
             </div>
