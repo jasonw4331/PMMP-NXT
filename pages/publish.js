@@ -172,7 +172,7 @@ const Publish = () => {
               <label
                 className='block text-zinc-400 font-bold mb-1 pr-4'
                 htmlFor='inline-full-name'>
-                Github URL
+                GitHub URL
               </label>
               <input
                 className='bg-zinc-100 appearance-none border-2 border-zinc-200 rounded w-full py-2 px-4 text-zinc-700 leading-tight focus:outline-none focus:bg-white focus:border-slate-500'
@@ -274,7 +274,7 @@ const Publish = () => {
               </div>
             </fieldset>
             <button
-              className='shadow bg-slate-500 hover:bg-slate-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded'
+              className='shadow bg-gray-900 hover:bg-green-600 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded'
               type='submit'
               disabled={!validPath}>
               Publish
@@ -283,7 +283,7 @@ const Publish = () => {
           <fieldset className={'max-w-sm flex flex-col pl-3'}>
             <legend className='sr-only'>Git Host Sites</legend>
 
-            <div className='relative inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:ring-green-200 dark:focus:ring-green-800'>
+            <div className='relative inline-flex items-center justify-center p-0.5 mb-2 text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm text-center dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-gray-900 dark:focus:ring-green-800'>
               <input
                 id='host-option-1'
                 type='radio'
@@ -295,17 +295,17 @@ const Publish = () => {
               />
               <label
                 htmlFor={'host-option-1'}
-                className='relative px-5 py-2.5 justify-between transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0 peer-checked:bg-opacity-0'>
+                className='relative px-5 py-2.5 justify-between transition-all ease-in duration-75 bg-white dark:bg-zinc-800 rounded-md bg-opacity-0 group-hover:bg-opacity-1 peer-checked:bg-opacity-1 dark:peer-checked:bg-gray-900'>
                 <Image
                   src={githubMark}
                   width={24}
                   height={24}
                   alt={'GitHub Logo'}
                 />
-                Github
+                GitHub
               </label>
             </div>
-            <div className='relative inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:ring-green-200 dark:focus:ring-green-800'>
+            <div className='relative inline-flex items-center justify-center p-0.5 mb-2 text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm text-center dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-gray-900 dark:focus:ring-green-800'>
               <input
                 id='host-option-2'
                 type='radio'
@@ -316,7 +316,7 @@ const Publish = () => {
               />
               <label
                 htmlFor={'host-option-2'}
-                className='relative px-5 py-2.5 justify-between transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0 peer-checked:bg-opacity-0'>
+                className='relative px-5 py-2.5 justify-between transition-all ease-in duration-75 bg-white dark:bg-zinc-800 rounded-md bg-opacity-0 group-hover:bg-opacity-1 peer-checked:bg-opacity-1 dark:peer-checked:bg-gray-900'>
                 <Image
                   src={gitlabIcon}
                   width={24}
@@ -326,7 +326,7 @@ const Publish = () => {
                 GitLab
               </label>
             </div>
-            <div className='relative inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:ring-green-200 dark:focus:ring-green-800'>
+            <div className='relative inline-flex items-center justify-center p-0.5 mb-2 text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm text-center dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-gray-900 dark:focus:ring-green-800'>
               <input
                 id='host-option-3'
                 type='radio'
@@ -337,14 +337,14 @@ const Publish = () => {
               />
               <label
                 htmlFor={'host-option-3'}
-                className='relative px-5 py-2.5 justify-between transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0 peer-checked:bg-opacity-0'>
+                className='relative px-5 py-2.5 justify-between transition-all ease-in duration-75 bg-white dark:bg-zinc-800 rounded-md bg-opacity-0 group-hover:bg-opacity-1 peer-checked:bg-opacity-1 dark:peer-checked:bg-gray-900'>
                 <Image
                   src={bitbucketMark}
                   width={23}
                   height={23}
                   alt={'Bitbucket Logo'}
                 />
-                Bitbucket
+                BitBucket
               </label>
             </div>
           </fieldset>
