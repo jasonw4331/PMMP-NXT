@@ -36,40 +36,34 @@ export async function getStaticProps(context) {
     }
 
   let found = []
-  let last = null
-  for (let i = 0; i < 3; i++) {
-    const snapshot = await getFirebaseAdmin()
-      .firestore()
-      .collection(`users/${userSnapshot.docs[0].id}/plugins/`)
-      .where('likes', '>', 0)
-      .orderBy('likes', 'desc')
-      .startAt(last)
-      .limit(5)
-      .get()
-    last = snapshot
-    let lastVersion = []
-    if (snapshot.docs.length < 1) break
-    snapshot.docs.forEach(doc => {
-      const name = doc.id.split('_v')[0]
-      const version = doc.id.split('_v')[1]
-      if (
-        semver.gt(version, lastVersion[name] ?? '0.0.0', {
-          includePrerelease: true,
-        })
-      ) {
-        lastVersion[name] = version
-      }
-    })
-    snapshot.docs.forEach(doc => {
-      lastVersion.forEach((version, name) => {
-        if (doc.id === `${name}_v${version}`) {
-          found.push(postToJSON(doc))
-          // TODO: filter out versions higher than in found list
-        }
+  const snapshot = await getFirebaseAdmin()
+    .firestore()
+    .collection(`users/${userSnapshot.docs[0].id}/plugins/`)
+    .where('likes', '>', 0)
+    .orderBy('likes', 'desc')
+    .limit(30) // TODO: increase if necessary
+    .get()
+  let highestVersions = []
+  let pluginLikes = []
+  snapshot.docs.forEach(doc => {
+    const name = doc.id.split('_v')[0]
+    const version = doc.id.split('_v')[1]
+    if (
+      semver.gt(version, highestVersions[name] ?? '0.0.0', {
+        includePrerelease: true,
       })
+    ) {
+      highestVersions[name] = version
+      if (doc.data().likes) pluginLikes[name] = doc.data().likes.length
+    }
+  })
+  pluginLikes.sort().every((likesCount, key) => {
+    snapshot.docs.forEach(doc => {
+      if (doc.id === key + '_v' + highestVersions[key])
+        found.push(postToJSON(doc))
     })
-    if (snapshot.docs.length < 5) break
-  }
+    if (found.length >= 5) return false
+  })
   return {
     props: {
       userData,
