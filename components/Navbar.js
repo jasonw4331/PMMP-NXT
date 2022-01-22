@@ -643,7 +643,7 @@ const Navbar = ({ AuthUser, sidebarOpen, setSidebarOpen }) => {
               </Link>
             </li>
             <li className='snap-end'>
-              <Link href='/logout'>
+              <button onClick={AuthUser.signOut()}>
                 <a className='p-3 flex gap-3 hover:bg-zinc-900/90'>
                   <div className='w-6 h-6'>
                     <svg
@@ -662,7 +662,7 @@ const Navbar = ({ AuthUser, sidebarOpen, setSidebarOpen }) => {
                   </div>
                   <p>Sign out</p>
                 </a>
-              </Link>
+              </button>
             </li>
             <li>
               <div>
