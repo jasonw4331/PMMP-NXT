@@ -4,7 +4,6 @@ import {
   withAuthUserTokenSSR,
 } from 'next-firebase-auth'
 import getAbsoluteURL from '../lib/getAbsoluteURL'
-import toast from 'react-hot-toast'
 import PluginCard from '../components/PluginCard'
 import ErrorCard from '../components/ErrorCard'
 import Metatags from '../components/Metatags'
@@ -51,7 +50,6 @@ export const getServerSideProps = withAuthUserTokenSSR({
   })
   const data = await response.json()
   if (!response.ok) {
-    toast.error(JSON.stringify(data))
     return {
       props: {
         data: [<ErrorCard key={0} />],
