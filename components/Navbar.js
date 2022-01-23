@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import Footer from './Footer'
 import Notification from './Notification'
 import AppLink from './AppLink'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import missingImage from '../public/icons/missing.png'
 import githubMark from '../public/icons/GitHub-Mark.svg'
 import docsImage from '../public/icons/Docs.ico'
@@ -27,6 +27,16 @@ import {
 } from '@mui/icons-material'
 import { SidebarData } from './SidebarData'
 import { useAuthUser } from 'next-firebase-auth'
+import {
+  collection,
+  getDocs,
+  getFirestore,
+  limit,
+  orderBy,
+  query,
+  where,
+} from 'firebase/firestore'
+import { getApp } from 'firebase/app'
 
 const Navbar = ({ AuthUser, sidebarOpen, setSidebarOpen }) => {
   const authUser = useAuthUser()
@@ -34,35 +44,38 @@ const Navbar = ({ AuthUser, sidebarOpen, setSidebarOpen }) => {
   let [appsOpen, setAppsOpen] = useState(false)
   let [notifsOpen, setNotifsOpen] = useState(false)
   let [userOpen, setUserOpen] = useState(false)
+  const [notifications, setNotifications] = useState([])
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
-  // TODO: notifications logic
-  const notifications = [
-    <Notification
-      key={0}
-      title='MyPlot v2.0.0'
-      timestamp={120000}
-      redirectUrl='/plugin/jasonwynn10/MyPlot_v2.0.0'
-      iconUrl='https://raw.githubusercontent.com/jasonwynn10/MyPlot/d4337d4b2d563c7c87e88de953c172b4e46ccd12/icon.png'
-    />,
-    <Notification
-      key={1}
-      title='NativeDimensions v1.0.0'
-      timestamp={0}
-      redirectUrl='/plugin/jasonwynn10/NativeDimensions_v1.0.0'
-      iconUrl={
-        'https://raw.githubusercontent.com/jasonwynn10/NativeDimensions/81f90d687825c6e8685709d5c36a0ff8c9221b8e/icon.gif'
-      }
-    />,
-  ]
-  for (let i = 2; i < 10; i++)
-    notifications.push(
-      <Notification
-        key={i}
-        title='Test Notification'
-        timestamp={0}
-        redirectUrl='/'
-      />
+
+  const populateNotifs = async db => {
+    const snapshot = await getDocs(
+      query(
+        collection(db, `/users/${authUser.id}/notifications`),
+        where('seen', '==', false),
+        orderBy('createdAt'),
+        limit(20)
+      )
     )
+    const notifList = snapshot.docs.map(doc => {
+      const data = doc.data()
+      return (
+        <Notification
+          key={doc.id}
+          title={data.title}
+          timestamp={data.createdAt.toMillis() || 0}
+          redirectUrl={data.redirectUrl}
+          iconUrl={data.iconUrl}
+        />
+      )
+    })
+    setNotifications(notifList)
+  }
+
+  useEffect(() => {
+    const db = getFirestore(getApp())
+    populateNotifs(db)
+  }, [notifsOpen]) // depend on notifsOpen to update notifications on open
+
   return (
     <header className={'dark:text-white'}>
       <div
