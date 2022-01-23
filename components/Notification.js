@@ -28,7 +28,7 @@ const Notification = ({
                 src={iconUrl}
                 height={64}
                 width={64}
-                alt={name + ' icon'}
+                alt={title + ' icon'}
               />
             )}
           </div>
