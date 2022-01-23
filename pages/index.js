@@ -32,7 +32,7 @@ const Home = ({ data = [] }) => {
 export const getServerSideProps = withAuthUserTokenSSR()(
   async ({ AuthUser, req }) => {
     const token = await AuthUser.getIdToken()
-    const endpoint = getAbsoluteURL('/api/releases?readOnly=true', req)
+    const endpoint = getAbsoluteURL('/api/releases?latestOnly=true', req)
     const response = await fetch(endpoint, {
       method: 'GET',
       headers: {
