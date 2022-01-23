@@ -1,15 +1,10 @@
 import { withAuthUser, withAuthUserTokenSSR } from 'next-firebase-auth'
 import Metatags from '../components/Metatags'
 import getAbsoluteURL from '../lib/getAbsoluteURL'
-import toast from 'react-hot-toast'
 import PluginCard from '../components/PluginCard'
 import ErrorCard from '../components/ErrorCard'
-import { useContext } from 'react'
-import { SidebarContext } from '../lib/sidebarContext'
 
 const Home = ({ data = [] }) => {
-  const { sidebarOpen } = useContext(SidebarContext)
-
   data = data.map(doc => (
     <PluginCard
       key={doc.id}
@@ -46,16 +41,15 @@ export const getServerSideProps = withAuthUserTokenSSR()(
     })
     const data = await response.json()
     if (!response.ok) {
-      toast.error(JSON.stringify(data))
       return {
         props: {
-          data: [<ErrorCard key={0} />],
+          data: [],
         },
       }
     }
     return {
       props: {
-        data: data.docs,
+        data: data,
       },
     }
   }
