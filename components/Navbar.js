@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 import Footer from './Footer'
 import Notification from './Notification'
 import AppLink from './AppLink'
@@ -25,8 +26,11 @@ import {
   Settings,
 } from '@mui/icons-material'
 import { SidebarData } from './SidebarData'
+import { useAuthUser } from 'next-firebase-auth'
 
 const Navbar = ({ AuthUser, sidebarOpen, setSidebarOpen }) => {
+  const authUser = useAuthUser()
+  const router = useRouter()
   let [appsOpen, setAppsOpen] = useState(false)
   let [notifsOpen, setNotifsOpen] = useState(false)
   let [userOpen, setUserOpen] = useState(false)
@@ -107,11 +111,13 @@ const Navbar = ({ AuthUser, sidebarOpen, setSidebarOpen }) => {
               <Search />
             </a>
           </Link>
-          <Link href='/publish'>
-            <a className='h-6 w-6 ml-4 hidden sm:block'>
-              <Build />
-            </a>
-          </Link>
+          {authUser.id && (
+            <Link href='/publish'>
+              <a className='h-6 w-6 ml-4 hidden sm:block'>
+                <Build />
+              </a>
+            </Link>
+          )}
           <button
             className='h-6 w-6 ml-4 hidden sm:block'
             onClick={() => {
@@ -121,18 +127,24 @@ const Navbar = ({ AuthUser, sidebarOpen, setSidebarOpen }) => {
             }}>
             <Apps />
           </button>
-          <button
-            className='h-6 w-6 ml-4 hidden sm:block'
-            onClick={() => {
-              setNotifsOpen(!notifsOpen)
-              setAppsOpen(false)
-              setUserOpen(false)
-            }}>
-            <Notifications />
-          </button>
+          {authUser.id && (
+            <button
+              className='h-6 w-6 ml-4 hidden sm:block'
+              onClick={() => {
+                setNotifsOpen(!notifsOpen)
+                setAppsOpen(false)
+                setUserOpen(false)
+              }}>
+              <Notifications />
+            </button>
+          )}
           <button
             className='w-12 h-12 ml-2.5'
             onClick={() => {
+              if (authUser.id === null) {
+                router.push('/auth')
+                return
+              }
               setUserOpen(!userOpen)
               setAppsOpen(false)
               setNotifsOpen(false)
