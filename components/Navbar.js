@@ -325,7 +325,11 @@ const Navbar = ({ AuthUser, sidebarOpen, setSidebarOpen }) => {
             </li>
             <li className='snap-end'>
               <button
-                onClick={() => AuthUser.signOut()}
+                onClick={() => {
+                  setUserOpen(false)
+                  setNotifications([])
+                  AuthUser.signOut()
+                }}
                 className='w-full p-3 flex gap-3 hover:bg-zinc-900/90'>
                 <div className='w-6 h-6'>
                   <Logout />
