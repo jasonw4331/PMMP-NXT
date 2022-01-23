@@ -148,7 +148,7 @@ const Publish = () => {
         setNeedsPath,
         setValidPath
       ),
-    [path, tag, url]
+    [checkRepository, path, needsPath, tag, url]
   )
 
   return (
