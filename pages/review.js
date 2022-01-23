@@ -1,20 +1,15 @@
 import {
   AuthAction,
-  useAuthUser,
   withAuthUser,
   withAuthUserTokenSSR,
 } from 'next-firebase-auth'
 import getAbsoluteURL from '../lib/getAbsoluteURL'
 import toast from 'react-hot-toast'
 import PluginCard from '../components/PluginCard'
-import Navbar from '../components/Navbar'
-import { useState } from 'react'
 import ErrorCard from '../components/ErrorCard'
+import Metatags from '../components/Metatags'
 
 const Review = ({ data }) => {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const AuthUser = useAuthUser()
-
   data = data.map(doc => (
     <PluginCard
       key={doc.id}
@@ -26,37 +21,15 @@ const Review = ({ data }) => {
     />
   ))
 
-  let remapped = []
-
-  let divider = 6
-  if (sidebarOpen) divider = 5
-
-  for (let i = 0, j = 0; i <= data.length / divider; i++, j += divider) {
-    if (remapped[i] === undefined) remapped[i] = []
-    remapped[i].push(data.slice(j, j + divider))
-  }
-
-  data = remapped.map((arr, index) => {
-    return (
-      <div key={index} className='flex w-full'>
-        {arr}
-      </div>
-    )
-  })
-
   return (
     <>
-      <Navbar
-        AuthUser={AuthUser}
-        sidebarOpen={sidebarOpen}
-        setSidebarOpen={setSidebarOpen}
+      <Metatags
+        title='Home'
+        tagline={'Currently showing ' + data.length + ' reviewed plugins'}
       />
-      <main
-        className={
-          'absolute top-14 max-h-[94vh] right-0 overflow-x-hidden overflow-y-auto overscroll-contain pt-2 pr-2'
-        }>
-        <ul className={'flex flex-col'}>{data}</ul>
-      </main>
+      <ul className={'w-full flex flex-wrap justify-center lg:justify-start'}>
+        {data}
+      </ul>
     </>
   )
 }
