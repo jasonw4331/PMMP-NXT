@@ -60,7 +60,7 @@ const handler = async (req, res) => {
       }
       docs.push(data)
     })
-    return res.status(200).json({ docs })
+    return res.status(200).json(docs)
   } catch (e) {
     return res.status(400).json({ error: e.message })
   }
