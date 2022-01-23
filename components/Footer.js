@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 const Footer = () => {
   return (
-    <footer className='font-normal text-sm text-zinc-500'>
+    <footer className={'font-normal text-sm text-zinc-500'}>
       <center>
         <h2>&copy; 2021 PMMP-NXT</h2>
         <h5>
