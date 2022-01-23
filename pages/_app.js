@@ -1,12 +1,10 @@
 import '../styles/globals.css'
 import Head from 'next/head'
 import initAuth from '../lib/firebase/initAuth'
-import { domAnimation, LazyMotion } from 'framer-motion'
 import { Toaster } from 'react-hot-toast'
 import Navbar from '../components/Navbar'
 import { useAuthUser, withAuthUser } from 'next-firebase-auth'
 import { useEffect, useState } from 'react'
-import { SidebarContext } from '../lib/sidebarContext'
 import * as gtag from '../lib/gtag'
 import Script from 'next/script'
 import { useRouter } from 'next/router'
@@ -101,21 +99,17 @@ const MyApp = ({ Component, pageProps }) => {
           `,
         }}
       />
-      <LazyMotion strict features={domAnimation}>
-        <SidebarContext.Provider value={{ sidebarOpen, setSidebarOpen }}>
-          <Navbar
-            AuthUser={AuthUser}
-            sidebarOpen={sidebarOpen}
-            setSidebarOpen={setSidebarOpen}
-          />
-          <main
-            className={`mt-14 ${
-              sidebarOpen ? 'ml-0 sm:ml-60' : 'ml-0'
-            } overflow-x-hidden overflow-y-auto overscroll-contain p-2`}>
-            <Component {...pageProps} />
-          </main>
-        </SidebarContext.Provider>
-      </LazyMotion>
+      <Navbar
+        AuthUser={AuthUser}
+        sidebarOpen={sidebarOpen}
+        setSidebarOpen={setSidebarOpen}
+      />
+      <main
+        className={`mt-14 ${
+          sidebarOpen ? 'ml-0 sm:ml-60' : 'ml-0'
+        } overflow-x-hidden overflow-y-auto overscroll-contain p-2`}>
+        <Component {...pageProps} />
+      </main>
       <Toaster />
     </>
   )
