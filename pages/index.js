@@ -21,31 +21,15 @@ const Home = ({ data = [] }) => {
     />
   ))
 
-  let remapped = []
-
-  let divider = 6
-  if (sidebarOpen) divider = 5
-
-  for (let i = 0, j = 0; i <= data.length / divider; i++, j += divider) {
-    if (remapped[i] === undefined) remapped[i] = []
-    remapped[i].push(data.slice(j, j + divider))
-  }
-
-  data = remapped.map((arr, index) => {
-    return (
-      <div key={index} className='flex w-full'>
-        {arr}
-      </div>
-    )
-  })
-
   return (
     <>
       <Metatags
         title='Home'
         tagline={'Currently showing ' + data.length + ' reviewed plugins'}
       />
-      <ul className={'flex flex-col'}>{data}</ul>
+      <ul className={'w-full flex flex-wrap justify-center lg:justify-start'}>
+        {data}
+      </ul>
     </>
   )
 }

@@ -107,10 +107,9 @@ const MyApp = ({ Component, pageProps }) => {
             setSidebarOpen={setSidebarOpen}
           />
           <main
-            className={
-              'absolute top-14 max-h-[94vh] right-0 overflow-x-hidden overflow-y-auto overscroll-contain pt-2 pr-2 ' +
-              (sidebarOpen ? 'max-w-[99vw]' : 'max-w-[99vw]')
-            }>
+            className={`mt-14 ${
+              sidebarOpen ? 'ml-0 sm:ml-60' : 'ml-0'
+            } overflow-x-hidden overflow-y-auto overscroll-contain p-2`}>
             <Component {...pageProps} />
           </main>
         </SidebarContext.Provider>
