@@ -1,8 +1,10 @@
 import {
   createUserWithEmailAndPassword,
+  EmailAuthProvider,
   getAuth,
   GithubAuthProvider,
   GoogleAuthProvider,
+  linkWithCredential,
   signInWithPopup,
   updateProfile,
 } from 'firebase/auth'
@@ -10,8 +12,10 @@ import Image from 'next/image'
 import githubMark from '../public/icons/GitHub-Mark.svg'
 import googleLogo from '../public/icons/GoogleLogo.svg'
 import { useAuthUser } from 'next-firebase-auth'
+import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore'
 import { useState } from 'react'
 import { Password } from '@mui/icons-material'
+import { getApp } from 'firebase/app'
 
 const FirebaseAuth = () => {
   const authUser = useAuthUser()
@@ -25,67 +29,85 @@ const FirebaseAuth = () => {
 
 const SignInButtons = () => {
   async function signInWithEmail() {
-    createUserWithEmailAndPassword(getAuth(), '', '')
-      .then(userCredential => {
-        // Signed in
-        const user = userCredential.user
-        // ...
+    const auth = getAuth()
+    const prevUser = auth.currentUser
+    let email = ''
+    let password = ''
+    let result = await createUserWithEmailAndPassword(
+      getAuth(),
+      email,
+      password
+    )
+
+    if (prevUser)
+      result = await linkWithCredential(
+        prevUser,
+        EmailAuthProvider.credential(email, password)
+      )
+
+    const db = getFirestore(getApp())
+    const snapshot = await getDoc(doc(db, `users/${result.user.uid}`))
+    if (snapshot.data() === undefined) {
+      await setDoc(doc(db, `users/${result.user.uid}`), {
+        accessLevel: 0,
+        displayName: result.user.displayName,
+        photoURL: result.user.photoURL,
       })
-      .catch(error => {
-        const errorCode = error.code
-        const errorMessage = error.message
-        // ..
-      })
+    }
   }
 
   async function signInWithGoogle() {
-    signInWithPopup(getAuth(), new GoogleAuthProvider())
-      .then(result => {
-        // This gives you a GitHub Access Token. You can use it to access the GitHub API.
-        const credential = GoogleAuthProvider.credentialFromResult(result)
-        const token = credential.accessToken
+    const auth = getAuth()
+    const prevUser = auth.currentUser
+    let result = await signInWithPopup(getAuth(), new GoogleAuthProvider())
 
-        // The signed-in user info.
-        const user = result.user
-        // ...
+    if (prevUser)
+      result = await linkWithCredential(
+        prevUser,
+        GoogleAuthProvider.credentialFromResult(result)
+      )
+
+    const db = getFirestore(getApp())
+    const snapshot = await getDoc(doc(db, `users/${result.user.uid}`))
+    if (snapshot.data() === undefined) {
+      await setDoc(doc(db, `users/${result.user.uid}`), {
+        accessLevel: 0,
+        displayName: result.user.displayName,
+        photoURL: result.user.photoURL,
       })
-      .catch(error => {
-        // Handle Errors here.
-        const errorCode = error.code
-        const errorMessage = error.message
-        // The email of the user's account used.
-        const email = error.email
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error)
-        // ...
-      })
+    }
   }
 
   async function signInWithGitHub() {
+    const auth = getAuth()
+    const prevUser = auth.currentUser
     const provider = new GithubAuthProvider()
     ;['user:email', 'public_repo', 'workflow'].forEach(scope =>
       provider.addScope(scope)
     )
-    signInWithPopup(getAuth(), provider)
-      .then(result => {
-        // This gives you a GitHub Access Token. You can use it to access the GitHub API.
-        const credential = GithubAuthProvider.credentialFromResult(result)
-        const token = credential.accessToken
+    let result = await signInWithPopup(getAuth(), provider)
+    // This gives you a GitHub Access Token. You can use it to access the GitHub API.
+    const credential = GithubAuthProvider.credentialFromResult(result)
+    const token = credential.accessToken
 
-        // The signed-in user info.
-        const user = result.user
-        // ...
+    if (prevUser)
+      result = await linkWithCredential(
+        prevUser,
+        GithubAuthProvider.credentialFromResult(result)
+      )
+
+    const db = getFirestore(getApp())
+    const snapshot = await getDoc(doc(db, `users/${result.user.uid}`))
+    if (snapshot.data() === undefined) {
+      setDoc(doc(db, `users/${result.user.uid}`), {
+        accessLevel: 1,
+        displayName: result.user.displayName,
+        photoURL: result.user.photoURL,
+        followers: [],
+        plugins: [],
+        token,
       })
-      .catch(error => {
-        // Handle Errors here.
-        const errorCode = error.code
-        const errorMessage = error.message
-        // The email of the user's account used.
-        const email = error.email
-        // The AuthCredential type that was used.
-        const credential = GithubAuthProvider.credentialFromError(error)
-        // ...
-      })
+    }
   }
 
   return (
