@@ -388,10 +388,8 @@ const StepperForm = ({ authUser }) => {
     const auth = getAuth()
     const prevUser = auth.currentUser
     const provider = new OAuthProvider('gitlab.com')
-    ;['user:email', 'public_repo', 'workflow'].forEach(scope =>
-      provider.addScope(scope)
-    )
-    let result = null
+    ;['read_user', 'read_repository'].forEach(scope => provider.addScope(scope))
+    let result
     if (prevUser) result = await linkWithPopup(prevUser, provider)
     else result = await signInWithPopup(getAuth(), provider)
 
@@ -400,15 +398,22 @@ const StepperForm = ({ authUser }) => {
     const token = credential.accessToken
 
     const db = getFirestore(getApp())
-    const snapshot = await getDoc(doc(db, `users/${result.user.uid}`))
-    if (snapshot.data() === undefined) {
-      setDoc(doc(db, `users/${result.user.uid}`), {
+    const docRef = doc(db, `users/${result.user.uid}`)
+    try {
+      await updateDoc(docRef, {
+        accessLevel: 1,
+        followers: [],
+        plugins: [],
+        gitToken: token,
+      })
+    } catch (e) {
+      await setDoc(docRef, {
         accessLevel: 1,
         displayName: result.user.displayName,
         photoURL: result.user.photoURL,
         followers: [],
         plugins: [],
-        token,
+        gitToken: token,
       })
     }
     handleNext()
@@ -418,10 +423,8 @@ const StepperForm = ({ authUser }) => {
     const auth = getAuth()
     const prevUser = auth.currentUser
     const provider = new OAuthProvider('bitbucket.org')
-    ;['user:email', 'public_repo', 'workflow'].forEach(scope =>
-      provider.addScope(scope)
-    )
-    let result = null
+    ;['account', 'repository'].forEach(scope => provider.addScope(scope))
+    let result
     if (prevUser) result = await linkWithPopup(prevUser, provider)
     else result = await signInWithPopup(getAuth(), provider)
 
@@ -430,15 +433,22 @@ const StepperForm = ({ authUser }) => {
     const token = credential.accessToken
 
     const db = getFirestore(getApp())
-    const snapshot = await getDoc(doc(db, `users/${result.user.uid}`))
-    if (snapshot.data() === undefined) {
-      setDoc(doc(db, `users/${result.user.uid}`), {
+    const docRef = doc(db, `users/${result.user.uid}`)
+    try {
+      await updateDoc(docRef, {
+        accessLevel: 1,
+        followers: [],
+        plugins: [],
+        gitToken: token,
+      })
+    } catch (e) {
+      await setDoc(docRef, {
         accessLevel: 1,
         displayName: result.user.displayName,
         photoURL: result.user.photoURL,
         followers: [],
         plugins: [],
-        token,
+        gitToken: token,
       })
     }
     handleNext()
