@@ -21,10 +21,12 @@ import { getApp } from 'firebase/app'
 const FirebaseAuth = () => {
   const authUser = useAuthUser()
 
-  return authUser.id !== null ? (
-    <UsernameForm user={authUser} />
-  ) : (
-    <SignInButtons />
+  return (
+    <div className={'w-full h-full flex justify-center'}>
+      <div className={'bg-zinc-900 w-full max-w-xl rounded-2xl px-3 py-1'}>
+        <SignInButtons />
+      </div>
+    </div>
   )
 }
 
@@ -161,17 +163,10 @@ const SignInButtons = () => {
   }
 
   return (
-    <div className={'max-w-sm'}>
-      <button
-        onClick={signInWithEmail}
-        disabled={true}
-        className='w-full text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 inline-flex items-center justify-center dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-800 dark:border-gray-700'>
-        <Password className={'mr-2 -ml-1 w-4 h-4'} />
-        Sign in with Email and Password
-      </button>
+    <div className={'w-full max-w-md flex flex-wrap justify-center gap-2'}>
       <button
         onClick={signInWithGoogle}
-        className='w-full text-white bg-[#3469c1] hover:bg-[#3469c1]/90 focus:ring-4 focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 inline-flex items-center justify-center dark:focus:ring-[#4285F4]/55 dark:hover:bg-[#4285F4] mr-2 mb-2'>
+        className='max-w-sm text-white bg-[#3469c1] hover:bg-[#3469c1]/90 focus:ring-4 focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 inline-flex items-center justify-center dark:focus:ring-[#4285F4]/55 dark:hover:bg-[#4285F4] mr-2 mb-2'>
         <div className={'mr-2 -ml-1 w-4 h-4'}>
           <Image src={googleLogo} alt={'Google Logo'} />
         </div>
@@ -179,7 +174,7 @@ const SignInButtons = () => {
       </button>
       <button
         onClick={signInWithGitHub}
-        className='w-full text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 inline-flex items-center justify-center dark:focus:ring-gray-500 dark:hover:bg-[#414a55] mr-2 mb-2'>
+        className='max-w-sm text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 inline-flex items-center justify-center dark:focus:ring-gray-500 dark:hover:bg-[#414a55] mr-2 mb-2'>
         <div className={'mr-2 -ml-1 w-4 h-4'}>
           <Image src={githubMark} alt={'Github Mark'} />
         </div>
