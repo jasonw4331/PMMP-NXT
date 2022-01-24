@@ -25,9 +25,5 @@ module.exports = withPWA({
       },
     ]
   },
-  i18n: {
-    locales: ['en-US'],
-    defaultLocale: 'en-US',
-  },
   swcMinify: true,
 })
