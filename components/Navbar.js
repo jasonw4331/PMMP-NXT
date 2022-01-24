@@ -119,7 +119,7 @@ const Navbar = ({ AuthUser, sidebarOpen, setSidebarOpen }) => {
             </button>
           </form>
         </div>
-        <div id='nav-right' className='flex items-center justify-end mr-4'>
+        <div id='nav-right' className='flex items-center justify-end mr-10'>
           <Link href='/search'>
             <a className='h-6 w-6 ml-4 sm:hidden contents'>
               <Search />
