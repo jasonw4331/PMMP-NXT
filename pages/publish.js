@@ -58,7 +58,9 @@ const StepperForm = ({ authUser }) => {
     auth = snapshot.get('gitToken') ?? null
   }
 
-  useEffect(() => getAuthToken(), [])
+  useEffect(() => {
+    getAuthToken()
+  }, [])
 
   // FORM VALIDATION STUFF
   const [url, setUrl] = useState('')

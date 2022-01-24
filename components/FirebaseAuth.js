@@ -1,11 +1,9 @@
 import {
-  createUserWithEmailAndPassword,
-  EmailAuthProvider,
   getAuth,
   GithubAuthProvider,
   GoogleAuthProvider,
-  linkWithCredential,
   linkWithPopup,
+  OAuthProvider,
   signInWithPopup,
   updateProfile,
 } from 'firebase/auth'
@@ -15,8 +13,9 @@ import googleLogo from '../public/icons/GoogleLogo.svg'
 import { useAuthUser } from 'next-firebase-auth'
 import { doc, getFirestore, setDoc, updateDoc } from 'firebase/firestore'
 import { useState } from 'react'
-import { Password } from '@mui/icons-material'
 import { getApp } from 'firebase/app'
+import gitlabIcon from '../public/icons/GitLab-Icon.svg'
+import bitbucketMark from '../public/icons/Bitbucket-Mark.svg'
 
 const FirebaseAuth = () => {
   const authUser = useAuthUser()
@@ -62,7 +61,7 @@ const SignInButtons = () => {
     ;['user:email', 'public_repo', 'workflow'].forEach(scope =>
       provider.addScope(scope)
     )
-    let result = null
+    let result
     if (prevUser) result = await linkWithPopup(prevUser, provider)
     else result = await signInWithPopup(getAuth(), provider)
     // This gives you a GitHub Access Token. You can use it to access the GitHub API.
