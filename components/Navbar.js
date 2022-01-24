@@ -98,7 +98,7 @@ const Navbar = ({ AuthUser, sidebarOpen, setSidebarOpen }) => {
         </div>
         <div
           id='nav-center'
-          className='w-full max-w-xl sm:flex items-center justify-center mx-2 sm:mx-10'>
+          className='w-full max-w-xl hidden sm:flex items-center justify-center mx-2 sm:mx-10'>
           <form
             method='get'
             action='/results'
