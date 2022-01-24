@@ -29,40 +29,6 @@ const FirebaseAuth = () => {
 }
 
 const SignInButtons = () => {
-  async function signInWithEmail() {
-    const auth = getAuth()
-    const prevUser = auth.currentUser
-    let email = ''
-    let password = ''
-    let result = await createUserWithEmailAndPassword(
-      getAuth(),
-      email,
-      password
-    )
-
-    if (prevUser)
-      result = await linkWithCredential(
-        prevUser,
-        EmailAuthProvider.credential(email, password)
-      )
-
-    const db = getFirestore(getApp())
-    const docRef = doc(db, `users/${result.user.uid}`)
-    try {
-      await updateDoc(docRef, {
-        accessLevel: 0,
-        displayName: result.user.displayName,
-        photoURL: result.user.photoURL,
-      })
-    } catch (e) {
-      await setDoc(docRef, {
-        accessLevel: 0,
-        displayName: result.user.displayName,
-        photoURL: result.user.photoURL,
-      })
-    }
-  }
-
   async function signInWithGoogle() {
     const auth = getAuth()
     const prevUser = auth.currentUser
@@ -122,6 +88,78 @@ const SignInButtons = () => {
     }
   }
 
+  async function signInWithGitLab() {
+    const auth = getAuth()
+    const prevUser = auth.currentUser
+    const provider = new OAuthProvider('gitlab.com')
+    ;['user:email', 'public_repo', 'workflow'].forEach(scope =>
+      provider.addScope(scope)
+    )
+    let result
+    if (prevUser) result = await linkWithPopup(prevUser, provider)
+    else result = await signInWithPopup(getAuth(), provider)
+
+    // This gives you a GitHub Access Token. You can use it to access the GitHub API.
+    const credential = GithubAuthProvider.credentialFromResult(result)
+    const token = credential.accessToken
+
+    const db = getFirestore(getApp())
+    const docRef = doc(db, `users/${result.user.uid}`)
+    try {
+      await updateDoc(docRef, {
+        accessLevel: 1,
+        followers: [],
+        plugins: [],
+        gitToken: token,
+      })
+    } catch (e) {
+      await setDoc(docRef, {
+        accessLevel: 1,
+        displayName: result.user.displayName,
+        photoURL: result.user.photoURL,
+        followers: [],
+        plugins: [],
+        gitToken: token,
+      })
+    }
+  }
+
+  async function signInWithBitbucket() {
+    const auth = getAuth()
+    const prevUser = auth.currentUser
+    const provider = new OAuthProvider('bitbucket.org')
+    ;['user:email', 'public_repo', 'workflow'].forEach(scope =>
+      provider.addScope(scope)
+    )
+    let result
+    if (prevUser) result = await linkWithPopup(prevUser, provider)
+    else result = await signInWithPopup(getAuth(), provider)
+
+    // This gives you a GitHub Access Token. You can use it to access the GitHub API.
+    const credential = GithubAuthProvider.credentialFromResult(result)
+    const token = credential.accessToken
+
+    const db = getFirestore(getApp())
+    const docRef = doc(db, `users/${result.user.uid}`)
+    try {
+      await updateDoc(docRef, {
+        accessLevel: 1,
+        followers: [],
+        plugins: [],
+        gitToken: token,
+      })
+    } catch (e) {
+      await setDoc(docRef, {
+        accessLevel: 1,
+        displayName: result.user.displayName,
+        photoURL: result.user.photoURL,
+        followers: [],
+        plugins: [],
+        gitToken: token,
+      })
+    }
+  }
+
   return (
     <div className={'max-w-sm'}>
       <button
@@ -146,6 +184,24 @@ const SignInButtons = () => {
           <Image src={githubMark} alt={'Github Mark'} />
         </div>
         Sign in with GitHub
+      </button>
+      <button
+        onClick={signInWithGitLab}
+        disabled={true}
+        className='hidden max-w-sm text-white bg-[#c6592a] hover:bg-[#ec6a32]/90 focus:ring-4 focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 inline-flex items-center justify-center dark:focus:ring-gray-500 dark:hover:bg-[#ec6a32] mr-2 mb-2'>
+        <div className={'mr-2 -ml-1 w-4 h-4'}>
+          <Image src={gitlabIcon} alt={'GitLab Icon'} />
+        </div>
+        Sign in with GitLab
+      </button>
+      <button
+        onClick={signInWithBitbucket}
+        disabled={true}
+        className='hidden max-w-sm text-white bg-[#0747a6] hover:bg-[#0a67f2]/90 focus:ring-4 focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 inline-flex items-center justify-center dark:focus:ring-gray-500 dark:hover:bg-[#0a67f2] mr-2 mb-2'>
+        <div className={'mr-2 -ml-1 w-4 h-4'}>
+          <Image src={bitbucketMark} alt={'Bitbucket Mark'} />
+        </div>
+        Sign in with Bitbucket
       </button>
     </div>
   )
