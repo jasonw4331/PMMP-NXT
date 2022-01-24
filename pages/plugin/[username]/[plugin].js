@@ -75,6 +75,14 @@ export async function getStaticProps(context) {
     .where('displayName', '==', username)
     .limit(1)
     .get()
+  if (userSnapshot.docs.length < 1)
+    return {
+      notFound: true,
+      // Next.js will attempt to re-generate the page:
+      // - When a request comes in
+      // - At most once every hour
+      revalidate: 3600, // 1 hour in seconds
+    }
   const snapshot = await getFirebaseAdmin()
     .firestore()
     .doc(`users/${userSnapshot.docs[0].id}/plugins/${plugin}`)
