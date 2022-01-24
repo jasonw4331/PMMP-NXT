@@ -5,6 +5,7 @@ import {
   GithubAuthProvider,
   GoogleAuthProvider,
   linkWithCredential,
+  linkWithPopup,
   signInWithPopup,
   updateProfile,
 } from 'firebase/auth'
@@ -12,7 +13,7 @@ import Image from 'next/image'
 import githubMark from '../public/icons/GitHub-Mark.svg'
 import googleLogo from '../public/icons/GoogleLogo.svg'
 import { useAuthUser } from 'next-firebase-auth'
-import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore'
+import { doc, getFirestore, setDoc, updateDoc } from 'firebase/firestore'
 import { useState } from 'react'
 import { Password } from '@mui/icons-material'
 import { getApp } from 'firebase/app'
@@ -46,9 +47,15 @@ const SignInButtons = () => {
       )
 
     const db = getFirestore(getApp())
-    const snapshot = await getDoc(doc(db, `users/${result.user.uid}`))
-    if (snapshot.data() === undefined) {
-      await setDoc(doc(db, `users/${result.user.uid}`), {
+    const docRef = doc(db, `users/${result.user.uid}`)
+    try {
+      await updateDoc(docRef, {
+        accessLevel: 0,
+        displayName: result.user.displayName,
+        photoURL: result.user.photoURL,
+      })
+    } catch (e) {
+      await setDoc(docRef, {
         accessLevel: 0,
         displayName: result.user.displayName,
         photoURL: result.user.photoURL,
@@ -59,18 +66,20 @@ const SignInButtons = () => {
   async function signInWithGoogle() {
     const auth = getAuth()
     const prevUser = auth.currentUser
-    let result = await signInWithPopup(getAuth(), new GoogleAuthProvider())
-
-    if (prevUser)
-      result = await linkWithCredential(
-        prevUser,
-        GoogleAuthProvider.credentialFromResult(result)
-      )
+    const provider = new GoogleAuthProvider()
+    let result = null
+    if (prevUser) result = await linkWithPopup(prevUser, provider)
+    else result = await signInWithPopup(getAuth(), provider)
 
     const db = getFirestore(getApp())
-    const snapshot = await getDoc(doc(db, `users/${result.user.uid}`))
-    if (snapshot.data() === undefined) {
-      await setDoc(doc(db, `users/${result.user.uid}`), {
+    const docRef = doc(db, `users/${result.user.uid}`)
+    try {
+      await updateDoc(docRef, {
+        accessLevel: 0,
+        photoURL: result.user.photoURL,
+      })
+    } catch (e) {
+      await setDoc(docRef, {
         accessLevel: 0,
         displayName: result.user.displayName,
         photoURL: result.user.photoURL,
@@ -85,27 +94,30 @@ const SignInButtons = () => {
     ;['user:email', 'public_repo', 'workflow'].forEach(scope =>
       provider.addScope(scope)
     )
-    let result = await signInWithPopup(getAuth(), provider)
+    let result = null
+    if (prevUser) result = await linkWithPopup(prevUser, provider)
+    else result = await signInWithPopup(getAuth(), provider)
     // This gives you a GitHub Access Token. You can use it to access the GitHub API.
     const credential = GithubAuthProvider.credentialFromResult(result)
     const token = credential.accessToken
 
-    if (prevUser)
-      result = await linkWithCredential(
-        prevUser,
-        GithubAuthProvider.credentialFromResult(result)
-      )
-
     const db = getFirestore(getApp())
-    const snapshot = await getDoc(doc(db, `users/${result.user.uid}`))
-    if (snapshot.data() === undefined) {
-      setDoc(doc(db, `users/${result.user.uid}`), {
+    const docRef = doc(db, `users/${result.user.uid}`)
+    try {
+      await updateDoc(docRef, {
+        accessLevel: 1,
+        followers: [],
+        plugins: [],
+        gitToken: token,
+      })
+    } catch (e) {
+      await setDoc(docRef, {
         accessLevel: 1,
         displayName: result.user.displayName,
         photoURL: result.user.photoURL,
         followers: [],
         plugins: [],
-        token,
+        gitToken: token,
       })
     }
   }
