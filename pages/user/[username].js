@@ -25,8 +25,10 @@ export async function getStaticProps(context) {
     .where('displayName', '==', username)
     .limit(1)
     .get()
-  const userData = userToJSON(userSnapshot)
-  if (userData.accessLevel < 1)
+  if (
+    userSnapshot.docs.length < 1 ||
+    userSnapshot.docs[0].data().accessLevel < 1
+  )
     return {
       notFound: true,
       // Next.js will attempt to re-generate the page:
@@ -34,6 +36,8 @@ export async function getStaticProps(context) {
       // - At most once every hour
       revalidate: 3600, // 1 hour in seconds
     }
+
+  const userData = userToJSON(userSnapshot.docs[0])
 
   let found = []
   const snapshot = await getFirebaseAdmin()
