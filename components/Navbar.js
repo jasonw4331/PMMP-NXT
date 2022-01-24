@@ -79,6 +79,7 @@ const Navbar = ({ AuthUser, sidebarOpen, setSidebarOpen }) => {
   return (
     <header className={'dark:text-white'}>
       <div
+        id={'navbar'}
         className={
           'w-screen h-14 fixed z-40 top-0 flex flex-nowrap justify-between bg-zinc-900'
         }>
