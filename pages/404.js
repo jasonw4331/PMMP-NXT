@@ -16,7 +16,7 @@ const NotFound = () => {
         title='Not Found'
         tagline={"Whoops! That page couldn't be found."}
       />
-      <div className='not-found'>
+      <div className={'not-found'}>
         <h1>Ooops...</h1>
         <h2>That page cannot be found :(</h2>
         <p>
