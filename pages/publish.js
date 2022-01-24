@@ -347,11 +347,6 @@ const StepperForm = ({ authUser }) => {
   async function signInWithGitHub() {
     const auth = getAuth()
     const prevUser = auth.currentUser
-    try {
-      await unlink(prevUser, 'github.com') // TODO: remove after testing
-    } catch (e) {
-      // NOOP
-    }
     const provider = new GithubAuthProvider()
     ;['user:email', 'public_repo', 'workflow'].forEach(scope =>
       provider.addScope(scope)
