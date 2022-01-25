@@ -19,7 +19,14 @@ const PluginCard = ({
       </h1>
       <h2 className={'w-full h-5 px-4 mb-2 font-roboto text-sm'}>{author}</h2>
       <div className={'w-[205px] h-[205px] mb-5'}>
-        <Image src={iconUrl} alt='Plugin Icon' width={205} height={205} />
+        <Image
+          src={iconUrl}
+          alt='Plugin Icon'
+          width={205}
+          height={205}
+          placeholder={'blur'}
+          loading={'lazy'}
+        />
       </div>
       <p
         className={
