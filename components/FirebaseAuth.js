@@ -5,21 +5,16 @@ import {
   linkWithPopup,
   OAuthProvider,
   signInWithPopup,
-  updateProfile,
 } from 'firebase/auth'
 import Image from 'next/image'
 import githubMark from '../public/icons/GitHub-Mark.svg'
 import googleLogo from '../public/icons/GoogleLogo.svg'
-import { useAuthUser } from 'next-firebase-auth'
 import { doc, getFirestore, setDoc, updateDoc } from 'firebase/firestore'
-import { useState } from 'react'
 import { getApp } from 'firebase/app'
 import gitlabIcon from '../public/icons/GitLab-Icon.svg'
 import bitbucketMark from '../public/icons/Bitbucket-Mark.svg'
 
 const FirebaseAuth = () => {
-  const authUser = useAuthUser()
-
   return (
     <div className={'w-full h-full flex justify-center'}>
       <div className={'bg-zinc-900 w-full max-w-xl rounded-2xl px-3 py-1'}>
@@ -34,7 +29,7 @@ const SignInButtons = () => {
     const auth = getAuth()
     const prevUser = auth.currentUser
     const provider = new GoogleAuthProvider()
-    let result = null
+    let result
     if (prevUser) result = await linkWithPopup(prevUser, provider)
     else result = await signInWithPopup(getAuth(), provider)
 
@@ -198,31 +193,6 @@ const SignInButtons = () => {
         Sign in with Bitbucket
       </button>
     </div>
-  )
-}
-
-const UsernameForm = ({ user }) => {
-  const [formValue, setFormValue] = useState('')
-
-  const onSubmit = async e => {
-    e.preventDefault()
-
-    await updateProfile(user, { displayName: formValue })
-  }
-
-  return (
-    <section>
-      <h3>Choose a Username</h3>
-      <form onSubmit={onSubmit}>
-        <input name='username' placeholder='my name' value={formValue} />
-        <button
-          type='submit'
-          className='text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800'
-          disabled={formValue !== ''}>
-          Choose
-        </button>
-      </form>
-    </section>
   )
 }
 
