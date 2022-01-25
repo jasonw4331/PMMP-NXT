@@ -24,7 +24,7 @@ const PluginCard = ({
           alt='Plugin Icon'
           width={205}
           height={205}
-          placeholder={'blur'}
+          placeholder={typeof iconUrl === 'string' ? 'empty' : 'blur'}
           loading={'lazy'}
         />
       </div>
