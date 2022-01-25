@@ -5,6 +5,7 @@ import { Toaster } from 'react-hot-toast'
 import Navbar from '../components/Navbar'
 import { useAuthUser, withAuthUser } from 'next-firebase-auth'
 import { useState } from 'react'
+import { ThemeProvider } from 'next-themes'
 
 initAuth()
 
@@ -68,18 +69,20 @@ const MyApp = ({ Component, pageProps }) => {
 
         <meta name='viewport' content='initial-scale=1.0, width=device-width' />
       </Head>
-      <Navbar
-        AuthUser={AuthUser}
-        sidebarOpen={sidebarOpen}
-        setSidebarOpen={setSidebarOpen}
-      />
-      <main
-        className={`mt-14 ${
-          sidebarOpen ? 'ml-0 sm:ml-60' : 'ml-0'
-        } overflow-x-hidden overflow-y-auto overscroll-contain p-2`}>
-        <Component {...pageProps} />
-      </main>
-      <Toaster />
+      <ThemeProvider attribute={'class'} defaultTheme={'dark'}>
+        <Navbar
+          AuthUser={AuthUser}
+          sidebarOpen={sidebarOpen}
+          setSidebarOpen={setSidebarOpen}
+        />
+        <main
+          className={`mt-14 ${
+            sidebarOpen ? 'ml-0 sm:ml-60' : 'ml-0'
+          } overflow-x-hidden overflow-y-auto overscroll-contain p-2`}>
+          <Component {...pageProps} />
+        </main>
+        <Toaster />
+      </ThemeProvider>
     </>
   )
 }

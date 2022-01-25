@@ -37,6 +37,7 @@ import {
   where,
 } from 'firebase/firestore'
 import { getApp } from 'firebase/app'
+import { useTheme } from 'next-themes'
 
 const Navbar = ({ AuthUser, sidebarOpen, setSidebarOpen }) => {
   const authUser = useAuthUser()
@@ -75,6 +76,8 @@ const Navbar = ({ AuthUser, sidebarOpen, setSidebarOpen }) => {
     const db = getFirestore(getApp())
     populateNotifs(db)
   }, [notifsOpen]) // depend on notifsOpen to update notifications on open
+
+  const { theme, setTheme } = useTheme()
 
   return (
     <header className={'dark:text-white'}>
@@ -344,7 +347,11 @@ const Navbar = ({ AuthUser, sidebarOpen, setSidebarOpen }) => {
               </svg>
             </li>
             <li className='snap-end'>
-              <button className='w-full p-3 flex gap-3 hover:bg-zinc-900/90'>
+              <button
+                onClick={() => {
+                  setTheme(theme === 'dark' ? 'light' : 'dark')
+                }}
+                className='w-full p-3 flex gap-3 hover:bg-zinc-900/90'>
                 <div className='w-6 h-6'>
                   <DarkMode />
                 </div>
