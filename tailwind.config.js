@@ -6,6 +6,7 @@ module.exports = {
     './components/**/*.{js,ts,jsx,tsx,html}',
     './lib/**/*.{js,ts,jsx,tsx,html}',
   ],
+  safelist: ['dark'], //specific classes
   theme: {
     extend: {},
   },
