@@ -32,7 +32,9 @@ const PluginCard = ({
           className={
             'text-purple-400 p-2 font-roboto uppercase text-sm leading-4 tracking-widest'
           }>
-          <Link href={'/plugin/' + encodeURI(author) + '/' + encodeURI(name)}>
+          <Link
+            href={'/plugin/' + encodeURI(author) + '/' + encodeURI(name)}
+            prefetch={false}>
             <a>More Details</a>
           </Link>
         </button>
