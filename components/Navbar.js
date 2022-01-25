@@ -317,7 +317,7 @@ const Navbar = ({ AuthUser, sidebarOpen, setSidebarOpen }) => {
             </svg>
           </div>
           <ul className='max-h-[592px] grid grid-cols-1 gap-1 overflow-y-auto snap-y'>
-            <li className='snap-end'>
+            <li>
               <Link href='/profile'>
                 <a className='p-3 flex gap-3 hover:bg-zinc-900/90'>
                   <div className='w-6 h-6'>
@@ -327,7 +327,7 @@ const Navbar = ({ AuthUser, sidebarOpen, setSidebarOpen }) => {
                 </a>
               </Link>
             </li>
-            <li className='snap-end'>
+            <li>
               <button
                 onClick={() => {
                   setUserOpen(false)
@@ -346,7 +346,7 @@ const Navbar = ({ AuthUser, sidebarOpen, setSidebarOpen }) => {
                 <path d='M-13 1L479.008 1' stroke='#71717a' fill='none' />
               </svg>
             </li>
-            <li className='snap-end'>
+            <li>
               <button
                 onClick={() => {
                   setTheme(theme === 'dark' ? 'light' : 'dark')
@@ -358,7 +358,7 @@ const Navbar = ({ AuthUser, sidebarOpen, setSidebarOpen }) => {
                 <p>Appearance: Dark</p>
               </button>
             </li>
-            <li className='snap-end'>
+            <li>
               <Link href='/settings'>
                 <a className='p-3 flex gap-3 hover:bg-zinc-900/90'>
                   <div className='w-6 h-6'>
@@ -368,7 +368,7 @@ const Navbar = ({ AuthUser, sidebarOpen, setSidebarOpen }) => {
                 </a>
               </Link>
             </li>
-            <li className='snap-end'>
+            <li>
               <Link href='/help'>
                 <a className='p-3 flex gap-3 hover:bg-zinc-900/90'>
                   <div className='w-6 h-6'>
@@ -378,7 +378,7 @@ const Navbar = ({ AuthUser, sidebarOpen, setSidebarOpen }) => {
                 </a>
               </Link>
             </li>
-            <li className='snap-end'>
+            <li>
               <Link href='https://github.com/jasonwynn10/PMMP-NXT/issues'>
                 <a className='p-3 flex gap-3 hover:bg-zinc-900/90'>
                   <div className='w-6 h-6'>
@@ -388,7 +388,7 @@ const Navbar = ({ AuthUser, sidebarOpen, setSidebarOpen }) => {
                 </a>
               </Link>
             </li>
-            <li className='snap-end'>
+            <li>
               <button className='w-full p-3 flex gap-3 hover:bg-zinc-900/90'>
                 <div className='w-6 h-6'>
                   <Keyboard />
