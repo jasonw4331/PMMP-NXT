@@ -1,26 +1,19 @@
 import { useAuthUser, withAuthUser } from 'next-firebase-auth'
 import Metatags from '../components/Metatags'
-import { useCallback, useEffect, useState } from 'react'
-import debounce from 'lodash.debounce'
+import { useEffect, useState } from 'react'
 import semantic from 'semver'
 import IdentifyRepoHost from '../lib/repo_hosts/identifyRepoHost'
 import Image from 'next/image'
 import githubMark from '../public/icons/GitHub-Mark.svg'
 import gitlabIcon from '../public/icons/GitLab-Icon.svg'
 import bitbucketMark from '../public/icons/Bitbucket-Mark.svg'
-import { useRouter } from 'next/router'
-import Stepper from '@mui/material/Stepper'
-import Step from '@mui/material/Step'
-import StepLabel from '@mui/material/StepLabel'
-import StepContent from '@mui/material/StepContent'
-import Button from '@mui/material/Button'
+import { Button, Step, StepContent, StepLabel, Stepper } from '@mui/material'
 import {
   getAuth,
   GithubAuthProvider,
   linkWithPopup,
   OAuthProvider,
   signInWithPopup,
-  unlink,
 } from 'firebase/auth'
 import {
   doc,
@@ -32,7 +25,6 @@ import {
 import { getApp } from 'firebase/app'
 
 const Publish = () => {
-  const router = useRouter()
   const authUser = useAuthUser()
 
   return (
@@ -60,7 +52,7 @@ const StepperForm = ({ authUser }) => {
 
   useEffect(() => {
     getAuthToken()
-  }, [])
+  })
 
   // FORM VALIDATION STUFF
   const [url, setUrl] = useState('')
@@ -68,25 +60,99 @@ const StepperForm = ({ authUser }) => {
   const [options, setOptions] = useState([])
   const [needsPath, setNeedsPath] = useState(false)
   const [path, setPath] = useState('')
-  const [validPath, setValidPath] = useState(false)
+  const [manifestUrl, setManifestUrl] = useState('')
+  const [enableDescription, setEnableDescription] = useState(true)
+  const [descriptionUrl, setDescriptionUrl] = useState('')
+  const [enableChangelog, setEnableChangelog] = useState(true)
+  const [changelogUrl, setChangelogUrl] = useState('')
 
-  // prevent new debounce being created every page render
-  const checkRepository = useCallback(
-    debounce(
-      async (
-        url,
-        tag,
-        needsPath,
-        path,
-        setTag,
-        setOptions,
-        setNeedsPath,
-        setValidPath
-      ) => {
-        if (url.length < 10) return
+  // STEPPER
+  const [activeStep, setActiveStep] = useState(0)
 
-        const regExp =
-          /^(?:http[s]?:\/\/)?((?:[a-zA-Z0-9][-a-zA-Z0-9]{0,61}[a-zA-Z0-9]?\.)?[a-zA-Z0-9]{1,2}(?:[-a-zA-Z0-9]{0,252}[a-zA-Z0-9])?)\.[a-zA-Z]{2,63}(?:\/|^).*/im
+  useEffect(() => {
+    if (
+      authUser.firebaseUser?.providerData.some(({ providerId }) => {
+        return providerId === 'github.com'
+      })
+    )
+      handleNext()
+  }, [authUser])
+
+  const handleNext = () => {
+    setActiveStep(prevActiveStep => prevActiveStep + 1)
+  }
+
+  const handleBack = () => {
+    setActiveStep(prevActiveStep => prevActiveStep - 1)
+  }
+
+  const regExp =
+    /^(?:http[s]?:\/\/)?((?:[a-zA-Z0-9][-a-zA-Z0-9]{0,61}[a-zA-Z0-9]?\.)?[a-zA-Z0-9]{1,2}(?:[-a-zA-Z0-9]{0,252}[a-zA-Z0-9])?)\.[a-zA-Z]{2,63}(?:\/|^).*/im
+
+  const steps = [
+    {
+      label: 'Sign in to your Repo host',
+      content: (
+        <div className={'min-w-fit flex flex-wrap'}>
+          <button
+            onClick={signInWithGitHub}
+            className='max-w-sm text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 inline-flex items-center justify-center dark:focus:ring-gray-500 dark:hover:bg-[#414a55] mr-2 mb-2'>
+            <div className={'mr-2 -ml-1 w-4 h-4'}>
+              <Image src={githubMark} alt={'Github Mark'} />
+            </div>
+            Sign in with GitHub
+          </button>
+          <button
+            onClick={signInWithGitLab}
+            disabled={true}
+            className='max-w-sm text-white bg-[#c6592a] hover:bg-[#ec6a32]/90 focus:ring-4 focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 inline-flex items-center justify-center dark:focus:ring-gray-500 dark:hover:bg-[#ec6a32] mr-2 mb-2'>
+            <div className={'mr-2 -ml-1 w-4 h-4'}>
+              <Image src={gitlabIcon} alt={'GitLab Icon'} />
+            </div>
+            Sign in with GitLab
+          </button>
+          <button
+            onClick={signInWithBitbucket}
+            disabled={true}
+            className='max-w-sm text-white bg-[#0747a6] hover:bg-[#0a67f2]/90 focus:ring-4 focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 inline-flex items-center justify-center dark:focus:ring-gray-500 dark:hover:bg-[#0a67f2] mr-2 mb-2'>
+            <div className={'mr-2 -ml-1 w-4 h-4'}>
+              <Image src={bitbucketMark} alt={'Bitbucket Mark'} />
+            </div>
+            Sign in with Bitbucket
+          </button>
+        </div>
+      ),
+      validate: () => true,
+      onContinue: null,
+    },
+    {
+      label: 'Choose a repository',
+      content: (
+        <fieldset className={'w-full max-w-lg flex flex-col'}>
+          <label
+            className='block text-zinc-400 font-bold mb-1 pr-4'
+            htmlFor='inline-full-name'>
+            Repository URL
+          </label>
+          <input
+            className='bg-zinc-100 appearance-none mb-6 border-2 border-zinc-200 rounded w-full py-2 px-4 text-zinc-700 leading-tight focus:outline-none focus:bg-white focus:border-slate-500'
+            id='inline-full-name'
+            name={'url'}
+            type={'url'}
+            value={url}
+            onChange={e => setUrl(e.target.value)}
+            placeholder={'https://github.com/pmmp/PocketMine-MP.git'}
+            required={true}
+            autoFocus={true}
+          />
+        </fieldset>
+      ),
+      validate: () =>
+        url.length >= 10 ||
+        /^(?:http[s]?:\/\/)?((?:[a-zA-Z0-9][-a-zA-Z0-9]{0,61}[a-zA-Z0-9]?\.)?[a-zA-Z0-9]{1,2}(?:[-a-zA-Z0-9]{0,252}[a-zA-Z0-9])?)\.[a-zA-Z]{2,63}(?:\/|^).*/im.test(
+          url
+        ),
+      onContinue: async () => {
         const results = regExp.exec(url)
         if (results[1] === null) return
 
@@ -120,137 +186,18 @@ const StepperForm = ({ authUser }) => {
             )
           })
         )
-
-        const file = await host.getRepoFileUrl({
-          domain,
-          namespace,
-          repo,
-          tag,
-          path,
-          file: 'plugin.yml',
-          auth,
-        })
-        if (path === null && file === null) {
-          setNeedsPath(true)
-          return
-        } else if (file === null) {
-          setValidPath(false)
-          return
-        }
-        setValidPath(true)
       },
-      1000
-    ),
-    []
-  )
-
-  // trigger repository check on any field update
-  useEffect(
-    () =>
-      checkRepository(
-        url,
-        tag,
-        needsPath,
-        path,
-        setTag,
-        setOptions,
-        setNeedsPath,
-        setValidPath
-      ),
-    [checkRepository, path, needsPath, tag, url]
-  )
-
-  // STEPPER
-  const [activeStep, setActiveStep] = useState(authUser.id === null ? 0 : 1)
-
-  const handleNext = () => {
-    setActiveStep(prevActiveStep => prevActiveStep + 1)
-  }
-
-  const handleBack = () => {
-    setActiveStep(prevActiveStep => prevActiveStep - 1)
-  }
-
-  const handleReset = () => {
-    setActiveStep(0)
-  }
-
-  const steps = [
-    {
-      label: 'Sign in to your Repo host',
-      content: (
-        <div className={'min-w-fit flex flex-wrap'}>
-          <button
-            key={0}
-            onClick={signInWithGitHub}
-            className='max-w-sm text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 inline-flex items-center justify-center dark:focus:ring-gray-500 dark:hover:bg-[#414a55] mr-2 mb-2'>
-            <div className={'mr-2 -ml-1 w-4 h-4'}>
-              <Image src={githubMark} alt={'Github Mark'} />
-            </div>
-            Sign in with GitHub
-          </button>
-          <button
-            key={1}
-            onClick={signInWithGitLab}
-            disabled={true}
-            className='max-w-sm text-white bg-[#c6592a] hover:bg-[#ec6a32]/90 focus:ring-4 focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 inline-flex items-center justify-center dark:focus:ring-gray-500 dark:hover:bg-[#ec6a32] mr-2 mb-2'>
-            <div className={'mr-2 -ml-1 w-4 h-4'}>
-              <Image src={gitlabIcon} alt={'GitLab Icon'} />
-            </div>
-            Sign in with GitLab
-          </button>
-          <button
-            key={2}
-            onClick={signInWithBitbucket}
-            disabled={true}
-            className='max-w-sm text-white bg-[#0747a6] hover:bg-[#0a67f2]/90 focus:ring-4 focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 inline-flex items-center justify-center dark:focus:ring-gray-500 dark:hover:bg-[#0a67f2] mr-2 mb-2'>
-            <div className={'mr-2 -ml-1 w-4 h-4'}>
-              <Image src={bitbucketMark} alt={'Bitbucket Mark'} />
-            </div>
-            Sign in with Bitbucket
-          </button>
-        </div>
-      ),
-    },
-    {
-      label: 'Choose a repository',
-      content: (
-        <fieldset
-          form={'publishForm'}
-          className={'w-full max-w-lg flex flex-col'}>
-          <label
-            className='block text-zinc-400 font-bold mb-1 pr-4'
-            htmlFor='inline-full-name'>
-            Repository URL
-          </label>
-          <input
-            form={'publishForm'}
-            className='bg-zinc-100 appearance-none mb-6 border-2 border-zinc-200 rounded w-full py-2 px-4 text-zinc-700 leading-tight focus:outline-none focus:bg-white focus:border-slate-500'
-            id='inline-full-name'
-            name={'url'}
-            type={'url'}
-            value={url}
-            onChange={e => setUrl(e.target.value)}
-            placeholder={'https://github.com/pmmp/PocketMine-MP.git'}
-            required={true}
-            autoFocus={true}
-          />
-        </fieldset>
-      ),
     },
     {
       label: `Choose a Release ${needsPath ? 'and Path' : ''}`,
       content: (
-        <fieldset
-          form={'publishForm'}
-          className={'w-full max-w-lg flex flex-col'}>
+        <fieldset className={'w-full max-w-lg flex flex-col'}>
           <label
             className='block text-zinc-400 font-bold mb-1 pr-4'
             htmlFor='inline-password'>
             Tag / Release
           </label>
           <select
-            form={'publishForm'}
             className='bg-zinc-100 appearance-none mb-6 border-2 border-zinc-200 rounded w-full py-2 px-4 text-zinc-700 leading-tight focus:outline-none focus:bg-white focus:border-slate-500'
             id='inline-password'
             name={'commit'}
@@ -266,7 +213,6 @@ const StepperForm = ({ authUser }) => {
               Path / To / Plugin
             </label>
             <input
-              form={'publishForm'}
               className='bg-zinc-100 appearance-none border-2 border-zinc-200 rounded w-full py-2 px-4 text-zinc-700 leading-tight focus:outline-none focus:bg-white focus:border-slate-500'
               id='inline-full-name'
               name={'path'}
@@ -279,17 +225,67 @@ const StepperForm = ({ authUser }) => {
           </div>
         </fieldset>
       ),
+      validate: () => tag !== '' && (!needsPath || manifestUrl !== ''),
+      onContinue: async () => {
+        const results = regExp.exec(url)
+        if (results[1] === null) return
+
+        const { domain, namespace, repo, host } = await IdentifyRepoHost(
+          results[1],
+          url,
+          auth
+        )
+
+        const manifestUrl = await host.getRepoFileUrl({
+          domain,
+          namespace,
+          repo,
+          tag,
+          path,
+          file: 'plugin.yml',
+          auth,
+        })
+        if (path === '' && manifestUrl === null) {
+          setNeedsPath(true)
+          return
+        } else if (manifestUrl === null) {
+          setManifestUrl('')
+          return
+        }
+        setManifestUrl(manifestUrl)
+        setDescriptionUrl(
+          (await host.getRepoFileUrl({
+            domain,
+            namespace,
+            repo,
+            tag,
+            path,
+            file: 'readme.md',
+            auth,
+          })) ?? ''
+        )
+        setEnableDescription(descriptionUrl !== '')
+        setChangelogUrl(
+          (await host.getRepoFileUrl({
+            domain,
+            namespace,
+            repo,
+            tag,
+            path,
+            file: 'changelog.md',
+            auth,
+          })) ?? ''
+        )
+        setEnableChangelog(changelogUrl !== '')
+      },
     },
     {
       label: `Choose your imports`,
       content: (
-        <fieldset
-          form={'publishForm'}
-          className='w-full max-w-lg flex flex-col'>
+        <fieldset className='w-full max-w-lg flex flex-col'>
           <legend className='sr-only'>Optional Imports</legend>
           <div className='flex items-center mb-4'>
             <input
-              form={'publishForm'}
               id='checkbox-1'
               aria-describedby='checkbox-1'
               type='checkbox'
@@ -308,12 +304,13 @@ const StepperForm = ({ authUser }) => {
 
           <div className='flex items-center mb-4'>
             <input
-              form={'publishForm'}
               id='checkbox-2'
               aria-describedby='checkbox-2'
               type='checkbox'
               name={'enableReadme'}
-              defaultChecked={true}
+              checked={enableDescription}
+              readOnly
+              onClick={() => setEnableDescription(!enableDescription)}
               className='w-4 h-4 text-green-600 bg-white dark:bg-gray-900 rounded border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
             />
             <label
@@ -325,12 +322,13 @@ const StepperForm = ({ authUser }) => {
 
           <div className='flex items-center mb-4'>
             <input
-              form={'publishForm'}
               id='checkbox-3'
               aria-describedby='checkbox-3'
               type='checkbox'
               name={'enableChangelog'}
-              defaultChecked={true}
+              checked={enableChangelog}
+              readOnly
+              onClick={() => setEnableChangelog(!enableChangelog)}
               className='w-4 h-4 text-green-600 bg-white dark:bg-gray-900 rounded border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
             />
             <label
@@ -341,6 +339,13 @@ const StepperForm = ({ authUser }) => {
           </div>
         </fieldset>
       ),
+      validate: () =>
+        manifestUrl !== '' &&
+        (!enableDescription || descriptionUrl !== '') &&
+        (!enableChangelog || changelogUrl !== ''),
+      onContinue: async () => {
+        // TODO: display preview
+      },
     },
   ]
 
@@ -390,6 +395,9 @@ const StepperForm = ({ authUser }) => {
     if (prevUser) result = await linkWithPopup(prevUser, provider)
     else result = await signInWithPopup(getAuth(), provider)
 
+    console.log(result)
+    return
+
     // This gives you a GitHub Access Token. You can use it to access the GitHub API.
     const credential = GithubAuthProvider.credentialFromResult(result)
     const token = credential.accessToken
@@ -425,6 +433,9 @@ const StepperForm = ({ authUser }) => {
     if (prevUser) result = await linkWithPopup(prevUser, provider)
     else result = await signInWithPopup(getAuth(), provider)
 
+    console.log(result)
+    return
+
     // This gives you a GitHub Access Token. You can use it to access the GitHub API.
     const credential = GithubAuthProvider.credentialFromResult(result)
     const token = credential.accessToken
@@ -451,82 +462,25 @@ const StepperForm = ({ authUser }) => {
     handleNext()
   }
 
-  const onSubmit = async e => {
-    e.preventDefault()
-
-    const form = new FormData(e.target)
-    const formData = {
-      ...Object.fromEntries(form.entries()),
-      url,
-      commit: tag,
-      path,
-    }
-    // TODO: validate formData.path
-
-    const regExp =
-      /^(?:http[s]?:\/\/)?((?:[a-zA-Z0-9][-a-zA-Z0-9]{0,61}[a-zA-Z0-9]?\.)?[a-zA-Z0-9]{1,2}(?:[-a-zA-Z0-9]{0,252}[a-zA-Z0-9])?)\.[a-zA-Z]{2,63}(?:\/|^).*/im
-    const results = regExp.exec(formData.url)
-    if (results[1] === null) return
-
-    const { domain, namespace, repo, commit, host } = {
-      ...(await IdentifyRepoHost(results[1], url, auth)),
-      commit: formData.commit,
-    }
-
-    const manifestUrl = await host.getRepoFileUrl({
-      domain,
-      namespace,
-      repo,
-      commit,
-      auth,
-      path,
-      file: 'plugin.yml',
-    })
-    if (formData.enableDescription) {
-      const descriptionUrl = await host.getRepoFileUrl({
-        domain,
-        namespace,
-        repo,
-        commit,
-        auth,
-        path,
-        file: 'readme.md',
-      })
-    } else {
-      const descriptionUrl = null
-    }
-    if (formData.enableChangelog) {
-      const changelogUrl = await host.getRepoFileUrl({
-        domain,
-        namespace,
-        repo,
-        commit,
-        auth,
-        path: path,
-        file: 'changelog.md',
-      })
-    } else {
-      const changelogUrl = null
-    }
-
-    // TODO: display draft with imported info
-  }
-
   return (
     <form
-      id={'publishForm'}
-      onSubmit={onSubmit}
-      className={'bg-zinc-900 w-full max-w-4xl rounded-2xl px-3 py-1'}>
+      className={
+        'bg-zinc-900 w-full max-w-4xl rounded-2xl px-3 py-1 dark:text-white'
+      }>
       <Stepper activeStep={activeStep} orientation='vertical'>
         {steps.map((step, index) => (
           <Step key={step.label}>
             <StepLabel
               optional={
                 index === steps.length - 1 ? (
-                  <p className={'font-thin text-sm'}>Last step</p>
+                  <p className={'font-thin text-sm dark:text-white'}>
+                    Last step
+                  </p>
                 ) : null
               }>
-              <h3 className={'font-semibold text-lg'}>{step.label}</h3>
+              <h3 className={'font-semibold text-lg dark:text-white'}>
+                {step.label}
+              </h3>
             </StepLabel>
             <StepContent>
               <div className={''}>{step.content}</div>
@@ -534,11 +488,11 @@ const StepperForm = ({ authUser }) => {
                 <Button
                   className={'bg-blue-700 dark:bg-zinc-700'}
                   variant='contained'
-                  disabled={index === steps.length - 1 && !validPath}
+                  disabled={!step.validate()}
                   onClick={() => {
+                    if (step.onContinue !== null) step.onContinue()
                     if (index !== steps.length - 1) handleNext()
                   }}
-                  type={index === steps.length - 1 ? 'submit' : 'button'}
                   sx={{ mt: 1, mr: 1 }}>
                   {index === steps.length - 1 ? 'Preview' : 'Continue'}
                 </Button>
