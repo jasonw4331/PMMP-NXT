@@ -89,16 +89,21 @@ export async function getStaticProps(context) {
 // It may be called again, on a serverless function, if
 // the path has not been generated.
 export async function getStaticPaths() {
-  const snapshot = await getFirebaseAdmin()
-    .firestore()
-    .collection('users')
-    .where('accessLevel', '>=', '1')
-    .orderBy('accessLevel', 'asc')
-    .get()
-  // Get the paths we want to pre-render based on released plugins
-  const paths = snapshot.docs.map(async doc => ({
-    params: { username: (await doc.data()).displayName },
-  }))
+  let paths = []
+  try {
+    const snapshot = await getFirebaseAdmin()
+      .firestore()
+      .collection('users')
+      .where('accessLevel', '>=', '1')
+      .orderBy('accessLevel', 'asc')
+      .get()
+    // Get the paths we want to pre-render based on released plugins
+    paths = snapshot.docs.map(async doc => ({
+      params: { username: (await doc.data()).displayName },
+    }))
+  } catch (e) {
+    console.log(e)
+  }
 
   // We'll pre-render only these paths at build time.
   // { fallback: blocking } will server-render pages
