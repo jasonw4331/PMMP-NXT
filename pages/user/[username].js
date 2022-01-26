@@ -18,56 +18,61 @@ const UserData = ({ data, plugins = [] }) => {
 export async function getStaticProps(context) {
   const { username } = context.params
 
-  const userSnapshot = await getFirebaseAdmin()
-    .firestore()
-    .collection('users')
-    .where('accessLevel', '>=', '1')
-    .where('displayName', '==', username)
-    .limit(1)
-    .get()
-  if (
-    userSnapshot.docs.length < 1 ||
-    userSnapshot.docs[0].data().accessLevel < 1
-  )
-    return {
-      notFound: true,
-      // Next.js will attempt to re-generate the page:
-      // - When a request comes in
-      // - At most once every hour
-      revalidate: 3600, // 1 hour in seconds
-    }
-
-  const userData = userToJSON(userSnapshot.docs[0])
-
-  let found = []
-  const snapshot = await getFirebaseAdmin()
-    .firestore()
-    .collection(`users/${userSnapshot.docs[0].id}/plugins/`)
-    .where('likes', '>', 0)
-    .orderBy('likes', 'desc')
-    .limit(30) // TODO: increase if necessary
-    .get()
-  let highestVersions = []
-  let pluginLikes = []
-  snapshot.docs.forEach(doc => {
-    const name = doc.id.split('_v')[0]
-    const version = doc.id.split('_v')[1]
+  let userData = {},
+    found = []
+  try {
+    const userSnapshot = await getFirebaseAdmin()
+      .firestore()
+      .collection('users')
+      .where('accessLevel', '>=', '1')
+      .where('displayName', '==', username)
+      .limit(1)
+      .get()
     if (
-      semver.gt(version, highestVersions[name] ?? '0.0.0', {
-        includePrerelease: true,
-      })
-    ) {
-      highestVersions[name] = version
-      if (doc.data().likes) pluginLikes[name] = doc.data().likes.length
-    }
-  })
-  pluginLikes.sort().every((likesCount, key) => {
+      userSnapshot.docs.length < 1 ||
+      userSnapshot.docs[0].data().accessLevel < 1
+    )
+      return {
+        notFound: true,
+        // Next.js will attempt to re-generate the page:
+        // - When a request comes in
+        // - At most once every hour
+        revalidate: 3600, // 1 hour in seconds
+      }
+
+    userData = userToJSON(userSnapshot.docs[0])
+
+    const snapshot = await getFirebaseAdmin()
+      .firestore()
+      .collection(`users/${userSnapshot.docs[0].id}/plugins/`)
+      .where('likes', '>', 0)
+      .orderBy('likes', 'desc')
+      .limit(30) // TODO: increase if necessary
+      .get()
+    let highestVersions = []
+    let pluginLikes = []
     snapshot.docs.forEach(doc => {
-      if (doc.id === key + '_v' + highestVersions[key])
-        found.push(postToJSON(doc))
+      const name = doc.id.split('_v')[0]
+      const version = doc.id.split('_v')[1]
+      if (
+        semver.gt(version, highestVersions[name] ?? '0.0.0', {
+          includePrerelease: true,
+        })
+      ) {
+        highestVersions[name] = version
+        if (doc.data().likes) pluginLikes[name] = doc.data().likes.length
+      }
     })
-    if (found.length >= 5) return false
-  })
+    pluginLikes.sort().every((likesCount, key) => {
+      snapshot.docs.forEach(doc => {
+        if (doc.id === key + '_v' + highestVersions[key])
+          found.push(postToJSON(doc))
+      })
+      if (found.length >= 5) return false
+    })
+  } catch (e) {
+    console.log(e)
+  }
   return {
     props: {
       userData,

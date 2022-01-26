@@ -30,30 +30,34 @@ const Home = ({ data = [] }) => {
 }
 
 export async function getStaticProps(context) {
-  const snapshot = await getFirebaseAdmin()
-    .firestore()
-    .collectionGroup('plugins')
-    .where('releaseStatus', '==', '2')
-    .get()
-  let latestVersions = []
-  let docs = []
-  snapshot.docs.forEach(doc => {
-    const data = postToJSON(doc)
-    const name = doc.id.split('_v')[0]
-    const version = doc.id.split('_v')[1]
-    if (
-      latestVersions[name] === undefined ||
-      semver.satisfies(version, '>' + latestVersions[name], {
-        includePrerelease: true,
-      })
-    ) {
-      latestVersions[name] = version
-      latestVersions.push(version)
+  const docs = []
+  try {
+    const snapshot = await getFirebaseAdmin()
+      .firestore()
+      .collectionGroup('plugins')
+      .where('releaseStatus', '==', '2')
+      .get()
+    let latestVersions = []
+    snapshot.docs.forEach(doc => {
+      const data = postToJSON(doc)
+      const name = doc.id.split('_v')[0]
+      const version = doc.id.split('_v')[1]
+      if (
+        latestVersions[name] === undefined ||
+        semver.satisfies(version, '>' + latestVersions[name], {
+          includePrerelease: true,
+        })
+      ) {
+        latestVersions[name] = version
+        latestVersions.push(version)
+        docs.push(data)
+        return
+      }
       docs.push(data)
-      return
-    }
-    docs.push(data)
-  })
+    })
+  } catch (e) {
+    console.log(e)
+  }
   return {
     props: {
       data: docs,
