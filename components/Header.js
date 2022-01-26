@@ -547,15 +547,6 @@ const UserWindow = ({ setUserOpen, setNotifications }) => {
             </a>
           </Link>
         </li>
-        <li>
-          <button className='w-full block py-2 px-4 text-left text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-600 dark:text-zinc-200 dark:hover:text-white'>
-            <p>
-              <Keyboard className={'hidden dark:inline-block'} />
-              <KeyboardOutlined className={'dark:hidden'} />
-              Keyboard shortcuts
-            </p>
-          </button>
-        </li>
       </ul>
     </div>
   )
