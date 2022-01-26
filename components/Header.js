@@ -27,6 +27,7 @@ import {
   Person,
   PersonOutline,
   Search,
+  SearchOutlined,
   Settings,
   SettingsOutlined,
 } from '@mui/icons-material'
@@ -124,7 +125,7 @@ const TopBar = ({
       </div>
       <div
         id='nav-center'
-        className='w-full max-w-xl hidden sm:flex items-center justify-center mx-2 sm:mx-10'>
+        className='w-full max-w-2xl hidden sm:flex items-center justify-center ml-5 mr-2.5 md:mx-10'>
         <div className='w-full z-30 hidden relative mr-3 md:mr-0 sm:block'>
           <div className='flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none'>
             <Search className={'w-5 h-5 text-zinc-500'} />
@@ -139,15 +140,18 @@ const TopBar = ({
           />
         </div>
       </div>
-      <div id='nav-right' className='flex items-center justify-end mr-10'>
+      <div
+        id='nav-right'
+        className='flex items-center justify-end sm:mr-5 md:mr-10'>
         <Link href='/search'>
-          <a className='h-6 w-6 ml-4 sm:hidden contents'>
-            <Search />
+          <a className='h-6 w-6 ml-2 sm:ml-4 sm:hidden'>
+            <Search className={'hidden dark:inline-block'} />
+            <SearchOutlined className={'dark:hidden'} />
           </a>
         </Link>
         {authUser.id && (
           <Link href='/publish'>
-            <a className='h-6 w-6 ml-4 hidden sm:block'>
+            <a className='h-6 w-6 ml-0 hidden sm:block'>
               <Build className={'hidden dark:inline-block'} />
               <BuildOutlined className={'dark:hidden'} />
             </a>
@@ -165,7 +169,7 @@ const TopBar = ({
         </button>
         {authUser.id && (
           <button
-            className='h-6 w-6 ml-4 hidden sm:block'
+            className='h-6 w-6 ml-2 sm:ml-4'
             onClick={() => {
               setNotifsOpen(!notifsOpen)
               setAppsOpen(false)
@@ -176,7 +180,7 @@ const TopBar = ({
           </button>
         )}
         <button
-          className='w-12 h-12 ml-2.5'
+          className='w-12 h-12 ml-1.5 sm:ml-2.5'
           onClick={() => {
             if (authUser.id === null) {
               router.push('/auth')
