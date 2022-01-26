@@ -131,12 +131,19 @@ const TopBar = ({
             <Search className={'w-5 h-5 text-zinc-500'} />
           </div>
           <input
-            type='text'
-            name='search_query'
+            type='search'
             autoComplete={'on'}
-            required={true}
             className='block p-2 pl-10 w-full text-zinc-900 bg-zinc-50 rounded-lg border border-zinc-300 sm:text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-700 dark:border-zinc-600 dark:placeholder-zinc-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
             placeholder='Search...'
+            onKeyDown={e => {
+              if (e.key === 'Enter') {
+                router.push(
+                  `/search?q=${encodeURI(
+                    document.querySelector('input').value
+                  )}`
+                )
+              }
+            }}
           />
         </div>
       </div>
