@@ -12,12 +12,17 @@ const PluginCard = ({
   return (
     <li
       className={
-        'w-[281px] h-[382px] flex flex-col justify-start items-center bg-zinc-800 bg-cover text-white rounded mb-10 mr-5 tracking-wide'
+        'w-[281px] h-[382px] flex flex-col justify-start items-center bg-cover dark:text-white rounded mb-10 mr-5 tracking-wide border border-gray-200 shadow-md dark:bg-zinc-800 dark:border-gray-700'
       }>
-      <h1 className={'w-full h-6 px-4 mt-3 font-roboto text-xl leading-6'}>
+      <h1
+        className={
+          'w-full h-6 px-4 mt-3 font-roboto text-xl leading-6 line-clamp-1'
+        }>
         {name.split('_v')[0]}
       </h1>
-      <h2 className={'w-full h-5 px-4 mb-2 font-roboto text-sm'}>{author}</h2>
+      <h2 className={'w-full h-5 px-4 mb-2 font-roboto text-sm line-clamp-1'}>
+        {author}
+      </h2>
       <div className={'w-[205px] h-[205px] mb-5'}>
         <Image
           src={iconUrl}
@@ -30,7 +35,7 @@ const PluginCard = ({
       </div>
       <p
         className={
-          'h-9 px-4 mb-3 break-words text-sm text-clip overflow-hidden'
+          'px-4 mb-3 break-words text-sm text-clip line-clamp-2 overflow-hidden'
         }>
         {tagline}
       </p>

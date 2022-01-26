@@ -5,18 +5,16 @@ import missingImage from '../public/icons/missing.png'
 const AppLink = ({ appName, redirectLink = '/', iconUrl = null }) => {
   iconUrl = iconUrl ?? missingImage
   return (
-    <li className={'text-center snap-end hover:bg-zinc-900/95'}>
+    <li className={'hover:bg-black/5'}>
       <Link href={redirectLink}>
-        <a>
-          <div className={'mt-1'}>
-            <Image
-              src={iconUrl}
-              height={64}
-              width={64}
-              alt={appName + ' icon'}
-            />
-          </div>
-          <span className={'w-16 text-white font-medium'}>{appName}</span>
+        <a
+          className={
+            'py-2 px-4 flex flex-col rounded-2xl text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-600 dark:text-zinc-200 dark:hover:text-white'
+          }>
+          <Image src={iconUrl} height={64} width={64} alt={appName + ' icon'} />
+          <center className={'break-all font-semibold dark:text-white'}>
+            {appName}
+          </center>
         </a>
       </Link>
     </li>

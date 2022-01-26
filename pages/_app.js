@@ -2,8 +2,8 @@ import '../styles/globals.css'
 import Head from 'next/head'
 import initAuth from '../lib/firebase/initAuth'
 import { Toaster } from 'react-hot-toast'
-import Navbar from '../components/Navbar'
-import { useAuthUser, withAuthUser } from 'next-firebase-auth'
+import Header from '../components/Header'
+import { withAuthUser } from 'next-firebase-auth'
 import { useState } from 'react'
 import { ThemeProvider } from 'next-themes'
 
@@ -11,7 +11,6 @@ initAuth()
 
 const MyApp = ({ Component, pageProps }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const AuthUser = useAuthUser()
 
   return (
     <>
@@ -70,11 +69,7 @@ const MyApp = ({ Component, pageProps }) => {
         <meta name='viewport' content='initial-scale=1.0, width=device-width' />
       </Head>
       <ThemeProvider attribute={'class'} defaultTheme={'dark'}>
-        <Navbar
-          AuthUser={AuthUser}
-          sidebarOpen={sidebarOpen}
-          setSidebarOpen={setSidebarOpen}
-        />
+        <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         <main
           className={`mt-14 ${
             sidebarOpen ? 'ml-0 sm:ml-60' : 'ml-0'
