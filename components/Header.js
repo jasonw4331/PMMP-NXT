@@ -313,6 +313,7 @@ const AppLink = ({ appName, redirectLink = '/', iconUrl = null }) => {
 const NotificationsWindow = ({ notifications, setNotifications }) => {
   const authUser = useAuthUser()
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const populateNotifs = useCallback(
     debounce(async db => {
       const snapshot = await getDocs(
