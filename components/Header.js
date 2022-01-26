@@ -11,14 +11,27 @@ import PMMPNewLogo from '../public/icons/pocketmine_logo2.png'
 import {
   Apps,
   AppsOutlined,
+  Bookmarks,
+  BookmarksOutlined,
   Build,
   BuildOutlined,
   DarkMode,
+  Explore,
+  ExploreOutlined,
+  Extension,
+  ExtensionOutlined,
   Feedback,
   FeedbackOutlined,
+  Flag,
+  FlagOutlined,
   Help,
-  Keyboard,
-  KeyboardOutlined,
+  HelpOutlined,
+  History,
+  HistoryOutlined,
+  Home,
+  HomeOutlined,
+  LibraryAdd,
+  LibraryAddOutlined,
   LightMode,
   Logout,
   Menu,
@@ -31,7 +44,6 @@ import {
   Settings,
   SettingsOutlined,
 } from '@mui/icons-material'
-import { SidebarData } from './SidebarData'
 import { useAuthUser } from 'next-firebase-auth'
 import {
   collection,
@@ -133,7 +145,7 @@ const TopBar = ({
           <input
             type='search'
             autoComplete={'on'}
-            className='block p-2 pl-10 w-full text-zinc-900 bg-zinc-50 rounded-lg border border-zinc-300 sm:text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-700 dark:border-zinc-600 dark:placeholder-zinc-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+            className='block p-2 pl-10 w-full text-zinc-900 bg-zinc-50 rounded-lg border border-zinc-200 sm:text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-700 dark:border-zinc-600 dark:placeholder-zinc-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
             placeholder='Search...'
             onKeyDown={e => {
               if (e.key === 'Enter') {
@@ -213,11 +225,12 @@ const TopBar = ({
 }
 
 const SideBar = ({ setSidebarOpen }) => {
+  const router = useRouter()
   const authUser = useAuthUser()
   return (
     <nav
       id={'sidebar'}
-      className={`dark:bg-zinc-900 w-60 h-screen fixed z-20 top-0 drop-shadow-lg`}>
+      className={`w-60 h-screen fixed top-0 text-base list-none bg-white rounded drop-shadow-lg dark:bg-zinc-900`}>
       <div className={'w-full h-14 flex justify-start items-center'}>
         <button className={'ml-2 text-3xl bg-none'}>
           <Menu
@@ -259,6 +272,9 @@ const SideBar = ({ setSidebarOpen }) => {
           <Footer />
         </li>
       </ul>
+      <div className='absolute bottom-6'>
+        <Footer />
+      </div>
     </nav>
   )
 }
@@ -268,7 +284,7 @@ const AppsWindow = () => {
     <div
       id='apps'
       className={
-        'fixed top-30 right-32 w-80 my-4 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-zinc-700 dark:divide-gray-600'
+        'fixed top-30 right-32 w-80 my-4 text-base list-none bg-white rounded divide-y divide-zinc-300 drop-shadow-lg dark:bg-zinc-900 dark:divide-zinc-700 border border-zinc-200 dark:border-zinc-700'
       }>
       <ul className='max-h-96 m-2 grid grid-cols-3 gap-2'>
         <AppLink
@@ -309,7 +325,7 @@ const AppLink = ({ appName, redirectLink = '/', iconUrl = null }) => {
       <Link href={redirectLink}>
         <a
           className={
-            'py-2 px-4 flex flex-col rounded-2xl text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-600 dark:text-zinc-200 dark:hover:text-white'
+            'py-2 px-4 flex flex-col rounded-2xl text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'
           }>
           <Image src={iconUrl} height={64} width={64} alt={appName + ' icon'} />
           <center className={'break-all font-semibold dark:text-white'}>
@@ -359,7 +375,7 @@ const NotificationsWindow = ({ notifications, setNotifications }) => {
     <div
       id='notifications'
       className={
-        'fixed top-30 right-24 max-w-3xl my-4 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-zinc-700 dark:divide-gray-600 border border-zinc-200 dark:border-zinc-700'
+        'fixed top-30 right-24 max-w-3xl my-4 text-base list-none bg-white rounded divide-y divide-zinc-300 drop-shadow-lg dark:bg-zinc-900 dark:divide-zinc-700 border border-zinc-200 dark:border-zinc-700'
       }>
       <div className='py-3 px-4 flex justify-between text-lg text-zinc-900 dark:text-white'>
         <p className='mt-0.5'>Notifications</p>
@@ -395,7 +411,7 @@ const Notification = ({
       <Link href={redirectUrl}>
         <a
           className={
-            'py-2 px-4 flex justify-between text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-600 dark:text-zinc-200 dark:hover:text-white'
+            'py-2 px-4 flex justify-between text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'
           }>
           <div>
             <p className={'break-all font-semibold dark:text-white'}>{title}</p>
@@ -428,7 +444,7 @@ const UserWindow = ({ setUserOpen, setNotifications }) => {
     <div
       id='user'
       className={
-        'fixed top-30 right-14 w-80 my-4 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-zinc-700 dark:divide-gray-600'
+        'fixed top-30 right-14 w-80 my-4 text-base list-none bg-white rounded divide-y divide-zinc-300 drop-shadow-lg dark:bg-zinc-900 dark:divide-zinc-700 border border-zinc-200 dark:border-zinc-700'
       }>
       <div className='py-3 px-4 flex gap-2 block text-sm text-zinc-900 dark:text-white'>
         <Image
@@ -452,7 +468,7 @@ const UserWindow = ({ setUserOpen, setNotifications }) => {
       <ul className='py-1'>
         <li>
           <Link href='/profile'>
-            <a className='block py-2 px-4 text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-600 dark:text-zinc-200 dark:hover:text-white'>
+            <a className='block py-2 px-4 text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'>
               <p>
                 <Person className={'hidden dark:inline-block'} />
                 <PersonOutline className={'dark:hidden'} />
@@ -468,7 +484,7 @@ const UserWindow = ({ setUserOpen, setNotifications }) => {
               setNotifications([])
               authUser.signOut()
             }}
-            className='w-full block py-2 px-4 text-left text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-600 dark:text-zinc-200 dark:hover:text-white'>
+            className='w-full block py-2 px-4 text-left text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'>
             <p>
               <Logout />
               Sign out
@@ -501,7 +517,7 @@ const UserWindow = ({ setUserOpen, setNotifications }) => {
         </li>
         <li>
           <Link href='/settings'>
-            <a className='block py-2 px-4 text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-600 dark:text-zinc-200 dark:hover:text-white'>
+            <a className='block py-2 px-4 text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'>
               <p>
                 <Settings className={'hidden dark:inline-block'} />
                 <SettingsOutlined className={'dark:hidden'} />
@@ -512,7 +528,7 @@ const UserWindow = ({ setUserOpen, setNotifications }) => {
         </li>
         <li>
           <Link href='/help'>
-            <a className='block py-2 px-4 text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-600 dark:text-zinc-200 dark:hover:text-white'>
+            <a className='block py-2 px-4 text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'>
               <p>
                 <Help />
                 Help
@@ -522,7 +538,7 @@ const UserWindow = ({ setUserOpen, setNotifications }) => {
         </li>
         <li>
           <Link href='https://github.com/jasonwynn10/PMMP-NXT/issues'>
-            <a className='block py-2 px-4 text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-600 dark:text-zinc-200 dark:hover:text-white'>
+            <a className='block py-2 px-4 text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'>
               <p>
                 <Feedback className={'hidden dark:inline-block'} />
                 <FeedbackOutlined className={'dark:hidden'} />
