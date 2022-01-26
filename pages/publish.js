@@ -96,7 +96,7 @@ const StepperForm = ({ authUser }) => {
         <div className={'min-w-fit flex flex-wrap'}>
           <button
             onClick={signInWithGitHub}
-            className='max-w-sm text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 inline-flex items-center justify-center dark:focus:ring-gray-500 dark:hover:bg-[#414a55] mr-2 mb-2'>
+            className='max-w-sm text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 inline-flex items-center justify-center dark:focus:ring-zinc-500 dark:hover:bg-[#414a55] mr-2 mb-2'>
             <div className={'mr-2 -ml-1 w-4 h-4'}>
               <Image src={githubMark} alt={'Github Mark'} />
             </div>
@@ -105,7 +105,7 @@ const StepperForm = ({ authUser }) => {
           <button
             onClick={signInWithGitLab}
             disabled={true}
-            className='max-w-sm text-white bg-[#c6592a] hover:bg-[#ec6a32]/90 focus:ring-4 focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 inline-flex items-center justify-center dark:focus:ring-gray-500 dark:hover:bg-[#ec6a32] mr-2 mb-2'>
+            className='max-w-sm text-white bg-[#c6592a] hover:bg-[#ec6a32]/90 focus:ring-4 focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 inline-flex items-center justify-center dark:focus:ring-zinc-500 dark:hover:bg-[#ec6a32] mr-2 mb-2'>
             <div className={'mr-2 -ml-1 w-4 h-4'}>
               <Image src={gitlabIcon} alt={'GitLab Icon'} />
             </div>
@@ -114,7 +114,7 @@ const StepperForm = ({ authUser }) => {
           <button
             onClick={signInWithBitbucket}
             disabled={true}
-            className='max-w-sm text-white bg-[#0747a6] hover:bg-[#0a67f2]/90 focus:ring-4 focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 inline-flex items-center justify-center dark:focus:ring-gray-500 dark:hover:bg-[#0a67f2] mr-2 mb-2'>
+            className='max-w-sm text-white bg-[#0747a6] hover:bg-[#0a67f2]/90 focus:ring-4 focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 inline-flex items-center justify-center dark:focus:ring-zinc-500 dark:hover:bg-[#0a67f2] mr-2 mb-2'>
             <div className={'mr-2 -ml-1 w-4 h-4'}>
               <Image src={bitbucketMark} alt={'Bitbucket Mark'} />
             </div>
@@ -135,7 +135,7 @@ const StepperForm = ({ authUser }) => {
             Repository URL
           </label>
           <input
-            className='bg-zinc-100 appearance-none mb-6 border-2 border-zinc-200 rounded w-full py-2 px-4 text-zinc-700 leading-tight focus:outline-none focus:bg-white focus:border-slate-500'
+            className='block p-2 pl-4 w-full text-zinc-900 bg-zinc-50 rounded-lg border border-zinc-200 sm:text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-700 dark:border-zinc-600 dark:placeholder-zinc-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
             id='inline-full-name'
             name={'url'}
             type={'url'}
@@ -191,19 +191,19 @@ const StepperForm = ({ authUser }) => {
     {
       label: `Choose a Release ${needsPath ? 'and Path' : ''}`,
       content: (
-        <fieldset className={'w-full max-w-lg flex flex-col'}>
+        <fieldset className={'max-w-lg flex flex-col'}>
           <label
             className='block text-zinc-400 font-bold mb-1 pr-4'
             htmlFor='inline-password'>
             Tag / Release
           </label>
           <select
-            className='bg-zinc-100 appearance-none mb-6 border-2 border-zinc-200 rounded w-full py-2 px-4 text-zinc-700 leading-tight focus:outline-none focus:bg-white focus:border-slate-500'
+            className='block p-2 pl-4 text-zinc-900 bg-zinc-50 rounded-lg border border-zinc-200 sm:text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-700 dark:border-zinc-600 dark:placeholder-zinc-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
             id='inline-password'
-            name={'commit'}
             defaultValue={tag}
             onChange={async e => setTag(e.target.value)}
-            required={true}>
+            required={true}
+            autoFocus={true}>
             {options}
           </select>
           <div className={needsPath ? 'mb-6' : 'hidden'}>
@@ -213,9 +213,8 @@ const StepperForm = ({ authUser }) => {
               Path / To / Plugin
             </label>
             <input
-              className='bg-zinc-100 appearance-none border-2 border-zinc-200 rounded w-full py-2 px-4 text-zinc-700 leading-tight focus:outline-none focus:bg-white focus:border-slate-500'
+              className='block p-2 pl-4 w-full text-zinc-900 bg-zinc-50 rounded-lg border border-zinc-200 sm:text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-700 dark:border-zinc-600 dark:placeholder-zinc-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
               id='inline-full-name'
-              name={'path'}
               type={'text'}
               placeholder={'Path/To/Plugin'}
               value={path}
@@ -293,11 +292,11 @@ const StepperForm = ({ authUser }) => {
               defaultChecked={true}
               required={true}
               disabled={true}
-              className='w-4 h-4 text-blue-600 bg-white dark:bg-gray-900 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
+              className='w-4 h-4 text-blue-600 bg-white dark:bg-zinc-900 rounded border-zinc-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-zinc-800 focus:ring-2 dark:bg-zinc-700 dark:border-zinc-600'
             />
             <label
               htmlFor='checkbox-1'
-              className='ml-3 text-sm font-medium text-gray-900 dark:text-gray-300'>
+              className='ml-3 text-sm font-medium text-zinc-900 dark:text-zinc-300'>
               Import plugin.yml
             </label>
           </div>
@@ -311,11 +310,11 @@ const StepperForm = ({ authUser }) => {
               checked={enableDescription}
               readOnly
               onClick={() => setEnableDescription(!enableDescription)}
-              className='w-4 h-4 text-blue-600 bg-white dark:bg-gray-900 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
+              className='w-4 h-4 text-blue-600 bg-white dark:bg-zinc-900 rounded border-zinc-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-zinc-800 focus:ring-2 dark:bg-zinc-700 dark:border-zinc-600'
             />
             <label
               htmlFor='checkbox-2'
-              className='ml-3 text-sm font-medium text-gray-900 dark:text-gray-300'>
+              className='ml-3 text-sm font-medium text-zinc-900 dark:text-zinc-300'>
               Import README.md
             </label>
           </div>
@@ -329,11 +328,11 @@ const StepperForm = ({ authUser }) => {
               checked={enableChangelog}
               readOnly
               onClick={() => setEnableChangelog(!enableChangelog)}
-              className='w-4 h-4 text-blue-600 bg-white dark:bg-gray-900 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
+              className='w-4 h-4 text-blue-600 bg-white dark:bg-zinc-900 rounded border-zinc-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-zinc-800 focus:ring-2 dark:bg-zinc-700 dark:border-zinc-600'
             />
             <label
               htmlFor='checkbox-3'
-              className='ml-3 text-sm font-medium text-gray-900 dark:text-gray-300'>
+              className='ml-3 text-sm font-medium text-zinc-900 dark:text-zinc-300'>
               Import CHANGELOG.md
             </label>
           </div>
@@ -465,7 +464,7 @@ const StepperForm = ({ authUser }) => {
   return (
     <form
       className={
-        'bg-zinc-900 w-full max-w-4xl rounded-2xl px-3 py-1 dark:text-white'
+        'w-full max-w-4xl my-4 px-3 py-1 text-base bg-white rounded-2xl drop-shadow-lg dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700'
       }>
       <Stepper activeStep={activeStep} orientation='vertical'>
         {steps.map((step, index) => (
