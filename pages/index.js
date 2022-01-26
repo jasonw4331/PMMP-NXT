@@ -65,36 +65,4 @@ export async function getStaticProps(context) {
   }
 }
 
-export async function getStaticPaths() {
-  const snapshot = await getFirebaseAdmin()
-    .firestore()
-    .collectionGroup('plugins')
-    .where('releaseStatus', '==', '2')
-    .get()
-  let latestVersions = []
-  let docs = []
-  snapshot.docs.forEach(doc => {
-    const data = postToJSON(doc)
-    const name = doc.id.split('_v')[0]
-    const version = doc.id.split('_v')[1]
-    if (
-      latestVersions[name] === undefined ||
-      semver.satisfies(version, '>' + latestVersions[name], {
-        includePrerelease: true,
-      })
-    ) {
-      latestVersions[name] = version
-      latestVersions.push(version)
-      docs.push(data)
-      return
-    }
-    docs.push(data)
-  })
-
-  // We'll pre-render only these paths at build time.
-  // { fallback: blocking } will server-render pages
-  // on-demand if the path doesn't exist.
-  return { paths: [{ params: { data: docs } }], fallback: 'blocking' }
-}
-
 export default withAuthUser()(Home)
