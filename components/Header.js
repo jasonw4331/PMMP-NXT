@@ -244,32 +244,149 @@ const SideBar = ({ setSidebarOpen }) => {
           </a>
         </Link>
       </div>
-      <ul className='w-full flex flex-col justify-center'>
-        {SidebarData.map((item, index) => {
-          if ((authUser.claims.accessLevel ?? 0) < item.accessLevel) return null
-          return (
-            <li key={index} className={item.cName}>
-              {item.type === 'link' && (
-                <Link href={item.path}>
-                  <a
-                    className={
-                      'no-underline text-lg w-[95%] h-full flex items-center pt-4 rounded'
-                    }>
-                    {item.icon}
-                    <span>{item.title}</span>
-                  </a>
-                </Link>
-              )}
-              {item.type === 'separator' && (
-                <svg viewBox='0 0 227 1' xmlns='http://www.w3.org/2000/svg'>
-                  <path d='M-13 1L479.008 1' stroke='#71717a' fill='none' />
-                </svg>
-              )}
-            </li>
-          )
-        })}
-        <li className='absolute bottom-6'>
-          <Footer />
+      <ul className='py-1 overflow-y-auto snap-y divide-y divide-zinc-300 dark:divide-zinc-700 dark:border-zinc-700'>
+        <li
+          className={
+            'flex flex-col justify-start items-center py-2 list-none w-60'
+          }>
+          <Link href={'/'}>
+            <a
+              className={
+                'w-full block py-2 px-4 text-left text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'
+              }>
+              <Home className={'hidden dark:inline-block'} />
+              <HomeOutlined className={'dark:hidden'} />
+              <span>Home</span>
+            </a>
+          </Link>
+          <Link href={'/feed/explore'}>
+            <a
+              className={
+                'w-full block py-2 px-4 text-left text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'
+              }>
+              <Explore className={'hidden dark:inline-block'} />
+              <ExploreOutlined className={'dark:hidden'} />
+              <span>Explore</span>
+            </a>
+          </Link>
+          <Link href={'/feed/bookmarks'}>
+            <a
+              className={
+                'w-full block py-2 px-4 text-left text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'
+              }>
+              <Bookmarks className={'hidden dark:inline-block'} />
+              <BookmarksOutlined className={'dark:hidden'} />
+              <span>Bookmarked</span>
+            </a>
+          </Link>
+        </li>
+        <li
+          className={
+            'flex flex-col justify-start items-center py-2 list-none w-60'
+          }>
+          <Link href={'/feed/library'}>
+            <a
+              className={
+                'w-full block py-2 px-4 text-left text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'
+              }>
+              <LibraryAdd className={'hidden dark:inline-block'} />
+              <LibraryAddOutlined className={'dark:hidden'} />
+              <span>Library</span>
+            </a>
+          </Link>
+          <Link href={'/feed/history'}>
+            <a
+              className={
+                'w-full block py-2 px-4 text-left text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'
+              }>
+              <History className={'hidden dark:inline-block'} />
+              <HistoryOutlined className={'dark:hidden'} />
+              <span>History</span>
+            </a>
+          </Link>
+
+          {authUser.firebaseUser && (
+            <Link href={`/${encodeURI(authUser.displayName)}`}>
+              <a
+                className={
+                  'w-full block py-2 px-4 text-left text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'
+                }>
+                <Extension className={'hidden dark:inline-block'} />
+                <ExtensionOutlined className={'dark:hidden'} />
+                <span>Your Plugins</span>
+              </a>
+            </Link>
+          )}
+        </li>
+        {!authUser.firebaseUser && (
+          <li
+            className={'flex flex-col justify-start py-2 px-4 list-none w-60'}>
+            <p
+              className={
+                'w-full block py-1 text-left text-sm text-zinc-700 dark:text-zinc-200'
+              }>
+              Sign in to like plugins, comment, and follow.
+            </p>
+            <button
+              className={
+                'block max-w-fit py-1.5 px-2.5 text-left text-sm text-zinc-700 rounded border hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'
+              }
+              onClick={() => {
+                if (authUser.id === null) {
+                  router.push('/auth')
+                }
+              }}>
+              <Person className={'hidden dark:inline-block'} />
+              <PersonOutline className={'dark:hidden'} />
+              <span>Sign In</span>
+            </button>
+          </li>
+        )}
+        <li
+          className={
+            'flex flex-col justify-start items-center py-2 list-none w-60'
+          }>
+          <Link href={'/settings'}>
+            <a
+              className={
+                'w-full block py-2 px-4 text-left text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'
+              }>
+              <Settings className={'hidden dark:inline-block'} />
+              <SettingsOutlined className={'dark:hidden'} />
+              <span>Settings</span>
+            </a>
+          </Link>
+          <Link href={'/reporthistory'}>
+            <a
+              className={
+                'w-full block py-2 px-4 text-left text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'
+              }>
+              <Flag className={'hidden dark:inline-block'} />
+              <FlagOutlined className={'dark:hidden'} />
+              <span>Report History</span>
+            </a>
+          </Link>
+          <Link href={'/help'}>
+            <a
+              className={
+                'w-full block py-2 px-4 text-left text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'
+              }>
+              <Help className={'hidden dark:inline-block'} />
+              <HelpOutlined className={'dark:hidden'} />
+              <span>Help</span>
+            </a>
+          </Link>
+
+          <Link href={'https://github.com/jasonwynn10/PMMP-NXT/issues'}>
+            <a
+              className={
+                'w-full block py-2 px-4 text-left text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'
+              }>
+              <Feedback className={'hidden dark:inline-block'} />
+              <FeedbackOutlined className={'dark:hidden'} />
+              <span>Send Feedback</span>
+            </a>
+          </Link>
         </li>
       </ul>
       <div className='absolute bottom-6'>
