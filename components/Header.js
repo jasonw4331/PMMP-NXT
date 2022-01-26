@@ -1,8 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import Footer from './Footer'
-import Notification from './Notification'
-import AppLink from './AppLink'
 import { useCallback, useEffect, useState } from 'react'
 import missingImage from '../public/icons/missing.png'
 import githubMark from '../public/icons/GitHub-Mark.svg'
@@ -47,6 +45,7 @@ import { getApp } from 'firebase/app'
 import { useTheme } from 'next-themes'
 import debounce from 'lodash.debounce'
 import { useRouter } from 'next/router'
+import { msToTime } from '../lib/timeConverter'
 
 const Header = ({ sidebarOpen, setSidebarOpen }) => {
   const [appsOpen, setAppsOpen] = useState(false)
@@ -292,6 +291,25 @@ const AppsWindow = () => {
   )
 }
 
+const AppLink = ({ appName, redirectLink = '/', iconUrl = null }) => {
+  iconUrl = iconUrl ?? missingImage
+  return (
+    <li className={'hover:bg-black/5'}>
+      <Link href={redirectLink}>
+        <a
+          className={
+            'py-2 px-4 flex flex-col rounded-2xl text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-600 dark:text-zinc-200 dark:hover:text-white'
+          }>
+          <Image src={iconUrl} height={64} width={64} alt={appName + ' icon'} />
+          <center className={'break-all font-semibold dark:text-white'}>
+            {appName}
+          </center>
+        </a>
+      </Link>
+    </li>
+  )
+}
+
 const NotificationsWindow = ({ notifications, setNotifications }) => {
   const authUser = useAuthUser()
 
@@ -344,6 +362,50 @@ const NotificationsWindow = ({ notifications, setNotifications }) => {
         {notifications}
       </ul>
     </div>
+  )
+}
+
+const Notification = ({
+  title,
+  timestamp = null,
+  redirectUrl = '/',
+  iconUrl = null,
+}) => {
+  // TODO: limit title length
+  // TODO: mark as seen on hover / click / focus
+  if (timestamp !== null)
+    timestamp =
+      timestamp < 1000
+        ? 'now'
+        : msToTime(new Date().getUTCMilliseconds() - timestamp) + ' ago'
+  return (
+    <li className={'snap-end hover:bg-black/5'}>
+      <Link href={redirectUrl}>
+        <a
+          className={
+            'py-2 px-4 flex justify-between text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-600 dark:text-zinc-200 dark:hover:text-white'
+          }>
+          <div>
+            <p className={'break-all font-semibold dark:text-white'}>{title}</p>
+            {timestamp !== null && (
+              <p className={'mt-1 text-zinc-500 dark:text-zinc-400'}>
+                Updated {timestamp}
+              </p>
+            )}
+          </div>
+          <div className={'w-16 h-16 mr-3'}>
+            {iconUrl && (
+              <Image
+                src={iconUrl}
+                height={64}
+                width={64}
+                alt={title + ' icon'}
+              />
+            )}
+          </div>
+        </a>
+      </Link>
+    </li>
   )
 }
 
