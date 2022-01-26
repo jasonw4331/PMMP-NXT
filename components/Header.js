@@ -11,6 +11,8 @@ import PMMPNewLogo from '../public/icons/pocketmine_logo2.png'
 import {
   Apps,
   AppsOutlined,
+  Assignment,
+  AssignmentIndOutlined,
   Bookmarks,
   BookmarksOutlined,
   Build,
@@ -340,6 +342,23 @@ const SideBar = ({ setSidebarOpen }) => {
               <PersonOutline className={'dark:hidden'} />
               <span>Sign In</span>
             </button>
+          </li>
+        )}
+        {authUser.firebaseUser && (
+          <li
+            className={
+              'flex flex-col justify-start items-center py-2 list-none w-60'
+            }>
+            <Link href={'/review'}>
+              <a
+                className={
+                  'w-full block py-2 px-4 text-left text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'
+                }>
+                <Assignment className={'hidden dark:inline-block'} />
+                <AssignmentIndOutlined className={'dark:hidden'} />
+                <span>Review Plugins</span>
+              </a>
+            </Link>
           </li>
         )}
         <li
