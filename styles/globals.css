@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
+.dark body {
     background-image: url('/background.png');
     background-repeat: repeat;
 }
