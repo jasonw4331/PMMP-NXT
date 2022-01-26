@@ -120,7 +120,7 @@ const TopBar = ({
     <div
       id={'navbar'}
       className={
-        'w-screen h-14 fixed z-40 top-0 flex flex-nowrap justify-between dark:bg-zinc-900'
+        'w-screen h-14 fixed z-30 top-0 flex flex-nowrap justify-between dark:bg-zinc-900'
       }>
       <div id='nav-left' className='min-w-fit flex items-center justify-start'>
         <button className={'ml-2 text-3xl bg-none'}>
@@ -138,7 +138,7 @@ const TopBar = ({
       <div
         id='nav-center'
         className='w-full max-w-2xl hidden sm:flex items-center justify-center ml-5 mr-2.5 md:mx-10'>
-        <div className='w-full z-30 hidden relative mr-3 md:mr-0 sm:block'>
+        <div className='w-full hidden relative mr-3 md:mr-0 sm:block'>
           <div className='flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none'>
             <Search className={'w-5 h-5 text-zinc-500'} />
           </div>
@@ -230,7 +230,7 @@ const SideBar = ({ setSidebarOpen }) => {
   return (
     <nav
       id={'sidebar'}
-      className={`w-60 h-screen fixed top-0 text-base list-none bg-white rounded drop-shadow-lg dark:bg-zinc-900`}>
+      className={`w-60 h-screen fixed z-20 top-0 text-base list-none bg-white rounded drop-shadow-lg dark:bg-zinc-900`}>
       <div className={'w-full h-14 flex justify-start items-center'}>
         <button className={'ml-2 text-3xl bg-none'}>
           <Menu
@@ -401,7 +401,7 @@ const AppsWindow = () => {
     <div
       id='apps'
       className={
-        'fixed top-30 right-32 w-80 my-4 text-base list-none bg-white rounded divide-y divide-zinc-300 drop-shadow-lg dark:bg-zinc-900 dark:divide-zinc-700 border border-zinc-200 dark:border-zinc-700'
+        'fixed z-10 top-30 right-32 w-80 my-4 text-base list-none bg-white rounded divide-y divide-zinc-300 drop-shadow-lg dark:bg-zinc-900 dark:divide-zinc-700 border border-zinc-200 dark:border-zinc-700'
       }>
       <ul className='max-h-96 m-2 grid grid-cols-3 gap-2'>
         <AppLink
@@ -492,7 +492,7 @@ const NotificationsWindow = ({ notifications, setNotifications }) => {
     <div
       id='notifications'
       className={
-        'fixed top-30 right-24 max-w-3xl my-4 text-base list-none bg-white rounded divide-y divide-zinc-300 drop-shadow-lg dark:bg-zinc-900 dark:divide-zinc-700 border border-zinc-200 dark:border-zinc-700'
+        'fixed z-10 top-30 right-24 max-w-3xl my-4 text-base list-none bg-white rounded divide-y divide-zinc-300 drop-shadow-lg dark:bg-zinc-900 dark:divide-zinc-700 border border-zinc-200 dark:border-zinc-700'
       }>
       <div className='py-3 px-4 flex justify-between text-lg text-zinc-900 dark:text-white'>
         <p className='mt-0.5'>Notifications</p>
@@ -561,7 +561,7 @@ const UserWindow = ({ setUserOpen, setNotifications }) => {
     <div
       id='user'
       className={
-        'fixed top-30 right-14 w-80 my-4 text-base list-none bg-white rounded divide-y divide-zinc-300 drop-shadow-lg dark:bg-zinc-900 dark:divide-zinc-700 border border-zinc-200 dark:border-zinc-700'
+        'fixed z-10 top-30 right-14 w-80 my-4 text-base list-none bg-white rounded divide-y divide-zinc-300 drop-shadow-lg dark:bg-zinc-900 dark:divide-zinc-700 border border-zinc-200 dark:border-zinc-700'
       }>
       <div className='py-3 px-4 flex gap-2 block text-sm text-zinc-900 dark:text-white'>
         <Image
