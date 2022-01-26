@@ -1,12 +1,8 @@
-import {
-  AuthAction,
-  withAuthUser,
-  withAuthUserTokenSSR,
-} from 'next-firebase-auth'
-import getAbsoluteURL from '../lib/getAbsoluteURL'
+import { AuthAction, getFirebaseAdmin, withAuthUser } from 'next-firebase-auth'
 import PluginCard from '../components/PluginCard'
-import ErrorCard from '../components/ErrorCard'
 import Metatags from '../components/Metatags'
+import { postToJSON } from '../lib/firebase/server/firestoreFuncs'
+import semver from 'semver'
 
 const Review = ({ data }) => {
   data = data.map(doc => (
@@ -33,35 +29,73 @@ const Review = ({ data }) => {
   )
 }
 
-export const getServerSideProps = withAuthUserTokenSSR({
-  whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
-})(async ({ AuthUser, req }) => {
-  // Optionally, get other props.
-  // You can return anything you'd normally return from
-  // `getServerSideProps`, including redirects.
-  // https://nextjs.org/docs/basic-features/data-fetching#getserversideprops-server-side-rendering
-  const token = await AuthUser.getIdToken()
-  const endpoint = getAbsoluteURL('/api/pendingPlugins?latestOnly=true', req)
-  const response = await fetch(endpoint, {
-    method: 'GET',
-    headers: {
-      Authorization: token || 'unauthenticated',
-    },
-  })
-  const data = await response.json()
-  if (!response.ok) {
-    return {
-      props: {
-        data: [<ErrorCard key={0} />],
-      },
+export async function getStaticProps(context) {
+  const snapshot = await getFirebaseAdmin()
+    .firestore()
+    .collectionGroup('plugins')
+    .where('releaseStatus', '==', '1')
+    .get()
+  let latestVersions = []
+  let docs = []
+  snapshot.docs.forEach(doc => {
+    const data = postToJSON(doc)
+    const name = doc.id.split('_v')[0]
+    const version = doc.id.split('_v')[1]
+    if (
+      latestVersions[name] === undefined ||
+      semver.satisfies(version, '>' + latestVersions[name], {
+        includePrerelease: true,
+      })
+    ) {
+      latestVersions[name] = version
+      latestVersions.push(version)
+      docs.push(data)
+      return
     }
-  }
+    docs.push(data)
+  })
   return {
     props: {
-      data: data.docs,
+      data: docs,
     },
+    // Next.js will attempt to re-generate the page:
+    // - When a request comes in
+    // - At most 4 times every day
+    revalidate: 21600, // 6 hours in seconds
   }
-})
+}
+
+export async function getStaticPaths() {
+  const snapshot = await getFirebaseAdmin()
+    .firestore()
+    .collectionGroup('plugins')
+    .where('releaseStatus', '==', '1')
+    .get()
+  let latestVersions = []
+  let docs = []
+  snapshot.docs.forEach(doc => {
+    const data = postToJSON(doc)
+    const name = doc.id.split('_v')[0]
+    const version = doc.id.split('_v')[1]
+    if (
+      latestVersions[name] === undefined ||
+      semver.satisfies(version, '>' + latestVersions[name], {
+        includePrerelease: true,
+      })
+    ) {
+      latestVersions[name] = version
+      latestVersions.push(version)
+      docs.push(data)
+      return
+    }
+    docs.push(data)
+  })
+
+  // We'll pre-render only these paths at build time.
+  // { fallback: blocking } will server-render pages
+  // on-demand if the path doesn't exist.
+  return { paths: [{ params: { data: docs } }], fallback: 'blocking' }
+}
 
 export default withAuthUser({
   whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
