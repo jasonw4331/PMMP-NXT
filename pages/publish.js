@@ -293,7 +293,7 @@ const StepperForm = ({ authUser }) => {
               defaultChecked={true}
               required={true}
               disabled={true}
-              className='w-4 h-4 text-green-600 bg-white dark:bg-gray-900 rounded border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
+              className='w-4 h-4 text-blue-600 bg-white dark:bg-gray-900 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
             />
             <label
               htmlFor='checkbox-1'
@@ -311,7 +311,7 @@ const StepperForm = ({ authUser }) => {
               checked={enableDescription}
               readOnly
               onClick={() => setEnableDescription(!enableDescription)}
-              className='w-4 h-4 text-green-600 bg-white dark:bg-gray-900 rounded border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
+              className='w-4 h-4 text-blue-600 bg-white dark:bg-gray-900 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
             />
             <label
               htmlFor='checkbox-2'
@@ -329,7 +329,7 @@ const StepperForm = ({ authUser }) => {
               checked={enableChangelog}
               readOnly
               onClick={() => setEnableChangelog(!enableChangelog)}
-              className='w-4 h-4 text-green-600 bg-white dark:bg-gray-900 rounded border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
+              className='w-4 h-4 text-blue-600 bg-white dark:bg-gray-900 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
             />
             <label
               htmlFor='checkbox-3'
