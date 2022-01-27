@@ -6,6 +6,7 @@ import Header from '../components/Header'
 import { withAuthUser } from 'next-firebase-auth'
 import { useState } from 'react'
 import { ThemeProvider } from 'next-themes'
+import { domAnimation, LazyMotion } from 'framer-motion'
 
 initAuth()
 
@@ -70,13 +71,15 @@ const MyApp = ({ Component, pageProps }) => {
         <meta name='viewport' content='initial-scale=1.0, width=device-width' />
       </Head>
       <ThemeProvider attribute={'class'} defaultTheme={'dark'}>
-        <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-        <main
-          className={`mt-14 ${
-            sidebarOpen ? 'ml-0 sm:ml-60' : 'ml-0'
-          } overflow-x-hidden overflow-y-auto overscroll-contain p-2`}>
-          <Component {...pageProps} />
-        </main>
+        <LazyMotion strict features={domAnimation}>
+          <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+          <main
+            className={`mt-14 ${
+              sidebarOpen ? 'ml-0 sm:ml-60' : 'ml-0'
+            } overflow-x-hidden overflow-y-auto overscroll-contain p-2`}>
+            <Component {...pageProps} />
+          </main>
+        </LazyMotion>
         <Toaster />
       </ThemeProvider>
     </>

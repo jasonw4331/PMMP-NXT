@@ -61,6 +61,7 @@ import { useTheme } from 'next-themes'
 import debounce from 'lodash.debounce'
 import { useRouter } from 'next/router'
 import { msToTime } from '../lib/timeConverter'
+import { AnimatePresence, m } from 'framer-motion'
 
 const Header = ({ sidebarOpen, setSidebarOpen }) => {
   const [appsOpen, setAppsOpen] = useState(false)
@@ -86,20 +87,24 @@ const Header = ({ sidebarOpen, setSidebarOpen }) => {
         userOpen={userOpen}
         setUserOpen={setUserOpen}
       />
-      {sidebarOpen && <SideBar setSidebarOpen={setSidebarOpen} />}
-      {appsOpen && <AppsWindow />}
-      {notifsOpen && (
-        <NotificationsWindow
-          notifications={notifications}
-          setNotifications={setNotifications}
-        />
-      )}
-      {userOpen && (
-        <UserWindow
-          setUserOpen={setUserOpen}
-          setNotifications={setNotifications}
-        />
-      )}
+      <AnimatePresence exitBeforeEnter>
+        {sidebarOpen && <SideBar setSidebarOpen={setSidebarOpen} />}
+      </AnimatePresence>
+      <AnimatePresence exitBeforeEnter>
+        {appsOpen && <AppsWindow />}
+        {notifsOpen && (
+          <NotificationsWindow
+            notifications={notifications}
+            setNotifications={setNotifications}
+          />
+        )}
+        {userOpen && (
+          <UserWindow
+            setUserOpen={setUserOpen}
+            setNotifications={setNotifications}
+          />
+        )}
+      </AnimatePresence>
     </header>
   )
 }
@@ -122,7 +127,7 @@ const TopBar = ({
     <div
       id={'navbar'}
       className={
-        'w-screen h-14 fixed z-30 top-0 flex flex-nowrap justify-between dark:bg-zinc-900'
+        'w-screen h-14 fixed z-30 top-0 flex flex-nowrap justify-between bg-white dark:bg-zinc-900'
       }>
       <div id='nav-left' className='min-w-fit flex items-center justify-start'>
         <button className={'ml-2 text-3xl bg-none'}>
@@ -230,9 +235,13 @@ const SideBar = ({ setSidebarOpen }) => {
   const router = useRouter()
   const authUser = useAuthUser()
   return (
-    <nav
+    <m.nav
       id={'sidebar'}
-      className={`w-60 h-screen fixed z-20 top-0 text-base list-none bg-white rounded drop-shadow-lg dark:bg-zinc-900`}>
+      className={`w-60 h-screen fixed z-20 top-0 text-base list-none bg-white rounded drop-shadow-lg dark:bg-zinc-900`}
+      key={'sidebar'}
+      initial={{ x: -245 }}
+      animate={{ x: 0, transition: { ease: 'linear', duration: 0.3 } }}
+      exit={{ x: -245, transition: { ease: 'linear', duration: 0.3 } }}>
       <div className={'w-full h-14 flex justify-start items-center'}>
         <button className={'ml-2 text-3xl bg-none'}>
           <Menu
@@ -411,17 +420,21 @@ const SideBar = ({ setSidebarOpen }) => {
       <div className='absolute bottom-6'>
         <Footer />
       </div>
-    </nav>
+    </m.nav>
   )
 }
 
 const AppsWindow = () => {
   return (
-    <div
+    <m.div
       id='apps'
       className={
         'fixed z-10 top-30 right-32 w-80 my-4 text-base list-none bg-white rounded divide-y divide-zinc-300 drop-shadow-lg dark:bg-zinc-900 dark:divide-zinc-700 border border-zinc-200 dark:border-zinc-700'
-      }>
+      }
+      key={'apps'}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}>
       <ul className='max-h-96 m-2 grid grid-cols-3 gap-2'>
         <AppLink
           appName='PMMP'
@@ -450,7 +463,7 @@ const AppsWindow = () => {
           iconUrl={discordLogoWhite}
         />
       </ul>
-    </div>
+    </m.div>
   )
 }
 
@@ -508,11 +521,15 @@ const NotificationsWindow = ({ notifications, setNotifications }) => {
     populateNotifs(db)
   })
   return (
-    <div
+    <m.div
       id='notifications'
       className={
         'fixed z-10 top-30 right-24 max-w-3xl my-4 text-base list-none bg-white rounded divide-y divide-zinc-300 drop-shadow-lg dark:bg-zinc-900 dark:divide-zinc-700 border border-zinc-200 dark:border-zinc-700'
-      }>
+      }
+      key={'notifications'}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}>
       <div className='py-3 px-4 flex justify-between text-lg text-zinc-900 dark:text-white'>
         <p className='mt-0.5'>Notifications</p>
         <Link href='/notifications'>
@@ -525,7 +542,7 @@ const NotificationsWindow = ({ notifications, setNotifications }) => {
       <ul className='max-h-[592px] py-1 overflow-y-auto snap-y'>
         {notifications}
       </ul>
-    </div>
+    </m.div>
   )
 }
 
@@ -577,11 +594,15 @@ const UserWindow = ({ setUserOpen, setNotifications }) => {
   const authUser = useAuthUser()
   const { setTheme } = useTheme()
   return (
-    <div
+    <m.div
       id='user'
       className={
         'fixed z-10 top-30 right-14 w-80 my-4 text-base list-none bg-white rounded divide-y divide-zinc-300 drop-shadow-lg dark:bg-zinc-900 dark:divide-zinc-700 border border-zinc-200 dark:border-zinc-700'
-      }>
+      }
+      key={'user'}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}>
       <div className='py-3 px-4 flex gap-2 block text-sm text-zinc-900 dark:text-white'>
         <Image
           src={authUser.photoURL || missingImage}
@@ -689,6 +710,6 @@ const UserWindow = ({ setUserOpen, setNotifications }) => {
           </Link>
         </li>
       </ul>
-    </div>
+    </m.div>
   )
 }
