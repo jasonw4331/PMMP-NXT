@@ -13,6 +13,7 @@ module.exports = withPlaiceholder(
     },
     pwa: {
       dest: 'public',
+      sw: '/firebase-messaging-sw.js',
       disable: process.env.NODE_ENV === 'development',
       buildExcludes: [/chunks\/images\/.*$/],
       publicExcludes: ['!noprecache/**/*'],
