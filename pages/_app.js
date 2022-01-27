@@ -26,10 +26,9 @@ const MyApp = ({ Component, pageProps }) => {
         />
         <meta name='format-detection' content='telephone=no' />
         <meta name='mobile-web-app-capable' content='yes' />
-        {/*<meta name='msapplication-config' content='/icons/browserconfig.xml' />*/}
         <meta name='msapplication-TileColor' content='#121212' />
         <meta name='msapplication-tap-highlight' content='no' />
-        <meta name='theme-color' content='#121212' />
+        <meta name='theme-color' content='#18181B' />
 
         <link
           rel='apple-touch-icon'
@@ -38,25 +37,7 @@ const MyApp = ({ Component, pageProps }) => {
           href='/icons/logo/icon.svg'
         />
 
-        <link rel='manifest' href='/manifest.json' />
-        <link
-          rel='mask-icon'
-          type='image/svg+xml'
-          href='/icons/logo/icon.svg'
-          color='#5bbad5'
-        />
-        <link
-          rel='shortcut icon'
-          type='image/svg+xml'
-          href='/icons/logo/icon.svg'
-        />
-
-        <link
-          rel='icon'
-          type='image/svg+xml'
-          sizes='200x200'
-          href='/icons/logo/icon.svg'
-        />
+        <link rel='manifest' href='/manifest/manifest.webmanifest' />
 
         <link rel='preconnect' href='https://fonts.googleapis.com' />
         <link rel='preconnect' href='https://fonts.gstatic.com' crossOrigin />
