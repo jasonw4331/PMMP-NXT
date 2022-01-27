@@ -1,7 +1,7 @@
 module.exports = {
   mode: 'jit',
   content: [
-    './public/**/*.html',
+    './public/**/*.{js,ts,jsx,tsx,html}',
     './pages/**/*.{js,ts,jsx,tsx,html}',
     './components/**/*.{js,ts,jsx,tsx,html}',
     './lib/**/*.{js,ts,jsx,tsx,html}',
