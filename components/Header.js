@@ -77,26 +77,6 @@ const Header = ({ sidebarOpen, setSidebarOpen }) => {
   ])
   const [userOpen, setUserOpen] = useState(false)
 
-  useEffect(() => {
-    setToken()
-
-    async function setToken() {
-      try {
-        const token = await firebaseCloudMessaging.init()
-        if (token) {
-          getMessage()
-        }
-      } catch (error) {
-        console.log(error)
-      }
-    }
-
-    function getMessage() {
-      const messaging = getMessaging()
-      onMessage(messaging, message => console.log('foreground ', message))
-    }
-  }, [])
-
   return (
     <header className={'dark:text-zinc-500'}>
       <TopBar
@@ -510,6 +490,26 @@ const AppLink = ({ appName, redirectLink = '/', iconUrl = null }) => {
 
 const NotificationsWindow = ({ notifications, setNotifications }) => {
   const authUser = useAuthUser()
+
+  useEffect(() => {
+    setToken()
+
+    async function setToken() {
+      try {
+        const token = await firebaseCloudMessaging.init()
+        if (token) {
+          getMessage()
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    function getMessage() {
+      const messaging = getMessaging()
+      onMessage(messaging, message => console.log('foreground ', message))
+    }
+  }, [])
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const populateNotifs = useCallback(
