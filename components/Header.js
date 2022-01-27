@@ -62,6 +62,8 @@ import debounce from 'lodash.debounce'
 import { useRouter } from 'next/router'
 import { msToTime } from '../lib/timeConverter'
 import { AnimatePresence, m } from 'framer-motion'
+import { firebaseCloudMessaging } from '../lib/webPush'
+import { getMessaging, onMessage } from 'firebase/messaging'
 
 const Header = ({ sidebarOpen, setSidebarOpen }) => {
   const [appsOpen, setAppsOpen] = useState(false)
@@ -74,6 +76,26 @@ const Header = ({ sidebarOpen, setSidebarOpen }) => {
     />,
   ])
   const [userOpen, setUserOpen] = useState(false)
+
+  useEffect(() => {
+    setToken()
+
+    async function setToken() {
+      try {
+        const token = await firebaseCloudMessaging.init()
+        if (token) {
+          getMessage()
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    function getMessage() {
+      const messaging = getMessaging()
+      onMessage(messaging, message => console.log('foreground ', message))
+    }
+  }, [])
 
   return (
     <header className={'dark:text-zinc-500'}>
