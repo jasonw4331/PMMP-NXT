@@ -512,7 +512,17 @@ const NotificationsWindow = ({ notifications, setNotifications }) => {
           />
         )
       })
-      setNotifications(notifList)
+      setNotifications(
+        notifList.length > 0
+          ? notifList
+          : [
+              <Notification
+                key={0}
+                title={'You have no new notifications!'}
+                redirectUrl={'/'}
+              />,
+            ]
+      )
     }),
     []
   )
