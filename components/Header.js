@@ -596,7 +596,12 @@ const UserWindow = ({ setUserOpen, setNotifications }) => {
           </span>
           {authUser.firebaseUser && (
             <span className='block text-sm font-medium text-zinc-500 truncate dark:text-zinc-400'>
-              Signed in with {authUser.firebaseUser?.providerData[0].providerId}
+              Signed in with{' '}
+              {authUser.firebaseUser?.providerData.some(
+                ({ providerId }) => providerId === 'github.com'
+              )
+                ? 'GitHub'
+                : authUser.firebaseUser?.providerData[0].providerId}
             </span>
           )}
         </div>
