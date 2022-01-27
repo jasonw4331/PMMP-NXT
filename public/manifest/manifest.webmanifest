@@ -7,6 +7,7 @@
     "name": "PMMP NXT",
     "short_name": "NXT",
     "description": "The next generation of PocketMine plugin distribution",
+    "gcm_sender_id": "1053465471389",
     "icons": [
         {
             "src": "/manifest/icon-192x192.png",
