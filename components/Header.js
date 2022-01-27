@@ -556,9 +556,7 @@ const Notification = ({
   // TODO: mark as seen on hover / click / focus
   if (timestamp !== null)
     timestamp =
-      timestamp < 1000
-        ? 'now'
-        : msToTime(new Date().getUTCMilliseconds() - timestamp) + ' ago'
+      timestamp < 1000 ? 'now' : msToTime(new Date() - timestamp) + ' ago'
   return (
     <li className={'snap-end hover:bg-black/5'}>
       <Link href={redirectUrl}>
