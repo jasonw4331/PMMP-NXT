@@ -398,7 +398,7 @@ const StepperForm = ({ authUser }) => {
     return
 
     // This gives you a GitHub Access Token. You can use it to access the GitHub API.
-    const credential = GithubAuthProvider.credentialFromResult(result)
+    const credential = OAuthProvider.credentialFromResult(result)
     const token = credential.accessToken
 
     const db = getFirestore(getApp())
@@ -436,7 +436,7 @@ const StepperForm = ({ authUser }) => {
     return
 
     // This gives you a GitHub Access Token. You can use it to access the GitHub API.
-    const credential = GithubAuthProvider.credentialFromResult(result)
+    const credential = OAuthProvider.credentialFromResult(result)
     const token = credential.accessToken
 
     const db = getFirestore(getApp())
