@@ -575,7 +575,7 @@ const NotificationsWindow = ({ notifications, setNotifications }) => {
                 'messages',
                 messages.filter(
                   message =>
-                    message.seen && message.timestamp > Date.now() - 2.628e9 // 1 month
+                    !message.seen || message.timestamp > Date.now() - 2.628e9 // 1 month
                 )
               )
               .catch(error => {
