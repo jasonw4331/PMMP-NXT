@@ -76,7 +76,7 @@ const Header = ({ sidebarOpen, setSidebarOpen }) => {
         userOpen={userOpen}
         setUserOpen={setUserOpen}
       />
-      <AnimatePresence exitBeforeEnter>
+      <AnimatePresence>
         {sidebarOpen && <SideBar setSidebarOpen={setSidebarOpen} />}
       </AnimatePresence>
       <AnimatePresence exitBeforeEnter>
