@@ -34,6 +34,7 @@ const SignInButtons = () => {
     if (prevUser) result = await linkWithPopup(prevUser, provider)
     else result = await signInWithPopup(getAuth(), provider)
 
+    // handle custom claims
     const idToken = await result.user.getIdToken()
     const res = await fetch(getAbsoluteURL('/api/setCustomClaims', null), {
       method: 'POST',
@@ -79,6 +80,7 @@ const SignInButtons = () => {
     if (prevUser) result = await linkWithPopup(prevUser, provider)
     else result = await signInWithPopup(getAuth(), provider)
 
+    // handle custom claims
     const idToken = await result.user.getIdToken()
     const res = await fetch(getAbsoluteURL('/api/setCustomClaims', null), {
       method: 'POST',
@@ -143,6 +145,7 @@ const SignInButtons = () => {
     if (prevUser) result = await linkWithPopup(prevUser, provider)
     else result = await signInWithPopup(getAuth(), provider)
 
+    // handle custom claims
     const idToken = await result.user.getIdToken()
     const res = await fetch(getAbsoluteURL('/api/setCustomClaims', null), {
       method: 'POST',
@@ -197,6 +200,7 @@ const SignInButtons = () => {
     if (prevUser) result = await linkWithPopup(prevUser, provider)
     else result = await signInWithPopup(getAuth(), provider)
 
+    // handle custom claims
     const idToken = await result.user.getIdToken()
     const res = await fetch(getAbsoluteURL('/api/setCustomClaims', null), {
       method: 'POST',

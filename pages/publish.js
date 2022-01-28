@@ -42,7 +42,7 @@ const Publish = () => {
 }
 
 const StepperForm = ({ authUser }) => {
-  // USE THE STORED TOKEN SO WE DONT REQUEST TOO MUCH
+  // use oauth token so we are not rate limited
   let auth = null
   const getAuthToken = async () => {
     const db = getFirestore(getApp())
