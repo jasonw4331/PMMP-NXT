@@ -4,22 +4,29 @@ import {
   postToJSON,
   userToJSON,
 } from '../../lib/firebase/server/firestoreFuncs'
-import semver from 'semver'
+import PluginCard from '../../components/PluginCard'
 
-const UserData = ({ data, plugins = [] }) => {
+const UserData = ({ userData, releasedPlugins = [] }) => {
+  releasedPlugins = releasedPlugins.map(plugin => (
+    <PluginCard
+      key={plugin.id}
+      name={plugin.id}
+      author={plugin.author}
+      tagline={plugin.tagline}
+      iconUrl={plugin.iconUrl}
+      downloadUrl={plugin.downloadUrl}
+    />
+  ))
   return (
     <>
-      <Metatags title={data.displayName} image={data.photoURL} />
-      <ul className={'flex flex-col'}>{plugins}</ul>
+      <Metatags title={userData.displayName} image={userData.photoURL} />
+      <ul className={'flex flex-col'}>{releasedPlugins}</ul>
     </>
   )
 }
 
 export async function getStaticProps(context) {
   const { username } = context.params
-
-  let userData = {},
-    found = []
   try {
     const userSnapshot = await getFirebaseAdmin()
       .firestore()
@@ -36,48 +43,42 @@ export async function getStaticProps(context) {
         revalidate: 3600, // 1 hour in seconds
       }
 
-    userData = userToJSON(userSnapshot.docs[0])
+    const userData = userToJSON(userSnapshot.docs[0])
 
     const snapshot = await getFirebaseAdmin()
       .firestore()
-      .collection(`users/${userSnapshot.docs[0].id}/plugins/`)
-      .where('likes', '>', 0)
+      .collection(`users/${userData.id}/plugins/`)
+      .where('id', 'in', userData.recentReleases)
       .orderBy('likes', 'desc')
-      .limit(30) // TODO: increase if necessary
+      .limit(5) // TODO: increase if necessary
       .get()
-    let highestVersions = []
-    let pluginLikes = []
-    snapshot.docs.forEach(doc => {
-      const name = doc.id.split('_v')[0]
-      const version = doc.id.split('_v')[1]
-      if (
-        semver.gt(version, highestVersions[name] ?? '0.0.0', {
-          includePrerelease: true,
-        })
-      ) {
-        highestVersions[name] = version
-        if (doc.data().likes) pluginLikes[name] = doc.data().likes.length
-      }
-    })
-    pluginLikes.sort().every((likesCount, key) => {
-      snapshot.docs.forEach(doc => {
-        if (doc.id === key + '_v' + highestVersions[key])
-          found.push(postToJSON(doc))
-      })
-      if (found.length >= 5) return false
-    })
+    const releasedPlugins = snapshot.docs
+      .sort(
+        (
+          { likes: likesA, dislikes: dislikesA },
+          { likes: likesB, dislikes: dislikesB }
+        ) => likesA - dislikesA - (likesB - dislikesB)
+      )
+      .map(doc => postToJSON(doc))
+    return {
+      props: {
+        userData,
+        releasedPlugins,
+      },
+      // Next.js will attempt to re-generate the page:
+      // - When a request comes in
+      // - At most once every day
+      revalidate: 86400, // 1 day in seconds
+    }
   } catch (e) {
     console.log(e)
   }
   return {
-    props: {
-      data: userData,
-      plugins: found,
-    },
+    notFound: true,
     // Next.js will attempt to re-generate the page:
     // - When a request comes in
     // - At most once every day
-    revalidate: 86400, // 1 day in seconds
+    revalidate: 3600, // 1 hour in seconds
   }
 }
 
