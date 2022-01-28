@@ -12,7 +12,7 @@ import {
   Apps,
   AppsOutlined,
   Assignment,
-  AssignmentIndOutlined,
+  AssignmentOutlined,
   Bookmarks,
   BookmarksOutlined,
   Build,
@@ -357,7 +357,7 @@ const SideBar = ({ setSidebarOpen }) => {
                   'w-full block py-2 px-4 text-left text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'
                 }>
                 <Assignment className={'hidden dark:inline-block'} />
-                <AssignmentIndOutlined className={'dark:hidden'} />
+                <AssignmentOutlined className={'dark:hidden'} />
                 <span>Review Plugins</span>
               </a>
             </Link>
