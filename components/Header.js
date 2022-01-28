@@ -9,6 +9,8 @@ import poggitLogo from '../public/icons/poggit.png'
 import discordLogoWhite from '../public/icons/Discord-Logo-White.png'
 import PMMPNewLogo from '../public/icons/pocketmine_logo2.png'
 import {
+  AdminPanelSettings,
+  AdminPanelSettingsOutlined,
   Apps,
   AppsOutlined,
   Assignment,
@@ -309,7 +311,7 @@ const SideBar = ({ setSidebarOpen }) => {
             </a>
           </Link>
 
-          {authUser.firebaseUser && (
+          {authUser.claims.developer && (
             <Link href={`/${encodeURI(authUser.displayName)}`}>
               <a
                 className={
@@ -346,21 +348,35 @@ const SideBar = ({ setSidebarOpen }) => {
             </button>
           </li>
         )}
-        {authUser.firebaseUser && (
+        {(authUser.claims.reviewer || authUser.claims.admin) && (
           <li
             className={
               'flex flex-col justify-start items-center py-2 list-none w-60'
             }>
-            <Link href={'/review'}>
-              <a
-                className={
-                  'w-full block py-2 px-4 text-left text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'
-                }>
-                <Assignment className={'hidden dark:inline-block'} />
-                <AssignmentOutlined className={'dark:hidden'} />
-                <span>Review Plugins</span>
-              </a>
-            </Link>
+            {authUser.claims.reviewer && (
+              <Link href={'/review'}>
+                <a
+                  className={
+                    'w-full block py-2 px-4 text-left text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'
+                  }>
+                  <Assignment className={'hidden dark:inline-block'} />
+                  <AssignmentOutlined className={'dark:hidden'} />
+                  <span>Review Plugins</span>
+                </a>
+              </Link>
+            )}
+            {authUser.claims.admin && (
+              <Link href={'/admin'}>
+                <a
+                  className={
+                    'w-full block py-2 px-4 text-left text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'
+                  }>
+                  <AdminPanelSettings className={'hidden dark:inline-block'} />
+                  <AdminPanelSettingsOutlined className={'dark:hidden'} />
+                  <span>Admin Panel</span>
+                </a>
+              </Link>
+            )}
           </li>
         )}
         <li
@@ -707,30 +723,45 @@ const UserWindow = ({ setUserOpen, setNotifications }) => {
           </span>
           {authUser.firebaseUser && (
             <span className='block text-sm font-medium text-zinc-500 truncate dark:text-zinc-400'>
-              Signed in with{' '}
-              {authUser.firebaseUser?.providerData.some(
-                ({ providerId }) => providerId === 'github.com'
-              )
-                ? 'GitHub'
-                : authUser.firebaseUser?.providerData[0].providerId}
+              {authUser.claims.admin
+                ? 'Admin '
+                : authUser.claims.developer
+                ? 'Developer '
+                : 'User '}
+              Account
             </span>
           )}
         </div>
       </div>
       <ul className='py-1'>
-        <li>
-          <Link
-            href={'/user/[username]'}
-            as={`/user/${encodeURI(authUser.displayName)}`}>
-            <a className='block py-2 px-4 text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'>
-              <p>
-                <Person className={'hidden dark:inline-block'} />
-                <PersonOutline className={'dark:hidden'} />
-                Your Profile
-              </p>
-            </a>
-          </Link>
-        </li>
+        {(authUser.claims.developer || authUser.claims.admin) && (
+          <li>
+            <Link
+              href={'/user/[username]'}
+              as={`/user/${encodeURI(authUser.displayName)}`}>
+              <a className='block py-2 px-4 text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'>
+                <p>
+                  <Person className={'hidden dark:inline-block'} />
+                  <PersonOutline className={'dark:hidden'} />
+                  Your Profile
+                </p>
+              </a>
+            </Link>
+          </li>
+        )}
+        {authUser.claims.admin && (
+          <li>
+            <Link href={'/admin'}>
+              <a className='block py-2 px-4 text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'>
+                <p>
+                  <AdminPanelSettings className={'hidden dark:inline-block'} />
+                  <AdminPanelSettingsOutlined className={'dark:hidden'} />
+                  Admin Panel
+                </p>
+              </a>
+            </Link>
+          </li>
+        )}
         <li>
           <button
             onClick={() => {
