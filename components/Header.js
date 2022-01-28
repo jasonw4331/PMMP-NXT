@@ -627,7 +627,7 @@ const NotificationsWindow = ({ notifications, setNotifications }) => {
 const Notification = ({
   messageId = '',
   title,
-  body = null,
+  body,
   timestamp = null,
   redirectUrl = '/',
   iconUrl = null,
@@ -653,8 +653,8 @@ const Notification = ({
             seenMessage ? '' : 'dark:hover:text-white'
           }`}>
           <div>
-            <p className={'break-all font-semibold dark:text-white'}>{title}</p>
-            {timestamp !== null && (
+            <p className={'break-all font-semibold dark:text-white'}>{body}</p>
+            {timestamp && (
               <p className={'mt-1 text-zinc-500 dark:text-zinc-400'}>
                 Updated {timestamp}
               </p>
