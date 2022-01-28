@@ -27,16 +27,8 @@ const FirebaseAuth = () => {
 }
 
 const SignInButtons = () => {
-  async function signInWithGoogle() {
+  async function setAuthClaims(idToken) {
     const auth = getAuth()
-    const prevUser = auth.currentUser
-    const provider = new GoogleAuthProvider()
-    let result
-    if (prevUser) result = await linkWithPopup(prevUser, provider)
-    else result = await signInWithPopup(getAuth(), provider)
-
-    // handle custom claims
-    const idToken = await result.user.getIdToken()
     const res = await fetch(getAbsoluteURL('/api/setCustomClaims', null), {
       method: 'POST',
       headers: {
@@ -48,25 +40,37 @@ const SignInButtons = () => {
     })
     const status = res.status
     if (status === 200) {
-      res.json().then(data => {
-        if (data.status === 'success') {
-          // force refresh for new auth claims
-          auth.currentUser.getIdToken(true)
-        }
-      })
+      const data = res.json()
+      if (data.status === 'success') {
+        // force refresh for new auth claims
+        return await auth.currentUser.getIdTokenResult(true)
+      }
     }
+    return null
+  }
 
-    const db = getFirestore(getApp())
-    const docRef = doc(db, `users/${result.user.uid}`)
+  async function signInWithGoogle() {
+    const auth = getAuth()
+    const prevUser = auth.currentUser
+    const provider = new GoogleAuthProvider()
+    let result
+    if (prevUser) result = await linkWithPopup(prevUser, provider)
+    else result = await signInWithPopup(getAuth(), provider)
+
+    const tokenResult = await setAuthClaims(await result.user.getIdToken())
+
     try {
-      await updateDoc(docRef, {
-        photoURL: result.user.photoURL,
-      })
-    } catch (e) {
-      await setDoc(docRef, {
+      await setDoc(doc(getFirestore(getApp()), `users/${result.user.uid}`), {
         displayName: result.user.displayName,
         photoURL: result.user.photoURL,
+        type: tokenResult.claims.admin
+          ? 'admin'
+          : tokenResult.claims.reviewer
+          ? 'reviewer'
+          : 'user',
       })
+    } catch (e) {
+      console.log(e)
     }
   }
 
@@ -81,26 +85,7 @@ const SignInButtons = () => {
     if (prevUser) result = await linkWithPopup(prevUser, provider)
     else result = await signInWithPopup(getAuth(), provider)
 
-    // handle custom claims
-    const idToken = await result.user.getIdToken()
-    const res = await fetch(getAbsoluteURL('/api/setCustomClaims', null), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        idToken,
-      }),
-    })
-    const status = res.status
-    if (status === 200) {
-      res.json().then(data => {
-        if (data.status === 'success') {
-          // force refresh for new auth claims
-          auth.currentUser.getIdToken(true)
-        }
-      })
-    }
+    const tokenResult = await setAuthClaims(await result.user.getIdToken())
 
     // This gives you a GitHub Access Token. You can use it to access the GitHub API.
     const credential = GithubAuthProvider.credentialFromResult(result)
@@ -125,6 +110,11 @@ const SignInButtons = () => {
         followers: [],
         recentReleases: [],
         recentSubmissions: [],
+        type: tokenResult.claims.admin
+          ? 'admin'
+          : tokenResult.claims.reviewer
+          ? 'reviewer'
+          : 'user',
       })
     } catch (e) {
       await setDoc(docRef, {
@@ -133,6 +123,11 @@ const SignInButtons = () => {
         followers: [],
         recentReleases: [],
         recentSubmissions: [],
+        type: tokenResult.claims.admin
+          ? 'admin'
+          : tokenResult.claims.reviewer
+          ? 'reviewer'
+          : 'user',
       })
     }
     try {
@@ -154,26 +149,7 @@ const SignInButtons = () => {
     if (prevUser) result = await linkWithPopup(prevUser, provider)
     else result = await signInWithPopup(getAuth(), provider)
 
-    // handle custom claims
-    const idToken = await result.user.getIdToken()
-    const res = await fetch(getAbsoluteURL('/api/setCustomClaims', null), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        idToken,
-      }),
-    })
-    const status = res.status
-    if (status === 200) {
-      res.json().then(data => {
-        if (data.status === 'success') {
-          // force refresh for new auth claims
-          auth.currentUser.getIdToken(true)
-        }
-      })
-    }
+    const tokenResult = await setAuthClaims(await result.user.getIdToken())
 
     // This gives you a GitHub Access Token. You can use it to access the GitHub API.
     const credential = GithubAuthProvider.credentialFromResult(result)
@@ -198,6 +174,11 @@ const SignInButtons = () => {
         plugins: [],
         recentReleases: [],
         recentSubmissions: [],
+        type: tokenResult.claims.admin
+          ? 'admin'
+          : tokenResult.claims.reviewer
+          ? 'reviewer'
+          : 'user',
       })
     } catch (e) {
       await setDoc(docRef, {
@@ -206,6 +187,11 @@ const SignInButtons = () => {
         followers: [],
         recentReleases: [],
         recentSubmissions: [],
+        type: tokenResult.claims.admin
+          ? 'admin'
+          : tokenResult.claims.reviewer
+          ? 'reviewer'
+          : 'user',
       })
     }
   }
@@ -221,26 +207,7 @@ const SignInButtons = () => {
     if (prevUser) result = await linkWithPopup(prevUser, provider)
     else result = await signInWithPopup(getAuth(), provider)
 
-    // handle custom claims
-    const idToken = await result.user.getIdToken()
-    const res = await fetch(getAbsoluteURL('/api/setCustomClaims', null), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        idToken,
-      }),
-    })
-    const status = res.status
-    if (status === 200) {
-      res.json().then(data => {
-        if (data.status === 'success') {
-          // force refresh for new auth claims
-          auth.currentUser.getIdToken(true)
-        }
-      })
-    }
+    const tokenResult = await setAuthClaims(await result.user.getIdToken())
 
     // This gives you a GitHub Access Token. You can use it to access the GitHub API.
     const credential = GithubAuthProvider.credentialFromResult(result)
@@ -264,6 +231,11 @@ const SignInButtons = () => {
         followers: [],
         recentReleases: [],
         recentSubmissions: [],
+        type: tokenResult.claims.admin
+          ? 'admin'
+          : tokenResult.claims.reviewer
+          ? 'reviewer'
+          : 'user',
       })
     } catch (e) {
       await setDoc(docRef, {
@@ -272,6 +244,11 @@ const SignInButtons = () => {
         followers: [],
         recentReleases: [],
         recentSubmissions: [],
+        type: tokenResult.claims.admin
+          ? 'admin'
+          : tokenResult.claims.reviewer
+          ? 'reviewer'
+          : 'user',
       })
     }
   }
