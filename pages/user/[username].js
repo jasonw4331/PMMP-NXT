@@ -9,7 +9,7 @@ import semver from 'semver'
 const UserData = ({ data, plugins = [] }) => {
   return (
     <>
-      <Metatags title={data.name} image={data.imageUrl} />
+      <Metatags title={data.displayName} image={data.photoURL} />
       <ul className={'flex flex-col'}>{plugins}</ul>
     </>
   )
@@ -24,14 +24,10 @@ export async function getStaticProps(context) {
     const userSnapshot = await getFirebaseAdmin()
       .firestore()
       .collection('users')
-      .where('accessLevel', '>=', '1')
       .where('displayName', '==', username)
       .limit(1)
       .get()
-    if (
-      userSnapshot.docs.length < 1 ||
-      userSnapshot.docs[0].data().accessLevel < 1
-    )
+    if (userSnapshot.docs.length < 1)
       return {
         notFound: true,
         // Next.js will attempt to re-generate the page:
@@ -75,7 +71,7 @@ export async function getStaticProps(context) {
   }
   return {
     props: {
-      userData,
+      data: userData,
       plugins: found,
     },
     // Next.js will attempt to re-generate the page:
@@ -94,8 +90,7 @@ export async function getStaticPaths() {
     const snapshot = await getFirebaseAdmin()
       .firestore()
       .collection('users')
-      .where('accessLevel', '>=', '1')
-      .orderBy('accessLevel', 'asc')
+      .where('plugins', '>=', '1')
       .get()
     // Get the paths we want to pre-render based on released plugins
     paths = snapshot.docs.map(async doc => ({
