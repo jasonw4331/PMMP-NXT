@@ -2,7 +2,6 @@ import { getFirebaseAdmin, withAuthUser } from 'next-firebase-auth'
 import Metatags from '../components/Metatags'
 import PluginCard from '../components/PluginCard'
 import { postToJSON } from '../lib/firebase/server/firestoreFuncs'
-import semver from 'semver'
 
 const Home = ({ data = [] }) => {
   data = data.map(doc => (
@@ -37,24 +36,13 @@ export async function getStaticProps(context) {
       .collectionGroup('plugins')
       .where('releaseStatus', '==', '2')
       .get()
-    let latestVersions = []
-    snapshot.docs.forEach(doc => {
+    for (const doc of snapshot.docs) {
+      const userDoc = await doc.ref.parent.parent.get()
+      const recentPlugins = userDoc.get('recentReleases')
+      if (!doc.id in recentPlugins) continue
       const data = postToJSON(doc)
-      const name = doc.id.split('_v')[0]
-      const version = doc.id.split('_v')[1]
-      if (
-        latestVersions[name] === undefined ||
-        semver.satisfies(version, '>' + latestVersions[name], {
-          includePrerelease: true,
-        })
-      ) {
-        latestVersions[name] = version
-        latestVersions.push(version)
-        docs.push(data)
-        return
-      }
       docs.push(data)
-    })
+    }
   } catch (e) {
     console.log(e)
   }

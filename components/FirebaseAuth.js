@@ -123,14 +123,16 @@ const SignInButtons = () => {
     try {
       await updateDoc(docRef, {
         followers: [],
-        plugins: [],
+        recentReleases: [],
+        recentSubmissions: [],
       })
     } catch (e) {
       await setDoc(docRef, {
         displayName: result.user.displayName,
         photoURL: result.user.photoURL,
         followers: [],
-        plugins: [],
+        recentReleases: [],
+        recentSubmissions: [],
       })
     }
     try {
@@ -183,15 +185,16 @@ const SignInButtons = () => {
       await updateDoc(docRef, {
         followers: [],
         plugins: [],
-        gitToken: token,
+        recentReleases: [],
+        recentSubmissions: [],
       })
     } catch (e) {
       await setDoc(docRef, {
         displayName: result.user.displayName,
         photoURL: result.user.photoURL,
         followers: [],
-        plugins: [],
-        gitToken: token,
+        recentReleases: [],
+        recentSubmissions: [],
       })
     }
   }
@@ -237,16 +240,16 @@ const SignInButtons = () => {
     try {
       await updateDoc(docRef, {
         followers: [],
-        plugins: [],
-        gitToken: token,
+        recentReleases: [],
+        recentSubmissions: [],
       })
     } catch (e) {
       await setDoc(docRef, {
         displayName: result.user.displayName,
         photoURL: result.user.photoURL,
         followers: [],
-        plugins: [],
-        gitToken: token,
+        recentReleases: [],
+        recentSubmissions: [],
       })
     }
   }
