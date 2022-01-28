@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import Footer from './Footer'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import missingImage from '../public/icons/missing.png'
 import githubMark from '../public/icons/GitHub-Mark.svg'
 import docsImage from '../public/icons/Docs.ico'
@@ -47,34 +47,18 @@ import {
   SettingsOutlined,
 } from '@mui/icons-material'
 import { useAuthUser } from 'next-firebase-auth'
-import {
-  collection,
-  getDocs,
-  getFirestore,
-  limit,
-  orderBy,
-  query,
-  where,
-} from 'firebase/firestore'
-import { getApp } from 'firebase/app'
 import { useTheme } from 'next-themes'
-import debounce from 'lodash.debounce'
 import { useRouter } from 'next/router'
 import { msToTime } from '../lib/timeConverter'
 import { AnimatePresence, m } from 'framer-motion'
 import { firebaseCloudMessaging } from '../lib/webPush'
 import { getMessaging, onMessage } from 'firebase/messaging'
+import localforage from 'localforage'
 
 const Header = ({ sidebarOpen, setSidebarOpen }) => {
   const [appsOpen, setAppsOpen] = useState(false)
   const [notifsOpen, setNotifsOpen] = useState(false)
-  const [notifications, setNotifications] = useState([
-    <Notification
-      key={0}
-      title={'You have no new notifications!'}
-      redirectUrl={'/'}
-    />,
-  ])
+  const [notifications, setNotifications] = useState([])
   const [userOpen, setUserOpen] = useState(false)
 
   return (
@@ -85,6 +69,7 @@ const Header = ({ sidebarOpen, setSidebarOpen }) => {
         appsOpen={appsOpen}
         setAppsOpen={setAppsOpen}
         notifsOpen={notifsOpen}
+        notifications={notifications}
         setNotifsOpen={setNotifsOpen}
         userOpen={userOpen}
         setUserOpen={setUserOpen}
@@ -119,6 +104,7 @@ const TopBar = ({
   appsOpen,
   setAppsOpen,
   notifsOpen,
+  notifications,
   setNotifsOpen,
   userOpen,
   setUserOpen,
@@ -203,8 +189,13 @@ const TopBar = ({
               setAppsOpen(false)
               setUserOpen(false)
             }}>
-            <Notifications className={'hidden dark:inline-block'} />
-            <NotificationsOutlined className={'dark:hidden'} />
+            {notifications.every(
+              notification => notification.props.seen === true
+            ) ? (
+              <NotificationsOutlined />
+            ) : (
+              <Notifications />
+            )}
           </button>
         )}
         <button
@@ -489,8 +480,65 @@ const AppLink = ({ appName, redirectLink = '/', iconUrl = null }) => {
 }
 
 const NotificationsWindow = ({ notifications, setNotifications }) => {
-  const authUser = useAuthUser()
+  function populateNotifications(messages) {
+    setNotifications(
+      messages.map(message => {
+        return (
+          <Notification
+            onMouseLeave={() => setSeen(message.messageId)}
+            key={message.messageId}
+            messageId={message.messageId}
+            title={message.title}
+            body={message.body}
+            timestamp={message.timestamp}
+            redirectUrl={message.link ?? '/'}
+            iconUrl={message.image}
+            seen={message.seen}
+          />
+        )
+      })
+    )
+  }
 
+  function addNotification(message) {
+    setNotifications([
+      ...notifications,
+      <Notification
+        onMouseLeave={() => setSeen(message.messageId)}
+        key={message.messageId}
+        messageId={message.messageId}
+        title={message.title}
+        body={message.body}
+        timestamp={message.timestamp}
+        redirectUrl={message.link ?? '/'}
+        iconUrl={message.image}
+        seen={message.seen}
+      />,
+    ])
+    console.log('Updated Notifications list')
+  }
+
+  function setSeen(messageId) {
+    localforage.getItem('messages').then(messages => {
+      if (messages) {
+        const newMessages = messages.map(message => {
+          if (message.messageId === messageId) {
+            message.seen = true
+          }
+          return message
+        })
+        localforage.setItem('messages', newMessages).catch(err => {
+          console.log(err)
+        })
+      }
+    })
+  }
+
+  localforage.getItem('messages').then(messages => {
+    if (messages) {
+      populateNotifications(messages)
+    }
+  })
   useEffect(() => {
     setToken()
 
@@ -507,50 +555,36 @@ const NotificationsWindow = ({ notifications, setNotifications }) => {
 
     function getMessage() {
       const messaging = getMessaging()
-      onMessage(messaging, message => console.log('foreground ', message))
-    }
-  }, [])
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const populateNotifs = useCallback(
-    debounce(async db => {
-      const snapshot = await getDocs(
-        query(
-          collection(db, `/users/${authUser.id}/notifications`),
-          where('seen', '==', false),
-          orderBy('createdAt'),
-          limit(20)
-        )
-      )
-      const notifList = snapshot.docs.map(doc => {
-        const data = doc.data()
-        return (
-          <Notification
-            key={doc.id}
-            title={data.title}
-            timestamp={data.createdAt.toMillis() || 0}
-            redirectUrl={data.redirectUrl}
-            iconUrl={data.iconUrl}
-          />
-        )
+      onMessage(messaging, message => {
+        console.log('Received Notification!')
+        message = {
+          messageId: message.messageId,
+          title: message.notification.title,
+          body: message.notification.body,
+          image: message.notification?.image,
+          link: message.fcmOptions?.link,
+          timestamp: Date.now(),
+          seen: false,
+        }
+        addNotification(message)
+        localforage.getItem('messages').then(messages => {
+          if (messages) {
+            messages.push(message)
+            localforage
+              .setItem(
+                'messages',
+                messages.filter(
+                  message =>
+                    message.seen && message.timestamp > Date.now() - 2.628e9 // 1 month
+                )
+              )
+              .catch(error => {
+                console.log(error)
+              })
+          }
+        })
       })
-      setNotifications(
-        notifList.length > 0
-          ? notifList
-          : [
-              <Notification
-                key={0}
-                title={'You have no new notifications!'}
-                redirectUrl={'/'}
-              />,
-            ]
-      )
-    }),
-    []
-  )
-  useEffect(() => {
-    const db = getFirestore(getApp())
-    populateNotifs(db)
+    }
   })
   return (
     <m.div
@@ -564,7 +598,7 @@ const NotificationsWindow = ({ notifications, setNotifications }) => {
       exit={{ opacity: 0 }}>
       <div className='py-3 px-4 flex justify-between text-lg text-zinc-900 dark:text-white'>
         <p className='mt-0.5'>Notifications</p>
-        <Link href='/notifications'>
+        <Link href='/settings#notifications'>
           <a>
             <Settings className={'hidden dark:inline-block'} />
             <SettingsOutlined className={'dark:hidden'} />
@@ -572,30 +606,52 @@ const NotificationsWindow = ({ notifications, setNotifications }) => {
         </Link>
       </div>
       <ul className='max-h-[592px] py-1 overflow-y-auto snap-y'>
-        {notifications}
+        {notifications.length > 0 ? (
+          notifications
+        ) : (
+          <li
+            className={`py-2 px-4 flex justify-between text-sm text-zinc-700 dark:text-zinc-200`}>
+            <div>
+              <p className={'break-all font-semibold dark:text-white'}>
+                You don&apos;t have any notifications!
+              </p>
+            </div>
+            <div className={'w-16 h-8 mr-3'} />
+          </li>
+        )}
       </ul>
     </m.div>
   )
 }
 
 const Notification = ({
+  messageId = '',
   title,
+  body = null,
   timestamp = null,
   redirectUrl = '/',
   iconUrl = null,
+  seen = false,
 }) => {
+  const [seenMessage, setSeenMessage] = useState(seen)
   // TODO: limit title length
   // TODO: mark as seen on hover / click / focus
   if (timestamp !== null)
     timestamp =
-      timestamp < 1000 ? 'now' : msToTime(new Date() - timestamp) + ' ago'
+      timestamp < 1000 ? 'now' : msToTime(Date.now() - timestamp) + ' ago'
   return (
-    <li className={'snap-end hover:bg-black/5'}>
-      <Link href={redirectUrl}>
+    <li
+      className={`snap-end ${seenMessage ? '' : 'hover:bg-black/5'}`}
+      onMouseLeave={() => {
+        setSeenMessage(true)
+      }}>
+      <Link href={redirectUrl} prefetch={false}>
         <a
-          className={
-            'py-2 px-4 flex justify-between text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'
-          }>
+          className={`py-2 px-4 flex justify-between text-sm text-zinc-700 ${
+            seenMessage ? '' : 'hover:bg-zinc-100'
+          } ${seenMessage ? '' : 'dark:hover:bg-zinc-800'} dark:text-zinc-200 ${
+            seenMessage ? '' : 'dark:hover:text-white'
+          }`}>
           <div>
             <p className={'break-all font-semibold dark:text-white'}>{title}</p>
             {timestamp !== null && (
@@ -660,8 +716,8 @@ const UserWindow = ({ setUserOpen, setNotifications }) => {
       <ul className='py-1'>
         <li>
           <Link
-            href={`/user/${encodeURI(authUser.displayName)}`}
-            as={'/profile'}>
+            href={'/user/[username]'}
+            as={`/user/${encodeURI(authUser.displayName)}`}>
             <a className='block py-2 px-4 text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'>
               <p>
                 <Person className={'hidden dark:inline-block'} />
@@ -675,13 +731,7 @@ const UserWindow = ({ setUserOpen, setNotifications }) => {
           <button
             onClick={() => {
               setUserOpen(false)
-              setNotifications([
-                <Notification
-                  key={0}
-                  title={'You have no new notifications!'}
-                  redirectUrl={'/'}
-                />,
-              ])
+              setNotifications([])
               authUser.signOut()
             }}
             className='w-full block py-2 px-4 text-left text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'>

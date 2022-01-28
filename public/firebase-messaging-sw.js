@@ -1,6 +1,7 @@
 // Give the service worker access to Firebase Messaging.
 // Note that you can only use Firebase Messaging here. Other Firebase libraries
 // are not available in the service worker.
+importScripts('./localforage.min.js')
 importScripts('https://www.gstatic.com/firebasejs/9.2.0/firebase-app-compat.js')
 importScripts(
   'https://www.gstatic.com/firebasejs/9.2.0/firebase-messaging-compat.js'
@@ -29,17 +30,31 @@ const messaging = firebase.messaging()
 // and you should use data messages for custom notifications.
 // For more info see:
 // https://firebase.google.com/docs/cloud-messaging/concept-options
-messaging.onBackgroundMessage(function (payload) {
-  console.log(
-    '[firebase-messaging-sw.js] Received background message ',
-    payload
-  )
-  // Customize notification here
-  const notificationTitle = 'Background Message Title'
-  const notificationOptions = {
-    body: 'Background Message body.',
-    icon: '/manifest/icon-maskable.png',
+messaging.onBackgroundMessage(function (message) {
+  console.log('[SW] Received Background Notification!')
+  message = {
+    messageId: message.messageId,
+    title: message.notification.title,
+    body: message.notification.body,
+    image: message.notification?.image,
+    link: message.fcmOptions?.link,
+    timestamp: Date.now(),
+    seen: false,
   }
-
-  self.registration.showNotification(notificationTitle, notificationOptions)
+  localforage
+    .getItem('messages')
+    .then(messages => {
+      if (messages) {
+        messages.push(message)
+        localforage
+          .setItem('messages', messages)
+          .then(() => console.log('[SW] Background Notification Saved!'))
+          .catch(error => {
+            console.log(error)
+          })
+      }
+    })
+    .catch(error => {
+      console.log(error)
+    })
 })
