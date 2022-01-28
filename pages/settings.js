@@ -13,5 +13,5 @@ const Settings = () => {
 }
 
 export default withAuthUser({
-  whenUnauthedBeforeInit: AuthAction.REDIRECT_TO_LOGIN,
+  whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
 })(Settings)
