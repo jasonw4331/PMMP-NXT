@@ -5,6 +5,7 @@ import {
   linkWithPopup,
   OAuthProvider,
   signInWithPopup,
+  updateProfile,
 } from 'firebase/auth'
 import Image from 'next/image'
 import githubMark from '../public/icons/GitHub-Mark.svg'
@@ -131,6 +132,12 @@ const SignInButtons = () => {
         followers: [],
         plugins: [],
       })
+    }
+    try {
+      if (prevUser)
+        await updateProfile(prevUser, { displayName: result.user.displayName })
+    } catch (e) {
+      console.log(e)
     }
   }
 
