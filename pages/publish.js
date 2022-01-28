@@ -53,10 +53,6 @@ const StepperForm = ({ authUser }) => {
     if (tokensRef.docs.length > 0) auth = tokensRef.docs[0].id
   }
 
-  useEffect(() => {
-    getAuthToken()
-  })
-
   // FORM VALIDATION STUFF
   const [url, setUrl] = useState('')
   const [tag, setTag] = useState('')
@@ -73,6 +69,7 @@ const StepperForm = ({ authUser }) => {
   const [activeStep, setActiveStep] = useState(0)
 
   useEffect(() => {
+    getAuthToken()
     if (
       authUser.firebaseUser?.providerData.some(({ providerId }) => {
         return providerId === 'github.com'
