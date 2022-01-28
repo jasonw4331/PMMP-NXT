@@ -34,7 +34,7 @@ export async function getStaticProps(context) {
     const snapshot = await getFirebaseAdmin()
       .firestore()
       .collectionGroup('plugins')
-      .where('releaseStatus', '==', '2')
+      .where('releaseStatus', '==', 2)
       .get()
     for (const doc of snapshot.docs) {
       const userDoc = await doc.ref.parent.parent.get()
