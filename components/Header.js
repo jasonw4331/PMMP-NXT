@@ -482,22 +482,21 @@ const AppLink = ({ appName, redirectLink = '/', iconUrl = null }) => {
 const NotificationsWindow = ({ notifications, setNotifications }) => {
   function populateNotifications(messages) {
     setNotifications(
-      messages.map(message => {
-        return (
-          <Notification
-            onMouseLeave={() => setSeen(message.messageId)}
-            key={message.messageId}
-            messageId={message.messageId}
-            title={message.title}
-            body={message.body}
-            timestamp={message.timestamp}
-            redirectUrl={message.link ?? '/'}
-            iconUrl={message.image}
-            seen={message.seen}
-          />
-        )
-      })
+      messages.map(message => (
+        <Notification
+          onMouseLeave={() => setSeen(message.messageId)}
+          key={message.messageId}
+          messageId={message.messageId}
+          title={message.title}
+          body={message.body}
+          timestamp={message.timestamp}
+          redirectUrl={message.link ?? '/'}
+          iconUrl={message.image}
+          seen={message.seen}
+        />
+      ))
     )
+    console.log('Populated notifications')
   }
 
   function addNotification(message) {
@@ -534,11 +533,16 @@ const NotificationsWindow = ({ notifications, setNotifications }) => {
     })
   }
 
-  localforage.getItem('messages').then(messages => {
-    if (messages) {
-      populateNotifications(messages)
-    }
-  })
+  localforage
+    .getItem('messages')
+    .then(messages => {
+      if (messages) {
+        populateNotifications(messages)
+      }
+    })
+    .catch(err => {
+      console.log(err)
+    })
   useEffect(() => {
     setToken()
 
@@ -648,8 +652,8 @@ const Notification = ({
       <Link href={redirectUrl} prefetch={false}>
         <a
           className={`py-2 px-4 flex justify-between text-sm text-zinc-700 ${
-            seenMessage ? '' : 'hover:bg-zinc-100'
-          } ${seenMessage ? '' : 'dark:hover:bg-zinc-800'} dark:text-zinc-200 ${
+            seenMessage ? '' : 'hover:bg-zinc-100 '
+          } ${seenMessage ? '' : 'dark:hover:bg-zinc-800 '}dark:text-zinc-200 ${
             seenMessage ? '' : 'dark:hover:text-white'
           }`}>
           <div>
