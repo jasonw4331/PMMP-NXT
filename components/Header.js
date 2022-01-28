@@ -6,7 +6,7 @@ import missingImage from '../public/icons/missing.png'
 import githubMark from '../public/icons/GitHub-Mark.svg'
 import docsImage from '../public/icons/Docs.ico'
 import poggitLogo from '../public/icons/poggit.png'
-import discordLogoWhite from '../public/icons/Discord-Logo-White.png'
+import discordLogo from '../public/icons/DiscordLogo.svg'
 import PMMPNewLogo from '../public/icons/pocketmine_logo2.png'
 import {
   AdminPanelSettings,
@@ -469,7 +469,7 @@ const AppsWindow = () => {
         <AppLink
           appName='Discord'
           redirectLink='https://poggit.pmmp.io'
-          iconUrl={discordLogoWhite}
+          iconUrl={discordLogo}
         />
       </ul>
     </m.div>
