@@ -16,8 +16,8 @@ import {
   signInWithPopup,
 } from 'firebase/auth'
 import {
+  collection,
   doc,
-  getDoc,
   getFirestore,
   setDoc,
   updateDoc,
@@ -46,8 +46,11 @@ const StepperForm = ({ authUser }) => {
   let auth = null
   const getAuthToken = async () => {
     const db = getFirestore(getApp())
-    const snapshot = await getDoc(doc(db, `/user/${authUser.id}`))
-    auth = snapshot.get('gitToken') ?? null
+    const tokensRef = await collection(db, 'tokens')
+      .where('uid', '==', authUser.uid)
+      .limit(1)
+      .get()
+    if (tokensRef.docs.length > 0) auth = tokensRef.docs[0].id
   }
 
   useEffect(() => {
