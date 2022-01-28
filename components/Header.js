@@ -262,7 +262,7 @@ const SideBar = ({ setSidebarOpen }) => {
               }>
               <Home className={'hidden dark:inline-block'} />
               <HomeOutlined className={'dark:hidden'} />
-              <span>Home</span>
+              <span className={'ml-3'}>Home</span>
             </a>
           </Link>
           <Link href={'/feed/explore'}>
@@ -272,7 +272,7 @@ const SideBar = ({ setSidebarOpen }) => {
               }>
               <Explore className={'hidden dark:inline-block'} />
               <ExploreOutlined className={'dark:hidden'} />
-              <span>Explore</span>
+              <span className={'ml-3'}>Explore</span>
             </a>
           </Link>
           <Link href={'/feed/bookmarks'}>
@@ -282,7 +282,7 @@ const SideBar = ({ setSidebarOpen }) => {
               }>
               <Bookmarks className={'hidden dark:inline-block'} />
               <BookmarksOutlined className={'dark:hidden'} />
-              <span>Bookmarked</span>
+              <span className={'ml-3'}>Bookmarked</span>
             </a>
           </Link>
         </li>
@@ -297,7 +297,7 @@ const SideBar = ({ setSidebarOpen }) => {
               }>
               <LibraryAdd className={'hidden dark:inline-block'} />
               <LibraryAddOutlined className={'dark:hidden'} />
-              <span>Library</span>
+              <span className={'ml-3'}>Library</span>
             </a>
           </Link>
           <Link href={'/feed/history'}>
@@ -307,7 +307,7 @@ const SideBar = ({ setSidebarOpen }) => {
               }>
               <History className={'hidden dark:inline-block'} />
               <HistoryOutlined className={'dark:hidden'} />
-              <span>History</span>
+              <span className={'ml-3'}>History</span>
             </a>
           </Link>
 
@@ -319,7 +319,7 @@ const SideBar = ({ setSidebarOpen }) => {
                 }>
                 <Extension className={'hidden dark:inline-block'} />
                 <ExtensionOutlined className={'dark:hidden'} />
-                <span>Your Plugins</span>
+                <span className={'ml-3'}>Your Plugins</span>
               </a>
             </Link>
           )}
@@ -361,7 +361,7 @@ const SideBar = ({ setSidebarOpen }) => {
                   }>
                   <Assignment className={'hidden dark:inline-block'} />
                   <AssignmentOutlined className={'dark:hidden'} />
-                  <span>Review Plugins</span>
+                  <span className={'ml-3'}>Review Plugins</span>
                 </a>
               </Link>
             )}
@@ -373,7 +373,7 @@ const SideBar = ({ setSidebarOpen }) => {
                   }>
                   <AdminPanelSettings className={'hidden dark:inline-block'} />
                   <AdminPanelSettingsOutlined className={'dark:hidden'} />
-                  <span>Admin Panel</span>
+                  <span className={'ml-3'}>Admin Panel</span>
                 </a>
               </Link>
             )}
@@ -390,7 +390,7 @@ const SideBar = ({ setSidebarOpen }) => {
               }>
               <Settings className={'hidden dark:inline-block'} />
               <SettingsOutlined className={'dark:hidden'} />
-              <span>Settings</span>
+              <span className={'ml-3'}>Settings</span>
             </a>
           </Link>
           <Link href={'/reporthistory'}>
@@ -400,7 +400,7 @@ const SideBar = ({ setSidebarOpen }) => {
               }>
               <Flag className={'hidden dark:inline-block'} />
               <FlagOutlined className={'dark:hidden'} />
-              <span>Report History</span>
+              <span className={'ml-3'}>Report History</span>
             </a>
           </Link>
           <Link href={'/help'}>
@@ -410,7 +410,7 @@ const SideBar = ({ setSidebarOpen }) => {
               }>
               <Help className={'hidden dark:inline-block'} />
               <HelpOutlined className={'dark:hidden'} />
-              <span>Help</span>
+              <span className={'ml-3'}>Help</span>
             </a>
           </Link>
 
@@ -421,7 +421,7 @@ const SideBar = ({ setSidebarOpen }) => {
               }>
               <Feedback className={'hidden dark:inline-block'} />
               <FeedbackOutlined className={'dark:hidden'} />
-              <span>Send Feedback</span>
+              <span className={'ml-3'}>Send Feedback</span>
             </a>
           </Link>
         </li>
@@ -740,11 +740,9 @@ const UserWindow = ({ setUserOpen, setNotifications }) => {
               href={'/user/[username]'}
               as={`/user/${encodeURI(authUser.displayName)}`}>
               <a className='block py-2 px-4 text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'>
-                <p>
-                  <Person className={'hidden dark:inline-block'} />
-                  <PersonOutline className={'dark:hidden'} />
-                  Your Profile
-                </p>
+                <Person className={'hidden dark:inline-block'} />
+                <PersonOutline className={'dark:hidden'} />
+                <span className={'ml-2'}>Your Profile</span>
               </a>
             </Link>
           </li>
@@ -753,11 +751,9 @@ const UserWindow = ({ setUserOpen, setNotifications }) => {
           <li>
             <Link href={'/admin'}>
               <a className='block py-2 px-4 text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'>
-                <p>
-                  <AdminPanelSettings className={'hidden dark:inline-block'} />
-                  <AdminPanelSettingsOutlined className={'dark:hidden'} />
-                  Admin Panel
-                </p>
+                <AdminPanelSettings className={'hidden dark:inline-block'} />
+                <AdminPanelSettingsOutlined className={'dark:hidden'} />
+                <span className={'ml-2'}>Admin Panel</span>
               </a>
             </Link>
           </li>
@@ -770,10 +766,8 @@ const UserWindow = ({ setUserOpen, setNotifications }) => {
               authUser.signOut()
             }}
             className='w-full block py-2 px-4 text-left text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'>
-            <p>
-              <Logout />
-              Sign out
-            </p>
+            <Logout />
+            <span className={'ml-2'}>Sign out</span>
           </button>
         </li>
       </ul>
@@ -784,51 +778,41 @@ const UserWindow = ({ setUserOpen, setNotifications }) => {
               setTheme('light')
             }}
             className='w-full hidden dark:block py-2 px-4 text-left text-sm hover:bg-zinc-600 text-zinc-200 hover:text-white'>
-            <p>
-              <DarkMode />
-              Appearance: Dark
-            </p>
+            <DarkMode />
+            <span className={'ml-2'}>Appearance: Dark</span>
           </button>
           <button
             onClick={() => {
               setTheme('dark')
             }}
             className='w-full block dark:hidden py-2 px-4 text-left text-sm text-zinc-700 hover:bg-zinc-100'>
-            <p>
-              <LightMode />
-              Appearance: Light
-            </p>
+            <LightMode />
+            <span className={'ml-2'}>Appearance: Light</span>
           </button>
         </li>
         <li>
           <Link href='/settings'>
             <a className='block py-2 px-4 text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'>
-              <p>
-                <Settings className={'hidden dark:inline-block'} />
-                <SettingsOutlined className={'dark:hidden'} />
-                Settings
-              </p>
+              <Settings className={'hidden dark:inline-block'} />
+              <SettingsOutlined className={'dark:hidden'} />
+              <span className={'ml-2'}>Settings</span>
             </a>
           </Link>
         </li>
         <li>
           <Link href='/help'>
             <a className='block py-2 px-4 text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'>
-              <p>
-                <Help />
-                Help
-              </p>
+              <Help />
+              <span className={'ml-2'}>Help</span>
             </a>
           </Link>
         </li>
         <li>
           <Link href='https://github.com/jasonwynn10/PMMP-NXT/issues'>
             <a className='block py-2 px-4 text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'>
-              <p>
-                <Feedback className={'hidden dark:inline-block'} />
-                <FeedbackOutlined className={'dark:hidden'} />
-                Send Feedback
-              </p>
+              <Feedback className={'hidden dark:inline-block'} />
+              <FeedbackOutlined className={'dark:hidden'} />
+              <span className={'ml-2'}>Send Feedback</span>
             </a>
           </Link>
         </li>
