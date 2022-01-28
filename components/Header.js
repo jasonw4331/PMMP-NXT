@@ -569,7 +569,7 @@ const NotificationsWindow = ({ notifications, setNotifications }) => {
         addNotification(message)
         localforage.getItem('messages').then(messages => {
           if (messages) {
-            messages.push(message)
+            messages.unshift(message)
             localforage
               .setItem(
                 'messages',
