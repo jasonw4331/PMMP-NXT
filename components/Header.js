@@ -734,7 +734,9 @@ const UserWindow = ({ setUserOpen, setNotifications }) => {
         </div>
       </div>
       <ul className='py-1'>
-        {(authUser.claims.developer || authUser.claims.admin) && (
+        {(authUser.claims.developer ||
+          authUser.claims.reviewer ||
+          authUser.claims.admin) && (
           <li>
             <Link
               href={'/user/[username]'}
