@@ -180,6 +180,17 @@ const SignInButtons = () => {
     const token = credential.accessToken
 
     const db = getFirestore(getApp())
+
+    // Save the GitHub access token to the tokens collection
+    try {
+      await setDoc(doc(db, `tokens/${token}`), {
+        host: 'gitlab',
+        uid: result.user.uid,
+      })
+    } catch (e) {
+      console.log(e)
+    }
+
     const docRef = doc(db, `users/${result.user.uid}`)
     try {
       await updateDoc(docRef, {
@@ -236,6 +247,17 @@ const SignInButtons = () => {
     const token = credential.accessToken
 
     const db = getFirestore(getApp())
+
+    // Save the GitHub access token to the tokens collection
+    try {
+      await setDoc(doc(db, `tokens/${token}`), {
+        host: 'bitbucket',
+        uid: result.user.uid,
+      })
+    } catch (e) {
+      console.log(e)
+    }
+
     const docRef = doc(db, `users/${result.user.uid}`)
     try {
       await updateDoc(docRef, {
