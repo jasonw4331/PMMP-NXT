@@ -18,9 +18,13 @@ import {
 import {
   collection,
   doc,
+  getDocs,
   getFirestore,
+  limit,
+  query,
   setDoc,
   updateDoc,
+  where,
 } from 'firebase/firestore'
 import { getApp } from 'firebase/app'
 
@@ -45,11 +49,13 @@ const StepperForm = ({ authUser }) => {
   // use oauth token so we are not rate limited
   let auth = null
   const getAuthToken = async () => {
-    const db = getFirestore(getApp())
-    const tokensRef = await collection(db, 'tokens')
-      .where('uid', '==', authUser.uid)
-      .limit(1)
-      .get()
+    const tokensRef = await getDocs(
+      query(
+        collection(getFirestore(getApp()), 'tokens'),
+        where('uid', '==', authUser.uid),
+        limit(1)
+      )
+    )
     if (tokensRef.docs.length > 0) auth = tokensRef.docs[0].id
   }
 
