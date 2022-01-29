@@ -45,7 +45,8 @@ const PluginCard = ({
             'text-purple-400 p-2 font-roboto uppercase text-sm leading-4 tracking-widest'
           }>
           <Link
-            href={'/plugin/' + encodeURI(author) + '/' + encodeURI(name)}
+            href={'/plugin/[username]/[plugin]'}
+            as={`/plugin/${encodeURI(author)}/${encodeURI(name)}`}
             prefetch={false}>
             <a>More Details</a>
           </Link>
