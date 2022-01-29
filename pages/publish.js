@@ -51,7 +51,8 @@ const StepperForm = () => {
     const tokensRef = await getDocs(
       query(
         collection(getFirestore(getApp()), 'tokens'),
-        where('uid', '==', authUser.uid),
+        where('uid', '==', authUser.id),
+        where('host', '==', 'github'),
         limit(1)
       )
     )
@@ -74,6 +75,7 @@ const StepperForm = () => {
   const [activeStep, setActiveStep] = useState(0)
 
   useEffect(() => {
+    if (!authUser.id) return
     getAuthToken()
     if (
       authUser.firebaseUser?.providerData.some(({ providerId }) => {
