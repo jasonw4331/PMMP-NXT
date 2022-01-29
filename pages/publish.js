@@ -29,8 +29,6 @@ import {
 import { getApp } from 'firebase/app'
 
 const Publish = () => {
-  const authUser = useAuthUser()
-
   return (
     <>
       <Metatags
@@ -39,13 +37,14 @@ const Publish = () => {
         //TODO: upload arrow image
       />
       <div className={'w-full h-full flex justify-center'}>
-        <StepperForm authUser={authUser} />
+        <StepperForm />
       </div>
     </>
   )
 }
 
-const StepperForm = ({ authUser }) => {
+const StepperForm = () => {
+  const authUser = useAuthUser()
   // use oauth token so we are not rate limited
   let auth = null
   const getAuthToken = async () => {
