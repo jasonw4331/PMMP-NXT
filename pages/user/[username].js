@@ -95,7 +95,7 @@ export async function getStaticPaths() {
     const snapshot = await getFirebaseAdmin()
       .firestore()
       .collection('users')
-      .where('plugins', '>=', 1)
+      .where('recentReleases', '>=', 1)
       .get()
     for (const doc of snapshot.docs) {
       const username = doc.data().displayName
