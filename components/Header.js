@@ -147,7 +147,7 @@ const TopBar = ({
             onKeyDown={e => {
               if (e.key === 'Enter') {
                 router.push(
-                  `/search?q=${encodeURI(
+                  `/results?q=${encodeURI(
                     document.querySelector('input').value
                   )}`
                 )
@@ -159,7 +159,7 @@ const TopBar = ({
       <div
         id='nav-right'
         className='flex items-center justify-end sm:mr-5 md:mr-10'>
-        <Link href='/search'>
+        <Link href='/results'>
           <a className='h-6 w-6 ml-2 sm:ml-4 sm:hidden'>
             <Search className={'hidden dark:inline-block'} />
             <SearchOutlined className={'dark:hidden'} />
