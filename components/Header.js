@@ -310,9 +310,8 @@ const SideBar = ({ setSidebarOpen }) => {
               <span className={'ml-3'}>History</span>
             </a>
           </Link>
-
           {authUser.claims.developer && (
-            <Link href={`/${encodeURI(authUser.displayName)}`}>
+            <Link href={`/settings/projects`}>
               <a
                 className={
                   'w-full block py-2 px-4 text-left text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'
