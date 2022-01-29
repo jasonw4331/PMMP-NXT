@@ -1,5 +1,5 @@
 import { AuthAction, withAuthUser } from 'next-firebase-auth'
-import Metatags from '../components/Metatags'
+import Metatags from '../../components/Metatags'
 
 const Settings = () => {
   return (
