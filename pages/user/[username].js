@@ -21,7 +21,7 @@ const UserData = ({ userData, releasedPlugins = [] }) => {
   return (
     <>
       <Metatags title={userData.displayName} image={userData.photoURL} />
-      <ul className={'flex flex-col'}>{releasedPlugins}</ul>
+      <ul className={'flex'}>{releasedPlugins}</ul>
     </>
   )
 }
