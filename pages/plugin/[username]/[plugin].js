@@ -113,18 +113,21 @@ export async function getStaticProps(context) {
 // It may be called again, on a serverless function, if
 // the path has not been generated.
 export async function getStaticPaths() {
-  let paths = []
+  const paths = []
   try {
     const snapshot = await getFirebaseAdmin()
       .firestore()
       .collectionGroup('plugins')
-      .where('releaseStatus', '==', '2')
+      .where('releaseStatus', '==', 2)
       .orderBy('createdAt', 'asc')
       .get()
-    // Get the paths we want to pre-render based on released plugins
-    paths = snapshot.docs.map(async doc => ({
-      params: { username: (await doc.data()).author, plugin: doc.id },
-    }))
+    for (const doc of snapshot.docs) {
+      const userDoc = await doc.ref.parent.parent.get()
+      const recentPlugins = userDoc.get('recentReleases')
+      if (!doc.id in recentPlugins) continue
+      const data = postToJSON(doc)
+      paths.push(data)
+    }
   } catch (e) {
     console.log(e)
   }
@@ -132,7 +135,12 @@ export async function getStaticPaths() {
   // We'll pre-render only these paths at build time.
   // { fallback: blocking } will server-render pages
   // on-demand if the path doesn't exist.
-  return { paths, fallback: 'blocking' }
+  return {
+    paths: paths.map(doc => ({
+      params: { username: doc.author, plugin: doc.id },
+    })),
+    fallback: 'blocking',
+  }
 }
 
 export default withAuthUser()(PluginData)
