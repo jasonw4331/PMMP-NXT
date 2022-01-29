@@ -1,6 +1,6 @@
 import { useAuthUser, withAuthUser } from 'next-firebase-auth'
 import Metatags from '../components/Metatags'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import semantic from 'semver'
 import IdentifyRepoHost from '../lib/repo_hosts/identifyRepoHost'
 import Image from 'next/image'
@@ -9,24 +9,19 @@ import gitlabIcon from '../public/icons/GitLab-Icon.svg'
 import bitbucketMark from '../public/icons/Bitbucket-Mark.svg'
 import { Button, Step, StepContent, StepLabel, Stepper } from '@mui/material'
 import {
-  getAuth,
-  GithubAuthProvider,
-  linkWithPopup,
-  OAuthProvider,
-  signInWithPopup,
-} from 'firebase/auth'
-import {
   collection,
-  doc,
   getDocs,
   getFirestore,
   limit,
   query,
-  setDoc,
-  updateDoc,
   where,
 } from 'firebase/firestore'
 import { getApp } from 'firebase/app'
+import {
+  signInWithBitbucket,
+  signInWithGitHub,
+  signInWithGitLab,
+} from '../lib/signIn'
 
 const Publish = () => {
   return (
@@ -45,19 +40,7 @@ const Publish = () => {
 
 const StepperForm = () => {
   const authUser = useAuthUser()
-  // use oauth token so we are not rate limited
-  let auth = null
-  const getAuthToken = async () => {
-    const tokensRef = await getDocs(
-      query(
-        collection(getFirestore(getApp()), 'tokens'),
-        where('uid', '==', authUser.id),
-        where('host', '==', 'github'),
-        limit(1)
-      )
-    )
-    if (tokensRef.docs.length > 0) auth = tokensRef.docs[0].id
-  }
+  const gitToken = useRef(null)
 
   // FORM VALIDATION STUFF
   const [url, setUrl] = useState('')
@@ -76,6 +59,17 @@ const StepperForm = () => {
 
   useEffect(() => {
     if (!authUser.id) return
+    const getAuthToken = async () => {
+      const tokensRef = await getDocs(
+        query(
+          collection(getFirestore(getApp()), 'tokens'),
+          where('uid', '==', authUser.id),
+          where('host', '==', 'github'),
+          limit(1)
+        )
+      )
+      if (tokensRef.docs.length > 0) gitToken.current = tokensRef.docs[0].id
+    }
     getAuthToken()
     if (
       authUser.firebaseUser?.providerData.some(({ providerId }) => {
@@ -224,7 +218,7 @@ const StepperForm = () => {
           <StepContent>
             <div className={'min-w-fit flex flex-wrap'}>
               <button
-                onClick={signInWithGitHub}
+                onClick={() => signInWithGitHub().then(handleNext)}
                 className='max-w-sm text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 inline-flex items-center justify-center dark:focus:ring-zinc-500 dark:hover:bg-[#414a55] mr-2 mb-2'>
                 <div className={'mr-2 -ml-1 w-4 h-4'}>
                   <Image src={githubMark} alt={'Github Mark'} />
@@ -232,7 +226,7 @@ const StepperForm = () => {
                 Sign in with GitHub
               </button>
               <button
-                onClick={signInWithGitLab}
+                onClick={() => signInWithGitLab().then(handleNext)}
                 disabled={true}
                 className='max-w-sm text-white bg-[#c6592a] hover:bg-[#ec6a32]/90 focus:ring-4 focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 inline-flex items-center justify-center dark:focus:ring-zinc-500 dark:hover:bg-[#ec6a32] mr-2 mb-2'>
                 <div className={'mr-2 -ml-1 w-4 h-4'}>
@@ -241,7 +235,7 @@ const StepperForm = () => {
                 Sign in with GitLab
               </button>
               <button
-                onClick={signInWithBitbucket}
+                onClick={() => signInWithBitbucket().then(handleNext)}
                 disabled={true}
                 className='max-w-sm text-white bg-[#0747a6] hover:bg-[#0a67f2]/90 focus:ring-4 focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 inline-flex items-center justify-center dark:focus:ring-zinc-500 dark:hover:bg-[#0a67f2] mr-2 mb-2'>
                 <div className={'mr-2 -ml-1 w-4 h-4'}>
@@ -308,13 +302,13 @@ const StepperForm = () => {
                     if (results[1] === null) return
 
                     const { domain, namespace, repo, host } =
-                      await IdentifyRepoHost(results[1], url, auth)
+                      await IdentifyRepoHost(results[1], url, gitToken)
 
                     let tags = await host.getTags({
                       domain,
                       namespace,
                       repo,
-                      auth,
+                      auth: gitToken,
                     })
                     tags = tags.filter(({ name }) =>
                       semantic.valid(name, { includePrerelease: true })
@@ -402,7 +396,7 @@ const StepperForm = () => {
                     if (results[1] === null) return
 
                     const { domain, namespace, repo, host } =
-                      await IdentifyRepoHost(results[1], url, auth)
+                      await IdentifyRepoHost(results[1], url, gitToken)
 
                     const manifestUrl = await host.getRepoFileUrl({
                       domain,
@@ -411,7 +405,7 @@ const StepperForm = () => {
                       tag,
                       path,
                       file: 'plugin.yml',
-                      auth,
+                      auth: gitToken,
                     })
                     if (path === '' && manifestUrl === null) {
                       setNeedsPath(true)
@@ -429,7 +423,7 @@ const StepperForm = () => {
                         tag,
                         path,
                         file: 'readme.md',
-                        auth,
+                        auth: gitToken,
                       })) ?? ''
                     )
                     setEnableDescription(descriptionUrl !== '')
@@ -441,7 +435,7 @@ const StepperForm = () => {
                         tag,
                         path,
                         file: 'changelog.md',
-                        auth,
+                        auth: gitToken,
                       })) ?? ''
                     )
                     setEnableChangelog(changelogUrl !== '')
