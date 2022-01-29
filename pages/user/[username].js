@@ -95,12 +95,12 @@ export async function getStaticPaths() {
     const snapshot = await getFirebaseAdmin()
       .firestore()
       .collection('users')
-      .where('plugins', '>=', '1')
+      .where('plugins', '>=', 1)
       .get()
-    // Get the paths we want to pre-render based on released plugins
-    paths = snapshot.docs.map(async doc => ({
-      params: { username: (await doc.data()).displayName },
-    }))
+    for (const doc of snapshot.docs) {
+      const username = doc.data().displayName
+      paths.push({ params: { username } })
+    }
   } catch (e) {
     console.log(e)
   }
