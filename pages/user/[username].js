@@ -5,6 +5,7 @@ import {
   userToJSON,
 } from '../../lib/firebase/server/firestoreFuncs'
 import PluginCard from '../../components/PluginCard'
+import { FieldPath } from '@google-cloud/firestore'
 
 const UserData = ({ userData, releasedPlugins = [] }) => {
   releasedPlugins = releasedPlugins.map(plugin => (
@@ -31,10 +32,14 @@ export async function getStaticProps(context) {
     const userSnapshot = await getFirebaseAdmin()
       .firestore()
       .collection('users')
+      .where('type', 'in', ['developer', 'reviewer', 'admin'])
       .where('displayName', '==', username)
       .limit(1)
       .get()
-    if (userSnapshot.docs.length < 1)
+    if (
+      userSnapshot.docs.length < 1 ||
+      userSnapshot.docs[0].data().recentReleases.length < 1
+    )
       return {
         notFound: true,
         // Next.js will attempt to re-generate the page:
@@ -48,9 +53,8 @@ export async function getStaticProps(context) {
     const snapshot = await getFirebaseAdmin()
       .firestore()
       .collection(`users/${userData.id}/plugins/`)
-      .where('id', 'in', userData.recentReleases)
-      .orderBy('likes', 'desc')
-      .limit(5) // TODO: increase if necessary
+      .where(FieldPath.documentId(), 'in', userData.recentReleases)
+      .limit(5)
       .get()
     const releasedPlugins = snapshot.docs
       .sort(
