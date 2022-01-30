@@ -38,21 +38,24 @@ const Publish = () => {
   )
 }
 
+export default withAuthUser()(Publish)
+
+const regExp =
+  /^(?:http[s]?:\/\/)?((?:[a-zA-Z0-9][-a-zA-Z0-9]{0,61}[a-zA-Z0-9]?\.)?[a-zA-Z0-9]{1,2}(?:[-a-zA-Z0-9]{0,252}[a-zA-Z0-9])?)\.[a-zA-Z]{2,63}(?:\/|^).*/im
+
 const StepperForm = () => {
   const authUser = useAuthUser()
   const gitToken = useRef(null)
 
-  // FORM VALIDATION STUFF
-  const [url, setUrl] = useState('')
-  const [tag, setTag] = useState('')
-  const [options, setOptions] = useState([])
-  const [needsPath, setNeedsPath] = useState(false)
-  const [path, setPath] = useState('')
-  const [manifestUrl, setManifestUrl] = useState('')
-  const [enableDescription, setEnableDescription] = useState(true)
-  const [descriptionUrl, setDescriptionUrl] = useState('')
-  const [enableChangelog, setEnableChangelog] = useState(true)
-  const [changelogUrl, setChangelogUrl] = useState('')
+  const finalUrl = useRef('')
+  const finalTag = useRef('')
+  const finalOptions = useRef([])
+  const finalPath = useRef('')
+  const finalManifestContents = useRef('')
+  const finalEnableDescription = useRef(true)
+  const finalDescriptionContents = useRef('')
+  const finalEnableChangelog = useRef(true)
+  const finalChangelogContents = useRef('')
 
   // STEPPER
   const [activeStep, setActiveStep] = useState(0)
@@ -87,9 +90,6 @@ const StepperForm = () => {
     setActiveStep(prevActiveStep => prevActiveStep - 1)
   }
 
-  const regExp =
-    /^(?:http[s]?:\/\/)?((?:[a-zA-Z0-9][-a-zA-Z0-9]{0,61}[a-zA-Z0-9]?\.)?[a-zA-Z0-9]{1,2}(?:[-a-zA-Z0-9]{0,252}[a-zA-Z0-9])?)\.[a-zA-Z]{2,63}(?:\/|^).*/im
-
   return (
     <form
       className={
@@ -103,49 +103,7 @@ const StepperForm = () => {
             </h3>
           </StepLabel>
           <StepContent>
-            <div className={'min-w-fit flex flex-wrap'}>
-              <button
-                onClick={() => signInWithGitHub().then(handleNext)}
-                className='max-w-sm text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 inline-flex items-center justify-center dark:focus:ring-zinc-500 dark:hover:bg-[#414a55] mr-2 mb-2'>
-                <div className={'mr-2 -ml-1 w-4 h-4'}>
-                  <Image src={githubMark} alt={'Github Mark'} />
-                </div>
-                Sign in with GitHub
-              </button>
-              <button
-                onClick={() => signInWithGitLab().then(handleNext)}
-                disabled={true}
-                className='max-w-sm text-white bg-[#c6592a] hover:bg-[#ec6a32]/90 focus:ring-4 focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 inline-flex items-center justify-center dark:focus:ring-zinc-500 dark:hover:bg-[#ec6a32] mr-2 mb-2'>
-                <div className={'mr-2 -ml-1 w-4 h-4'}>
-                  <Image src={gitlabIcon} alt={'GitLab Icon'} />
-                </div>
-                Sign in with GitLab
-              </button>
-              <button
-                onClick={() => signInWithBitbucket().then(handleNext)}
-                disabled={true}
-                className='max-w-sm text-white bg-[#0747a6] hover:bg-[#0a67f2]/90 focus:ring-4 focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 inline-flex items-center justify-center dark:focus:ring-zinc-500 dark:hover:bg-[#0a67f2] mr-2 mb-2'>
-                <div className={'mr-2 -ml-1 w-4 h-4'}>
-                  <Image src={bitbucketMark} alt={'Bitbucket Mark'} />
-                </div>
-                Sign in with Bitbucket
-              </button>
-            </div>
-            <div className={'mb-1'}>
-              <Button
-                className={'bg-blue-700 dark:bg-zinc-700'}
-                variant='contained'
-                onClick={handleNext}
-                sx={{ mt: 1, mr: 1 }}>
-                Continue
-              </Button>
-              <Button
-                disabled={true}
-                onClick={handleBack}
-                sx={{ mt: 1, mr: 1 }}>
-                Back
-              </Button>
-            </div>
+            <SignInStep handleNext={handleNext} />
           </StepContent>
         </Step>
         <Step>
@@ -155,188 +113,39 @@ const StepperForm = () => {
             </h3>
           </StepLabel>
           <StepContent>
-            <fieldset className={'w-full max-w-lg flex flex-col'}>
-              <label
-                className='block text-zinc-400 font-bold mb-1 pr-4'
-                htmlFor='inline-full-name'>
-                Repository URL
-              </label>
-              <input
-                className='block p-2 pl-4 w-full text-zinc-900 bg-zinc-50 rounded-lg border border-zinc-200 sm:text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-700 dark:border-zinc-600 dark:placeholder-zinc-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
-                id='inline-full-name'
-                name={'url'}
-                type={'url'}
-                value={url}
-                onChange={e => setUrl(e.target.value)}
-                placeholder={'https://github.com/pmmp/PocketMine-MP.git'}
-                required={true}
-                autoFocus={true}
-              />
-            </fieldset>
-            <div className={'mb-1'}>
-              <Button
-                className={'bg-blue-700 dark:bg-zinc-700'}
-                variant='contained'
-                disabled={
-                  url.length < 10 ||
-                  /^(?:http[s]?:\/\/)?((?:[a-zA-Z0-9][-a-zA-Z0-9]{0,61}[a-zA-Z0-9]?\.)?[a-zA-Z0-9]{1,2}(?:[-a-zA-Z0-9]{0,252}[a-zA-Z0-9])?)\.[a-zA-Z]{2,63}(?:\/|^).*/im.test(
-                    url
-                  ) === false
-                }
-                onClick={() => {
-                  const onContinue = async () => {
-                    const results = regExp.exec(url)
-                    if (results[1] === null) return
-
-                    const { domain, namespace, repo, host } =
-                      await IdentifyRepoHost(results[1], url, gitToken)
-
-                    let tags = await host.getTags({
-                      domain,
-                      namespace,
-                      repo,
-                      auth: gitToken,
-                    })
-                    tags = tags.filter(({ name }) =>
-                      semantic.valid(name, { includePrerelease: true })
-                    )
-                    if (tags.length < 1) {
-                      setTag('')
-                      setOptions([])
-                      return
-                    }
-                    setTag(tags[0].commit.sha)
-                    setOptions(
-                      tags.map(({ name, commit: { sha } }) => {
-                        return (
-                          <option
-                            key={sha}
-                            value={sha}
-                            className={
-                              'bg-zinc-100 appearance-none border-2 border-zinc-200 rounded w-full py-2 px-4 text-zinc-700 leading-tight focus:outline-none focus:bg-white focus:border-slate-500'
-                            }>
-                            {name}
-                          </option>
-                        )
-                      })
-                    )
-                  }
-                  onContinue()
-                  handleNext()
-                }}
-                sx={{ mt: 1, mr: 1 }}>
-                Continue
-              </Button>
-              <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
-                Back
-              </Button>
-            </div>
+            <ChooseARepo
+              authUser={authUser}
+              finalUrl={finalUrl}
+              finalTag={finalTag}
+              finalOptions={finalOptions}
+              auth={gitToken.current}
+              handleNext={handleNext}
+              handleBack={handleBack}
+            />
           </StepContent>
         </Step>
         <Step>
           <StepLabel>
             <h3 className={'font-semibold text-lg dark:text-white'}>
-              Choose a Release {needsPath ? 'and Path' : ''}
+              Choose a Release
+              {finalManifestContents.current === '' ? ' and Path' : ''}
             </h3>
           </StepLabel>
           <StepContent>
-            <fieldset className={'max-w-lg flex flex-col'}>
-              <label
-                className='block text-zinc-400 font-bold mb-1 pr-4'
-                htmlFor='inline-password'>
-                Tag / Release
-              </label>
-              <select
-                className='block p-2 pl-4 text-zinc-900 bg-zinc-50 rounded-lg border border-zinc-200 sm:text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-700 dark:border-zinc-600 dark:placeholder-zinc-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
-                id='inline-password'
-                defaultValue={tag}
-                onChange={e => setTag(e.target.value)}
-                required={true}
-                autoFocus={true}>
-                {options}
-              </select>
-              <div className={needsPath ? 'mb-6' : 'hidden'}>
-                <label
-                  className='block text-zinc-400 font-bold mb-1 pr-4'
-                  htmlFor='inline-full-name'>
-                  Path / To / Plugin
-                </label>
-                <input
-                  className='block p-2 pl-4 w-full text-zinc-900 bg-zinc-50 rounded-lg border border-zinc-200 sm:text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-700 dark:border-zinc-600 dark:placeholder-zinc-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
-                  id='inline-full-name'
-                  type={'text'}
-                  placeholder={'Path/To/Plugin'}
-                  value={path}
-                  onChange={e => setPath(e.target.value)}
-                  required={false}
-                />
-              </div>
-            </fieldset>
-            <div className={'mb-1'}>
-              <Button
-                className={'bg-blue-700 dark:bg-zinc-700'}
-                variant='contained'
-                disabled={tag === '' || (needsPath && manifestUrl === '')}
-                onClick={() => {
-                  const onContinue = async () => {
-                    const results = regExp.exec(url)
-                    if (results[1] === null) return
-
-                    const { domain, namespace, repo, host } =
-                      await IdentifyRepoHost(results[1], url, gitToken)
-
-                    const manifestUrl = await host.getRepoFileUrl({
-                      domain,
-                      namespace,
-                      repo,
-                      tag,
-                      path,
-                      file: 'plugin.yml',
-                      auth: gitToken,
-                    })
-                    if (path === '' && manifestUrl === null) {
-                      setNeedsPath(true)
-                      return
-                    } else if (manifestUrl === null) {
-                      setManifestUrl('')
-                      return
-                    }
-                    setManifestUrl(manifestUrl)
-                    setDescriptionUrl(
-                      (await host.getRepoFileUrl({
-                        domain,
-                        namespace,
-                        repo,
-                        tag,
-                        path,
-                        file: 'readme.md',
-                        auth: gitToken,
-                      })) ?? ''
-                    )
-                    setEnableDescription(descriptionUrl !== '')
-                    setChangelogUrl(
-                      (await host.getRepoFileUrl({
-                        domain,
-                        namespace,
-                        repo,
-                        tag,
-                        path,
-                        file: 'changelog.md',
-                        auth: gitToken,
-                      })) ?? ''
-                    )
-                    setEnableChangelog(changelogUrl !== '')
-                  }
-                  onContinue()
-                  handleNext()
-                }}
-                sx={{ mt: 1, mr: 1 }}>
-                Continue
-              </Button>
-              <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
-                Back
-              </Button>
-            </div>
+            <ChooseATag
+              url={finalUrl.current}
+              finalTag={finalTag}
+              finalOptions={finalOptions}
+              finalPath={finalPath}
+              finalManifestContents={finalManifestContents}
+              finalEnableDescription={finalEnableDescription}
+              finalDescriptionContents={finalDescriptionContents}
+              finalEnableChangelog={finalEnableChangelog}
+              finalChangelogContents={finalChangelogContents}
+              auth={gitToken.current}
+              handleNext={handleNext}
+              handleBack={handleBack}
+            />
           </StepContent>
         </Step>
         <Step>
@@ -349,81 +158,14 @@ const StepperForm = () => {
             </h3>
           </StepLabel>
           <StepContent>
-            <fieldset className='w-full max-w-lg flex flex-col'>
-              <legend className='sr-only'>Optional Imports</legend>
-              <div className='flex items-center mb-4'>
-                <input
-                  id='checkbox-1'
-                  aria-describedby='checkbox-1'
-                  type='checkbox'
-                  name={'enableManifest'}
-                  defaultChecked={true}
-                  required={true}
-                  disabled={true}
-                  className='w-4 h-4 text-blue-600 bg-white dark:bg-zinc-900 rounded border-zinc-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-zinc-800 focus:ring-2 dark:bg-zinc-700 dark:border-zinc-600'
-                />
-                <label
-                  htmlFor='checkbox-1'
-                  className='ml-3 text-sm font-medium text-zinc-900 dark:text-zinc-300'>
-                  Import plugin.yml
-                </label>
-              </div>
-
-              <div className='flex items-center mb-4'>
-                <input
-                  id='checkbox-2'
-                  aria-describedby='checkbox-2'
-                  type='checkbox'
-                  name={'enableReadme'}
-                  checked={enableDescription}
-                  readOnly
-                  onClick={() => setEnableDescription(!enableDescription)}
-                  className='w-4 h-4 text-blue-600 bg-white dark:bg-zinc-900 rounded border-zinc-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-zinc-800 focus:ring-2 dark:bg-zinc-700 dark:border-zinc-600'
-                />
-                <label
-                  htmlFor='checkbox-2'
-                  className='ml-3 text-sm font-medium text-zinc-900 dark:text-zinc-300'>
-                  Import README.md
-                </label>
-              </div>
-
-              <div className='flex items-center mb-4'>
-                <input
-                  id='checkbox-3'
-                  aria-describedby='checkbox-3'
-                  type='checkbox'
-                  name={'enableChangelog'}
-                  checked={enableChangelog}
-                  readOnly
-                  onClick={() => setEnableChangelog(!enableChangelog)}
-                  className='w-4 h-4 text-blue-600 bg-white dark:bg-zinc-900 rounded border-zinc-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-zinc-800 focus:ring-2 dark:bg-zinc-700 dark:border-zinc-600'
-                />
-                <label
-                  htmlFor='checkbox-3'
-                  className='ml-3 text-sm font-medium text-zinc-900 dark:text-zinc-300'>
-                  Import CHANGELOG.md
-                </label>
-              </div>
-            </fieldset>
-            <div className={'mb-1'}>
-              <Button
-                className={'bg-blue-700 dark:bg-zinc-700'}
-                variant='contained'
-                disabled={
-                  manifestUrl === '' ||
-                  (enableDescription && descriptionUrl === '') ||
-                  (enableChangelog && changelogUrl === '')
-                }
-                onClick={() => {
-                  // TODO: display preview
-                }}
-                sx={{ mt: 1, mr: 1 }}>
-                Preview
-              </Button>
-              <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
-                Back
-              </Button>
-            </div>
+            <FinalStep
+              manifestContents={finalManifestContents.current}
+              finalEnableChangelog={finalEnableChangelog}
+              descriptionContents={finalDescriptionContents.current}
+              finalEnableDescription={finalEnableDescription}
+              changelogContents={finalChangelogContents.current}
+              handleBack={handleBack}
+            />
           </StepContent>
         </Step>
       </Stepper>
@@ -431,4 +173,352 @@ const StepperForm = () => {
   )
 }
 
-export default withAuthUser()(Publish)
+const SignInStep = ({ handleNext }) => {
+  const authUser = useAuthUser()
+  return (
+    <>
+      <div className={'min-w-fit flex flex-wrap'}>
+        <button
+          onClick={() => signInWithGitHub().then(handleNext)}
+          className='max-w-sm text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 inline-flex items-center justify-center dark:focus:ring-zinc-500 dark:hover:bg-[#414a55] mr-2 mb-2'>
+          <div className={'mr-2 -ml-1 w-4 h-4'}>
+            <Image src={githubMark} alt={'Github Mark'} />
+          </div>
+          Sign in with GitHub
+        </button>
+        <button
+          onClick={() => signInWithGitLab().then(handleNext)}
+          disabled={true}
+          className='max-w-sm text-white bg-[#c6592a] hover:bg-[#ec6a32]/90 focus:ring-4 focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 inline-flex items-center justify-center dark:focus:ring-zinc-500 dark:hover:bg-[#ec6a32] mr-2 mb-2'>
+          <div className={'mr-2 -ml-1 w-4 h-4'}>
+            <Image src={gitlabIcon} alt={'GitLab Icon'} />
+          </div>
+          Sign in with GitLab
+        </button>
+        <button
+          onClick={() => signInWithBitbucket().then(handleNext)}
+          disabled={true}
+          className='max-w-sm text-white bg-[#0747a6] hover:bg-[#0a67f2]/90 focus:ring-4 focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 inline-flex items-center justify-center dark:focus:ring-zinc-500 dark:hover:bg-[#0a67f2] mr-2 mb-2'>
+          <div className={'mr-2 -ml-1 w-4 h-4'}>
+            <Image src={bitbucketMark} alt={'Bitbucket Mark'} />
+          </div>
+          Sign in with Bitbucket
+        </button>
+      </div>
+      <StepperButtons
+        disabledNext={!authUser.firebaseUser}
+        disabledBack={true}
+        onNext={handleNext}
+      />
+    </>
+  )
+}
+
+const ChooseARepo = ({
+  authUser,
+  finalUrl,
+  finalTag,
+  finalOptions,
+  auth,
+  handleNext,
+  handleBack,
+}) => {
+  const [url, setUrl] = useState(finalUrl.current)
+
+  return (
+    <>
+      <fieldset className={'w-full max-w-lg flex flex-col'}>
+        <label
+          className='block text-zinc-400 font-bold mb-1 pr-4'
+          htmlFor='inline-full-name'>
+          Repository URL
+        </label>
+        <input
+          className='block p-2 pl-4 w-full text-zinc-900 bg-zinc-50 rounded-lg border border-zinc-200 sm:text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-700 dark:border-zinc-600 dark:placeholder-zinc-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+          id='inline-full-name'
+          name={'url'}
+          type={'url'}
+          value={url}
+          onChange={e => setUrl(e.target.value)}
+          placeholder={`https://github.com/${authUser.displayName}/MyRepo`}
+          required={true}
+          autoFocus={true}
+          pattern={regExp.source}
+        />
+      </fieldset>
+      <StepperButtons
+        disabledNext={url.length < 10 || regExp.test(url) === false}
+        onNext={() => {
+          const onContinue = async () => {
+            const results = regExp.exec(url)
+            if (!results[1]) return
+
+            const { domain, namespace, repo, host } = await IdentifyRepoHost(
+              results[1],
+              url,
+              auth
+            )
+
+            let tags = await host.getTags({
+              domain,
+              namespace,
+              repo,
+              auth,
+            })
+            tags = tags.filter(({ name }) =>
+              semantic.valid(name, { includePrerelease: true })
+            )
+            if (tags.length < 1) {
+              finalTag.current = ''
+              finalOptions.current = []
+              return
+            }
+            finalTag.current = tags[0].commit.sha
+            finalOptions.current = tags.map(({ name, commit: { sha } }) => (
+              <option
+                key={sha}
+                value={sha}
+                className={
+                  'bg-zinc-100 appearance-none border-2 border-zinc-200 rounded w-full py-2 px-4 text-zinc-700 leading-tight focus:outline-none focus:bg-white focus:border-slate-500'
+                }>
+                {name}
+              </option>
+            ))
+          }
+          onContinue().then(() => {
+            finalUrl.current = url
+            handleNext()
+          })
+        }}
+        onBack={handleBack}
+      />
+    </>
+  )
+}
+
+const ChooseATag = ({
+  url,
+  finalTag,
+  finalOptions,
+  finalPath,
+  finalManifestContents,
+  finalEnableDescription,
+  finalDescriptionContents,
+  finalEnableChangelog,
+  finalChangelogContents,
+  auth,
+  handleNext,
+  handleBack,
+}) => {
+  const [tag, setTag] = useState(finalTag.current)
+  const [needsPath, setNeedsPath] = useState(finalPath.current !== '')
+  const [path, setPath] = useState(finalPath.current)
+
+  return (
+    <>
+      <fieldset className={'max-w-lg flex flex-col'}>
+        <label
+          className='block text-zinc-400 font-bold mb-1 pr-4'
+          htmlFor='inline-password'>
+          Tag / Release
+        </label>
+        <select
+          className='block p-2 pl-4 text-zinc-900 bg-zinc-50 rounded-lg border border-zinc-200 sm:text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-700 dark:border-zinc-600 dark:placeholder-zinc-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+          id='inline-password'
+          defaultValue={tag}
+          onChange={e => setTag(e.target.value)}
+          required={true}
+          autoFocus={true}>
+          {finalOptions.current}
+        </select>
+        <div className={needsPath ? 'mb-6' : 'hidden'}>
+          <label
+            className='block text-zinc-400 font-bold mb-1 pr-4'
+            htmlFor='inline-full-name'>
+            Path / To / Plugin
+          </label>
+          <input
+            className='block p-2 pl-4 w-full text-zinc-900 bg-zinc-50 rounded-lg border border-zinc-200 sm:text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-700 dark:border-zinc-600 dark:placeholder-zinc-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+            id='inline-full-name'
+            type={'text'}
+            placeholder={'Path/To/Plugin'}
+            value={path}
+            onChange={e => setPath(e.target.value)}
+            required={false}
+          />
+        </div>
+      </fieldset>
+      <StepperButtons
+        disabledNext={
+          tag === '' || (needsPath && finalManifestContents.current === '')
+        }
+        onNext={() => {
+          const onContinue = async () => {
+            const results = regExp.exec(url)
+            if (!results[1]) return
+
+            const { domain, namespace, repo, host } = await IdentifyRepoHost(
+              results[1],
+              url,
+              auth
+            )
+
+            finalManifestContents.current =
+              (await host.getRepoFileContent({
+                domain,
+                namespace,
+                repo,
+                commit: tag,
+                path,
+                file: 'plugin.yml',
+                auth,
+              })) ?? ''
+            if (path === '' && finalManifestContents.current === '')
+              setNeedsPath(true)
+            else setNeedsPath(false)
+            finalDescriptionContents.current =
+              (await host.getRepoFileUrl({
+                domain,
+                namespace,
+                repo,
+                commit: tag,
+                path,
+                file: 'readme.md',
+                auth,
+              })) ?? ''
+            finalEnableDescription.current =
+              finalDescriptionContents.current !== ''
+            finalChangelogContents.current =
+              (await host.getRepoFileUrl({
+                domain,
+                namespace,
+                repo,
+                commit: tag,
+                path,
+                file: 'changelog.md',
+                auth,
+              })) ?? ''
+            finalEnableChangelog.current = finalChangelogContents.current !== ''
+
+            finalPath.current = path
+            finalTag.current = tag
+          }
+          onContinue().then(handleNext)
+        }}
+        onBack={handleBack}
+      />
+    </>
+  )
+}
+
+const FinalStep = ({
+  manifestContents,
+  finalEnableDescription,
+  descriptionContents,
+  finalEnableChangelog,
+  changelogContents,
+  handleBack,
+}) => {
+  const [enableDescription, setEnableDescription] = useState(
+    finalEnableDescription.current
+  )
+  const [enableChangelog, setEnableChangelog] = useState(
+    finalEnableChangelog.current
+  )
+  return (
+    <>
+      <fieldset className='w-full max-w-lg flex flex-col'>
+        <legend className='sr-only'>Optional Imports</legend>
+        <div className='flex items-center mb-4'>
+          <input
+            id='checkbox-1'
+            aria-describedby='checkbox-1'
+            type='checkbox'
+            name={'enableManifest'}
+            defaultChecked={true}
+            required={true}
+            disabled={true}
+            className='w-4 h-4 text-blue-600 bg-white dark:bg-zinc-900 rounded border-zinc-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-zinc-800 focus:ring-2 dark:bg-zinc-700 dark:border-zinc-600'
+          />
+          <label
+            htmlFor='checkbox-1'
+            className='ml-3 text-sm font-medium text-zinc-900 dark:text-zinc-300'>
+            Import plugin.yml
+          </label>
+        </div>
+
+        <div className='flex items-center mb-4'>
+          <input
+            id='checkbox-2'
+            aria-describedby='checkbox-2'
+            type='checkbox'
+            name={'enableDescription'}
+            checked={enableDescription}
+            readOnly
+            onClick={() => setEnableDescription(!enableDescription)}
+            className='w-4 h-4 text-blue-600 bg-white dark:bg-zinc-900 rounded border-zinc-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-zinc-800 focus:ring-2 dark:bg-zinc-700 dark:border-zinc-600'
+          />
+          <label
+            htmlFor='checkbox-2'
+            className='ml-3 text-sm font-medium text-zinc-900 dark:text-zinc-300'>
+            Import README.md
+          </label>
+        </div>
+
+        <div className='flex items-center mb-4'>
+          <input
+            id='checkbox-3'
+            aria-describedby='checkbox-3'
+            type='checkbox'
+            name={'enableChangelog'}
+            checked={enableChangelog}
+            readOnly
+            onClick={() => setEnableChangelog(!enableChangelog)}
+            className='w-4 h-4 text-blue-600 bg-white dark:bg-zinc-900 rounded border-zinc-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-zinc-800 focus:ring-2 dark:bg-zinc-700 dark:border-zinc-600'
+          />
+          <label
+            htmlFor='checkbox-3'
+            className='ml-3 text-sm font-medium text-zinc-900 dark:text-zinc-300'>
+            Import CHANGELOG.md
+          </label>
+        </div>
+      </fieldset>
+      <StepperButtons
+        disabledNext={
+          manifestContents === '' ||
+          (enableDescription && descriptionContents === '') ||
+          (enableChangelog && changelogContents === '')
+        }
+        onNext={() => {
+          finalEnableDescription.current = enableDescription
+          finalEnableChangelog.current = enableChangelog
+          // TODO: display preview
+        }}
+        onBack={handleBack}
+        nextText={'Preview'}
+      />
+    </>
+  )
+}
+
+const StepperButtons = ({
+  disabledNext,
+  disabledBack = false,
+  onNext = null,
+  onBack = null,
+  nextText = 'Continue',
+}) => (
+  <div className={'mb-1'}>
+    <Button
+      className={'bg-blue-700 dark:bg-zinc-700'}
+      variant='contained'
+      disabled={disabledNext}
+      onClick={onNext}
+      sx={{ mt: 1, mr: 1 }}>
+      {nextText}
+    </Button>
+    <Button disabled={disabledBack} onClick={onBack} sx={{ mt: 1, mr: 1 }}>
+      Back
+    </Button>
+  </div>
+)
