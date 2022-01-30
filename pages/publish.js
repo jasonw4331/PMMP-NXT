@@ -22,6 +22,7 @@ import {
   signInWithGitHub,
   signInWithGitLab,
 } from '../lib/signIn'
+import { Web, WebOutlined } from '@mui/icons-material'
 
 const Publish = () => {
   return (
@@ -495,7 +496,13 @@ const FinalStep = ({
           // TODO: display preview
         }}
         onBack={handleBack}
-        nextText={'Preview'}
+        nextText={
+          <>
+            <Web className={'hidden dark:inline-block'} />
+            <WebOutlined className={'dark:hidden'} />
+            <span className={'ml-2'}>Preview</span>
+          </>
+        }
       />
     </>
   )
