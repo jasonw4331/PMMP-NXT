@@ -25,6 +25,17 @@ import {
 import { Web, WebOutlined } from '@mui/icons-material'
 
 const Publish = () => {
+  const finalUrl = useRef('')
+  const finalTag = useRef('')
+  const finalPath = useRef('')
+  const finalManifestContents = useRef('')
+  const finalEnableDescription = useRef(true)
+  const finalDescriptionContents = useRef('')
+  const finalEnableChangelog = useRef(true)
+  const finalChangelogContents = useRef('')
+
+  const [page, setPage] = useState(0)
+
   return (
     <>
       <Metatags
@@ -33,7 +44,19 @@ const Publish = () => {
         //TODO: upload arrow image
       />
       <div className={'w-full h-full flex justify-center'}>
-        <StepperForm />
+        {page === 0 && (
+          <StepperForm
+            finalUrl={finalUrl}
+            finalTag={finalTag}
+            finalPath={finalPath}
+            finalManifestContents={finalManifestContents}
+            finalEnableDescription={finalEnableDescription}
+            finalDescriptionContents={finalDescriptionContents}
+            finalEnableChangelog={finalEnableChangelog}
+            finalChangelogContents={finalChangelogContents}
+            setPage={setPage}
+          />
+        )}
       </div>
     </>
   )
@@ -44,19 +67,21 @@ export default withAuthUser()(Publish)
 const regExp =
   /^(?:http[s]?:\/\/)?((?:[a-zA-Z0-9][-a-zA-Z0-9]{0,61}[a-zA-Z0-9]?\.)?[a-zA-Z0-9]{1,2}(?:[-a-zA-Z0-9]{0,252}[a-zA-Z0-9])?)\.[a-zA-Z]{2,63}(?:\/|^).*/im
 
-const StepperForm = () => {
+const StepperForm = ({
+  finalUrl,
+  finalTag,
+  finalPath,
+  finalManifestContents,
+  finalEnableDescription,
+  finalDescriptionContents,
+  finalEnableChangelog,
+  finalChangelogContents,
+  setPage,
+}) => {
   const authUser = useAuthUser()
   const gitToken = useRef(null)
 
-  const finalUrl = useRef('')
-  const finalTag = useRef('')
   const finalOptions = useRef([])
-  const finalPath = useRef('')
-  const finalManifestContents = useRef('')
-  const finalEnableDescription = useRef(true)
-  const finalDescriptionContents = useRef('')
-  const finalEnableChangelog = useRef(true)
-  const finalChangelogContents = useRef('')
 
   // STEPPER
   const [activeStep, setActiveStep] = useState(0)
@@ -165,6 +190,7 @@ const StepperForm = () => {
               descriptionContents={finalDescriptionContents.current}
               finalEnableDescription={finalEnableDescription}
               changelogContents={finalChangelogContents.current}
+              setPage={setPage}
               handleBack={handleBack}
             />
           </StepContent>
@@ -419,6 +445,7 @@ const FinalStep = ({
   finalEnableChangelog,
   changelogContents,
   handleBack,
+  setPage,
 }) => {
   const [enableDescription, setEnableDescription] = useState(
     finalEnableDescription.current
@@ -493,7 +520,7 @@ const FinalStep = ({
         onNext={() => {
           finalEnableDescription.current = enableDescription
           finalEnableChangelog.current = enableChangelog
-          // TODO: display preview
+          setPage(1)
         }}
         onBack={handleBack}
         nextText={
