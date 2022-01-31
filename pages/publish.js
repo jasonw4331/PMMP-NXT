@@ -410,9 +410,19 @@ const ChooseATag = ({
                 repo,
                 commit: tag,
                 path,
+                file: 'README.md',
+                auth,
+              })) ??
+              (await host.getRepoFileUrl({
+                domain,
+                namespace,
+                repo,
+                commit: tag,
+                path,
                 file: 'readme.md',
                 auth,
-              })) ?? ''
+              })) ??
+              ''
             finalEnableDescription.current =
               finalDescriptionContents.current !== ''
             finalChangelogContents.current =
@@ -422,9 +432,19 @@ const ChooseATag = ({
                 repo,
                 commit: tag,
                 path,
+                file: 'CHANGELOG.md',
+                auth,
+              })) ??
+              (await host.getRepoFileUrl({
+                domain,
+                namespace,
+                repo,
+                commit: tag,
+                path,
                 file: 'changelog.md',
                 auth,
-              })) ?? ''
+              })) ??
+              ''
             finalEnableChangelog.current = finalChangelogContents.current !== ''
 
             finalPath.current = path
