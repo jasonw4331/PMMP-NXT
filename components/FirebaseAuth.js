@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import githubMark from '../public/icons/GitHub-Mark.svg'
 import googleLogo from '../public/icons/GoogleLogo.svg'
+import twitterLogo from '../public/icons/TwitterLogo.svg'
 import gitlabIcon from '../public/icons/GitLab-Icon.svg'
 import bitbucketMark from '../public/icons/Bitbucket-Mark.svg'
 import {
@@ -8,6 +9,7 @@ import {
   signInWithGitHub,
   signInWithGitLab,
   signInWithGoogle,
+  signInWithTwitter,
 } from '../lib/signIn'
 
 const FirebaseAuth = () => {
@@ -30,6 +32,14 @@ const SignInButtons = () => {
           <Image src={googleLogo} alt={'Google Logo'} />
         </div>
         Sign in with Google
+      </button>
+      <button
+        onClick={signInWithTwitter}
+        className='max-w-sm text-white bg-[#1da1f2] hover:bg-[#1da1f2]/90 focus:ring-4 focus:ring-[#1da1f2]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center justify-center dark:focus:ring-[#1da1f2]/55 mr-2 mb-2'>
+        <div className={'mr-2 -ml-1 w-4 h-4'}>
+          <Image src={twitterLogo} alt={'Twitter Logo'} />
+        </div>
+        Sign in with Twitter
       </button>
       <button
         onClick={signInWithGitHub}
