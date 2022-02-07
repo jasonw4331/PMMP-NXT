@@ -61,7 +61,7 @@ const MyApp = ({ Component, pageProps }) => {
           <main
             className={`mt-14 ${
               sidebarOpen ? 'ml-0 sm:ml-60' : 'ml-0'
-            } overflow-x-hidden overflow-y-auto overscroll-contain p-2`}>
+            } overflow-x-hidden overflow-y-auto overscroll-contain`}>
             <Component {...pageProps} />
           </main>
         </LazyMotion>
