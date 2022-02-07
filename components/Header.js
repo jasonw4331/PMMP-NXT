@@ -445,7 +445,7 @@ const AppsWindow = () => {
     <m.div
       id='apps'
       className={
-        'fixed z-10 top-30 right-32 w-80 my-4 text-base list-none bg-white rounded divide-y divide-zinc-300 drop-shadow-lg dark:bg-zinc-900 dark:divide-zinc-700 border border-zinc-200 dark:border-zinc-700'
+        'invisible sm:visible fixed z-10 top-30 right-32 w-80 my-4 text-base list-none bg-white rounded divide-y divide-zinc-300 drop-shadow-lg dark:bg-zinc-900 dark:divide-zinc-700 border border-zinc-200 dark:border-zinc-700'
       }
       key={'apps'}
       initial={{ opacity: 0 }}
@@ -617,7 +617,7 @@ const NotificationsWindow = ({ notifications, setNotifications }) => {
     <m.div
       id='notifications'
       className={
-        'fixed z-10 top-30 right-24 max-w-3xl my-4 text-base list-none bg-white rounded divide-y divide-zinc-300 drop-shadow-lg dark:bg-zinc-900 dark:divide-zinc-700 border border-zinc-200 dark:border-zinc-700'
+        'fixed z-30 top-30 sm:right-24 w-screen sm:w-fit max-w-3xl text-base list-none bg-white sm:rounded divide-y divide-zinc-300 drop-shadow-lg dark:bg-zinc-900 dark:divide-zinc-700 border border-zinc-200 dark:border-zinc-700'
       }
       key={'notifications'}
       initial={{ opacity: 0 }}
@@ -710,7 +710,7 @@ const UserWindow = ({ setUserOpen, setNotifications, setSidebarOpen }) => {
     <m.div
       id='user'
       className={
-        'fixed z-10 top-30 right-14 w-80 my-4 text-base list-none bg-white rounded divide-y divide-zinc-300 drop-shadow-lg dark:bg-zinc-900 dark:divide-zinc-700 border border-zinc-200 dark:border-zinc-700'
+        'fixed z-30 top-30 sm:right-14 w-screen sm:w-80 text-base list-none bg-white rounded divide-y divide-zinc-300 drop-shadow-lg dark:bg-zinc-900 dark:divide-zinc-700 border border-zinc-200 dark:border-zinc-700'
       }
       key={'user'}
       initial={{ opacity: 0 }}
