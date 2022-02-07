@@ -190,7 +190,7 @@ const TopBar = ({
           <Apps className={'hidden dark:inline-block'} />
           <AppsOutlined className={'dark:hidden'} />
         </button>
-        {authUser.id && (
+        {authUser.firebaseUser && (
           <button
             className='h-6 w-6 ml-2 sm:ml-4'
             onClick={() => {
