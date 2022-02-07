@@ -21,7 +21,10 @@ const Review = ({ data }) => {
         title='Home'
         tagline={'Currently showing ' + data.length + ' reviewed plugins'}
       />
-      <ul className={'w-full flex flex-wrap justify-center lg:justify-start'}>
+      <ul
+        className={
+          'p-2 flex flex-wrap gap-x-5 gap-y-10 justify-center lg:justify-start'
+        }>
         {data}
       </ul>
     </>

@@ -12,7 +12,7 @@ const PluginCard = ({
   return (
     <li
       className={
-        'w-[281px] h-[382px] flex flex-col justify-start items-center bg-cover dark:text-white rounded mb-10 mr-5 tracking-wide border border-gray-200 shadow-md dark:bg-zinc-800 dark:border-gray-700'
+        'w-[281px] h-[382px] flex flex-col justify-start items-center bg-cover dark:text-white rounded tracking-wide border border-gray-200 shadow-md dark:bg-zinc-800 dark:border-gray-700'
       }>
       <h1
         className={
