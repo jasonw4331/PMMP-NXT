@@ -166,7 +166,7 @@ const TopBar = ({
       <div
         id='nav-right'
         className='flex items-center justify-end sm:mr-5 md:mr-10'>
-        <Link href='/results'>
+        <Link href={'/results'}>
           <a className='h-6 w-6 ml-2 sm:ml-4 sm:hidden'>
             <Search className={'hidden dark:inline-block'} />
             <SearchOutlined className={'dark:hidden'} />
@@ -625,7 +625,7 @@ const NotificationsWindow = ({ notifications, setNotifications }) => {
       exit={{ opacity: 0 }}>
       <div className='py-3 px-4 flex justify-between text-lg text-zinc-900 dark:text-white'>
         <p className='mt-0.5'>Notifications</p>
-        <Link href='/settings#notifications'>
+        <Link href={'/settings/notifications'}>
           <a>
             <Settings className={'hidden dark:inline-block'} />
             <SettingsOutlined className={'dark:hidden'} />
@@ -800,7 +800,7 @@ const UserWindow = ({ setUserOpen, setNotifications, setSidebarOpen }) => {
           </button>
         </li>
         <li>
-          <Link href='/settings'>
+          <Link href={'/settings'}>
             <a
               className='block py-2 px-4 text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'
               onClick={() => setSidebarOpen(false)}>
@@ -811,7 +811,7 @@ const UserWindow = ({ setUserOpen, setNotifications, setSidebarOpen }) => {
           </Link>
         </li>
         <li>
-          <Link href='/help'>
+          <Link href={'/help'}>
             <a className='block py-2 px-4 text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'>
               <Help />
               <span className={'ml-2'}>Help</span>
@@ -819,7 +819,7 @@ const UserWindow = ({ setUserOpen, setNotifications, setSidebarOpen }) => {
           </Link>
         </li>
         <li>
-          <Link href='https://github.com/jasonwynn10/PMMP-NXT/issues'>
+          <Link href={'https://github.com/jasonwynn10/PMMP-NXT/issues'}>
             <a className='block py-2 px-4 text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'>
               <Feedback className={'hidden dark:inline-block'} />
               <FeedbackOutlined className={'dark:hidden'} />
