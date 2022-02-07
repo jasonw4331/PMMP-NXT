@@ -26,6 +26,11 @@ module.exports = withPlaiceholder(
           destination: '/',
           permanent: true,
         },
+        {
+          source: '/settings',
+          destination: '/settings/admin',
+          permanent: true,
+        },
       ]
     },
     swcMinify: true,
