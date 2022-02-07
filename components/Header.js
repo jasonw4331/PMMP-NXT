@@ -56,12 +56,15 @@ import { AnimatePresence, m } from 'framer-motion'
 import { firebaseCloudMessaging } from '../lib/webPush'
 import { getMessaging, onMessage } from 'firebase/messaging'
 import localforage from 'localforage'
+import AppInstallPopup from './AppInstallPopup'
 
 const Header = ({ sidebarOpen, setSidebarOpen }) => {
   const [appsOpen, setAppsOpen] = useState(false)
   const [notifsOpen, setNotifsOpen] = useState(false)
   const [notifications, setNotifications] = useState([])
   const [userOpen, setUserOpen] = useState(false)
+
+  const [popupOpen, setPopupOpen] = useState(false)
 
   return (
     <header className={'dark:text-zinc-500'}>
@@ -75,6 +78,7 @@ const Header = ({ sidebarOpen, setSidebarOpen }) => {
         setNotifsOpen={setNotifsOpen}
         userOpen={userOpen}
         setUserOpen={setUserOpen}
+        setPopupOpen={setPopupOpen}
       />
       <AnimatePresence>
         {sidebarOpen && <SideBar setSidebarOpen={setSidebarOpen} />}
@@ -94,6 +98,7 @@ const Header = ({ sidebarOpen, setSidebarOpen }) => {
             setSidebarOpen={setSidebarOpen}
           />
         )}
+        {popupOpen && <AppInstallPopup setPopupOpen={setPopupOpen} />}
       </AnimatePresence>
     </header>
   )
@@ -111,6 +116,7 @@ const TopBar = ({
   setNotifsOpen,
   userOpen,
   setUserOpen,
+  setPopupOpen,
 }) => {
   const router = useRouter()
   const authUser = useAuthUser()
@@ -166,14 +172,14 @@ const TopBar = ({
             <SearchOutlined className={'dark:hidden'} />
           </a>
         </Link>
-        {authUser.id && (
-          <Link href='/publish'>
-            <a className='h-6 w-6 ml-0 hidden sm:block'>
-              <Build className={'hidden dark:inline-block'} />
-              <BuildOutlined className={'dark:hidden'} />
-            </a>
-          </Link>
-        )}
+        <button
+          className='h-6 w-6 ml-0 hidden sm:block'
+          onClick={() => {
+            setPopupOpen(true)
+          }}>
+          <Build className={'hidden dark:inline-block'} />
+          <BuildOutlined className={'dark:hidden'} />
+        </button>
         <button
           className='h-6 w-6 ml-4 hidden sm:block'
           onClick={() => {
