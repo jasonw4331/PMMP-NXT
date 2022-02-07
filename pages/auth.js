@@ -3,12 +3,12 @@ import FirebaseAuth from '../components/FirebaseAuth'
 import Metatags from '../components/Metatags'
 
 const Auth = () => (
-  <div className={'top-0'}>
-    <Metatags title='Log In' />
-    <center>
+  <>
+    <Metatags title='Sign in' />
+    <div className={'w-full flex flex-wrap justify-center lg:justify-start'}>
       <FirebaseAuth />
-    </center>
-  </div>
+    </div>
+  </>
 )
 
 export default withAuthUser({
