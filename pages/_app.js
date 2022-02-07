@@ -11,7 +11,7 @@ import { domAnimation, LazyMotion } from 'framer-motion'
 initAuth()
 
 const MyApp = ({ Component, pageProps }) => {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(true)
 
   return (
     <>
