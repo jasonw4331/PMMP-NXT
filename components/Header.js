@@ -236,8 +236,8 @@ const SideBar = ({ setSidebarOpen }) => {
       className={`w-60 h-screen fixed z-20 top-0 text-base list-none bg-white rounded drop-shadow-lg dark:bg-zinc-900`}
       key={'sidebar'}
       initial={{ x: -245 }}
-      animate={{ x: 0, transition: { ease: 'linear', duration: 0.3 } }}
-      exit={{ x: -245, transition: { ease: 'linear', duration: 0.3 } }}>
+      animate={{ x: 0, transition: { ease: 'linear', duration: 0.2 } }}
+      exit={{ x: -245, transition: { ease: 'linear', duration: 0.2 } }}>
       <div className={'w-full h-14 flex justify-start items-center'}>
         <button className={'ml-2 text-3xl bg-none'}>
           <Menu
