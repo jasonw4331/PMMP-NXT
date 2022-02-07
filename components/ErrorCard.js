@@ -6,7 +6,7 @@ const ErrorCard = () => {
   return (
     <li
       className={
-        'w-[281px] h-[382px] flex flex-col justify-start items-center bg-zinc-800 bg-cover text-white rounded mb-10 mr-5 tracking-wide'
+        'w-[281px] h-[382px] flex flex-col justify-start items-center bg-zinc-800 bg-cover text-white rounded tracking-wide'
       }>
       <h1 className={'w-full h-6 px-4 mt-3 font-roboto text-xl leading-6'}>
         There was an error
