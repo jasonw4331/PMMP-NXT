@@ -1,8 +1,11 @@
 import { AuthAction, useAuthUser, withAuthUser } from 'next-firebase-auth'
 import Metatags from '../../components/Metatags'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 const ProjectSettings = ({ sidebarOpen = false }) => {
+  const router = useRouter()
+  const { installation_id = null, setup_action = null } = router.query
   const authUser = useAuthUser()
   return (
     <>
