@@ -91,6 +91,7 @@ const Header = ({ sidebarOpen, setSidebarOpen }) => {
           <UserWindow
             setUserOpen={setUserOpen}
             setNotifications={setNotifications}
+            setSidebarOpen={setSidebarOpen}
           />
         )}
       </AnimatePresence>
@@ -386,7 +387,8 @@ const SideBar = ({ setSidebarOpen }) => {
             <a
               className={
                 'w-full block py-2 px-4 text-left text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'
-              }>
+              }
+              onClick={() => setSidebarOpen(false)}>
               <Settings className={'hidden dark:inline-block'} />
               <SettingsOutlined className={'dark:hidden'} />
               <span className={'ml-3'}>Settings</span>
@@ -695,7 +697,7 @@ const Notification = ({
   )
 }
 
-const UserWindow = ({ setUserOpen, setNotifications }) => {
+const UserWindow = ({ setUserOpen, setNotifications, setSidebarOpen }) => {
   const authUser = useAuthUser()
   const { setTheme } = useTheme()
   return (
@@ -793,7 +795,9 @@ const UserWindow = ({ setUserOpen, setNotifications }) => {
         </li>
         <li>
           <Link href='/settings'>
-            <a className='block py-2 px-4 text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'>
+            <a
+              className='block py-2 px-4 text-sm text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:hover:text-white'
+              onClick={() => setSidebarOpen(false)}>
               <Settings className={'hidden dark:inline-block'} />
               <SettingsOutlined className={'dark:hidden'} />
               <span className={'ml-2'}>Settings</span>
