@@ -1,5 +1,6 @@
 import { createNodeMiddleware } from '@octokit/app'
 import GITHUB_APP from '../../../lib/initGitHubApp'
+// eslint-disable-next-line @next/next/no-server-import-in-page
 import { NextResponse } from 'next/server'
 
 const gitMiddleware = createNodeMiddleware(GITHUB_APP, {
