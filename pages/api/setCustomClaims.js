@@ -14,12 +14,20 @@ const handler = async (req, res) => {
     return data.docs.length > 0
   }
 
-  function testReviewerClaims(claims) {
-    return JSON.parse(process.env.REVIEWERS).includes(claims.email)
+  async function testReviewerClaims(claims) {
+    const data = await getFirebaseAdmin()
+      .firestore()
+      .doc(`claims/${claims.email}`)
+      .get()
+    return data.data()?.reviewer
   }
 
-  function testAdminClaims(claims) {
-    return JSON.parse(process.env.ADMINS).includes(claims.email)
+  async function testAdminClaims(claims) {
+    const data = await getFirebaseAdmin()
+      .firestore()
+      .doc(`claims/${claims.email}`)
+      .get()
+    return data.data()?.admin
   }
 
   try {
@@ -53,7 +61,10 @@ const handler = async (req, res) => {
         recentSubmissions: [],
       }
     }
-    if (checkClaims.includes('reviewer') && testReviewerClaims(claims)) {
+    if (
+      checkClaims.includes('reviewer') &&
+      (await testReviewerClaims(claims))
+    ) {
       // set reviewer privileges
       newClaims = {
         ...newClaims,
@@ -64,7 +75,7 @@ const handler = async (req, res) => {
         type: 'reviewer',
       }
     }
-    if (checkClaims.includes('admin') && testAdminClaims(claims)) {
+    if (checkClaims.includes('admin') && (await testAdminClaims(claims))) {
       // set admin privileges
       newClaims = {
         ...newClaims,
