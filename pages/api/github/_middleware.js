@@ -6,7 +6,8 @@ import { NextResponse } from 'next/server'
 const gitMiddleware = createNodeMiddleware(GITHUB_APP, {
   pathPrefix: '/',
   onUnhandledRequest: (req, res) => {
-    return NextResponse.next()
+    console.log(req.body)
+    return NextResponse.redirect('/')
   },
   log: {
     debug: console.log,
@@ -18,9 +19,7 @@ const gitMiddleware = createNodeMiddleware(GITHUB_APP, {
 
 export default async function middleware(request) {
   // Handles API routes listed at https://github.com/octokit/app.js#middlewares
-  const response = await gitMiddleware(request, null, () =>
+  return await gitMiddleware(request, null, () =>
     NextResponse.redirect('/settings/projects')
   )
-  //console.log(response)
-  return response
 }
