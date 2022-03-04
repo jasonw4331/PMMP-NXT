@@ -7,8 +7,10 @@ import { withAuthUser } from 'next-firebase-auth'
 import { useState } from 'react'
 import { ThemeProvider } from 'next-themes'
 import { domAnimation, LazyMotion } from 'framer-motion'
+import initEnv from '../lib/initEnv'
 
 initAuth()
+initEnv()
 
 const MyApp = ({ Component, pageProps }) => {
   const [sidebarOpen, setSidebarOpen] = useState(true)
