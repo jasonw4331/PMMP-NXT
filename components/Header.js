@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import Footer from './Footer'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import missingImage from '../public/icons/missing.png'
 import githubMark from '../public/icons/GitHub-Mark.svg'
 import docsImage from '../public/icons/Docs.ico'
@@ -57,20 +57,19 @@ import { firebaseCloudMessaging } from '../lib/webPush'
 import { getMessaging, onMessage } from 'firebase/messaging'
 import localforage from 'localforage'
 import AppInstallPopup from './AppInstallPopup'
+import SidebarContext from './SidebarContext'
 
-const Header = ({ sidebarOpen, setSidebarOpen }) => {
+const Header = () => {
   const [appsOpen, setAppsOpen] = useState(false)
   const [notifsOpen, setNotifsOpen] = useState(false)
   const [notifications, setNotifications] = useState([])
   const [userOpen, setUserOpen] = useState(false)
-
   const [popupOpen, setPopupOpen] = useState(false)
+  const { sidebarOpen, setSidebarOpen } = useContext(SidebarContext)
 
   return (
     <header className={'dark:text-zinc-500'}>
       <TopBar
-        sidebarOpen={sidebarOpen}
-        setSidebarOpen={setSidebarOpen}
         appsOpen={appsOpen}
         setAppsOpen={setAppsOpen}
         notifsOpen={notifsOpen}
@@ -80,9 +79,7 @@ const Header = ({ sidebarOpen, setSidebarOpen }) => {
         setUserOpen={setUserOpen}
         setPopupOpen={setPopupOpen}
       />
-      <AnimatePresence>
-        {sidebarOpen && <SideBar setSidebarOpen={setSidebarOpen} />}
-      </AnimatePresence>
+      <AnimatePresence>{sidebarOpen && <SideBar />}</AnimatePresence>
       <AnimatePresence exitBeforeEnter>
         {appsOpen && <AppsWindow />}
         {notifsOpen && (
@@ -95,7 +92,6 @@ const Header = ({ sidebarOpen, setSidebarOpen }) => {
           <UserWindow
             setUserOpen={setUserOpen}
             setNotifications={setNotifications}
-            setSidebarOpen={setSidebarOpen}
           />
         )}
         {popupOpen && <AppInstallPopup setPopupOpen={setPopupOpen} />}
@@ -107,8 +103,6 @@ const Header = ({ sidebarOpen, setSidebarOpen }) => {
 export default Header
 
 const TopBar = ({
-  sidebarOpen,
-  setSidebarOpen,
   appsOpen,
   setAppsOpen,
   notifsOpen,
@@ -120,6 +114,7 @@ const TopBar = ({
 }) => {
   const router = useRouter()
   const authUser = useAuthUser()
+  const { sidebarOpen, setSidebarOpen } = useContext(SidebarContext)
   return (
     <div
       id={'navbar'}
@@ -233,9 +228,11 @@ const TopBar = ({
   )
 }
 
-const SideBar = ({ setSidebarOpen }) => {
+const SideBar = () => {
   const router = useRouter()
   const authUser = useAuthUser()
+  const { sidebarOpen, setSidebarOpen } = useContext(SidebarContext)
+
   return (
     <m.nav
       id={'sidebar'}
@@ -703,9 +700,11 @@ const Notification = ({
   )
 }
 
-const UserWindow = ({ setUserOpen, setNotifications, setSidebarOpen }) => {
+const UserWindow = ({ setUserOpen, setNotifications }) => {
   const authUser = useAuthUser()
   const { setTheme } = useTheme()
+  const { sidebarOpen, setSidebarOpen } = useContext(SidebarContext)
+
   return (
     <m.div
       id='user'

@@ -1,9 +1,12 @@
 import { AuthAction, useAuthUser, withAuthUser } from 'next-firebase-auth'
 import Metatags from '../../components/Metatags'
 import Link from 'next/link'
+import { useContext } from 'react'
+import SidebarContext from '../../components/SidebarContext'
 
-const AppearanceSettings = ({ sidebarOpen = false }) => {
+const AppearanceSettings = () => {
   const authUser = useAuthUser()
+  const { sidebarOpen, setSidebarOpen } = useContext(SidebarContext)
   return (
     <>
       <Metatags title='Appearance Settings' />

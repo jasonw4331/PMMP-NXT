@@ -1,9 +1,12 @@
 import { AuthAction, useAuthUser, withAuthUser } from 'next-firebase-auth'
 import Metatags from '../../components/Metatags'
 import Link from 'next/link'
+import { useContext } from 'react'
+import SidebarContext from '../../components/SidebarContext'
 
-const NotificationSettings = ({ sidebarOpen = false }) => {
+const NotificationSettings = () => {
   const authUser = useAuthUser()
+  const { sidebarOpen, setSidebarOpen } = useContext(SidebarContext)
   return (
     <>
       <Metatags title='Notification Settings' />

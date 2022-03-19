@@ -8,6 +8,7 @@ import { useState } from 'react'
 import { ThemeProvider } from 'next-themes'
 import { domAnimation, LazyMotion } from 'framer-motion'
 import initEnv from '../lib/initEnv'
+import SidebarContext from '../components/SidebarContext'
 
 initAuth()
 initEnv()
@@ -58,15 +59,17 @@ const MyApp = ({ Component, pageProps }) => {
         <meta name='viewport' content='initial-scale=1.0, width=device-width' />
       </Head>
       <ThemeProvider attribute={'class'} defaultTheme={'dark'}>
-        <LazyMotion strict features={domAnimation}>
-          <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-          <main
-            className={`mt-14 ${
-              sidebarOpen ? 'ml-0 sm:ml-60' : 'ml-0'
-            } overflow-x-hidden overflow-y-auto overscroll-contain`}>
-            <Component {...pageProps} sidebarOpen={sidebarOpen} />
-          </main>
-        </LazyMotion>
+        <SidebarContext.Provider value={{ sidebarOpen, setSidebarOpen }}>
+          <LazyMotion strict features={domAnimation}>
+            <Header />
+            <main
+              className={`mt-14 ${
+                sidebarOpen ? 'ml-0 sm:ml-60' : 'ml-0'
+              } overflow-x-hidden overflow-y-auto overscroll-contain`}>
+              <Component {...pageProps} />
+            </main>
+          </LazyMotion>
+        </SidebarContext.Provider>
         <Toaster />
       </ThemeProvider>
     </>
