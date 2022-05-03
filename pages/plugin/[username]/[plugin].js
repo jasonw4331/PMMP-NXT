@@ -6,60 +6,198 @@ import { msToDate } from '../../../lib/timeConverter'
 import Image from 'next/image'
 import missingImage from '../../../public/icons/missing.png'
 import { postToJSON } from '../../../lib/firebase/server/firestoreFuncs'
+import Link from 'next/link'
+import {
+  BookmarkAddOutlined,
+  DownloadOutlined,
+  ShareOutlined,
+  ThumbDownOutlined,
+  ThumbUpOutlined,
+} from '@mui/icons-material'
+import PluginRecommendationCard from '../../../components/PluginRecommendationCard'
 
-const PluginData = ({ data, description, changelog = null }) => {
-  data = data ?? { id: null, tagline: '', imageUrl: null }
+const PluginData = ({
+  id,
+  tagline,
+  imageUrl,
+  thumbnail,
+  downloads,
+  lastUpdated,
+  description,
+  changelog,
+  authorLink,
+  author,
+  authorFollows,
+  likes,
+  dislikes,
+  recommendations,
+}) => {
+  recommendations = recommendations.map(recommendation => {
+    // eslint-disable-next-line react/jsx-key
+    return <PluginRecommendationCard {...recommendation} />
+  })
   return (
     <>
-      <Metatags
-        title={data.id.split('_v')[0]}
-        tagline={data.tagline}
-        image={data.imageUrl}
-      />
-      <div>
-        <div>
-          <h1>{data.id.split('_v')[0]}</h1>
-          <p>{data.author}</p>
-          <p>{msToDate(data.lastUpdated)}</p>
-          <div>
-            <button>Like</button>
-            <button>Dislike</button>
-            <div>Ratio bar</div>
-            <button>Share</button>
-            <button>Download</button>
-            <button>Report</button>
+      <Metatags title={id.split('_v')[0]} tagline={tagline} image={imageUrl} />
+      <div className={'flex justify-center max-w-[1754px] p-2'}>
+        <div
+          id={'primary'}
+          className={
+            'flex-grow flex-shrink max-w-[1274.67px] min-w-[640px] my-3 ml-3 p-3 rounded-l-2xl bg-zinc-800'
+          }>
+          <div id={'primary-inner'} className={''}>
+            {thumbnail && (
+              <div id={'thumbnail'}>
+                <Image src={missingImage} alt={'Plugin Thumbnail'} />
+              </div>
+            )}
+            <div id={'active-metadata'} className={''}>
+              <div
+                id={'info'}
+                className={
+                  (thumbnail ? 'pt-10 ' : '') +
+                  'pb-4 border-b-2 border-zinc-600'
+                }>
+                <h1 className={'font-roboto text-lg font-normal break-words'}>
+                  {id.split('_v')[0]}
+                </h1>
+                <h2 className={'font-roboto text-base font-normal break-words'}>
+                  {tagline}
+                </h2>
+                <div
+                  id={'subinfo'}
+                  className={'flex items-center justify-between'}>
+                  <div
+                    id={'subinfo-text'}
+                    className={
+                      'max-h-5 overflow-hidden font-roboto font-normal text-sm text-zinc-500 display-webkit-box'
+                    }>
+                    <div id={'count'} className={'inline-block'}>
+                      <span className={'inline'}>{downloads} downloads</span>
+                    </div>
+                    <div id={'date'} className={'inline-block'}>
+                      <span className='mx-2 inline'>&bull;</span>
+                      <time
+                        className={'inline'}
+                        dateTime={new Date(lastUpdated).toUTCString()}>
+                        {new Intl.DateTimeFormat('en-US', {
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric',
+                        }).format(lastUpdated)}
+                      </time>
+                    </div>
+                  </div>
+                  <div id={'subinfo-buttons'} className={'-mt-0.5 flex gap-2'}>
+                    <button>
+                      <ThumbUpOutlined />
+                      <span
+                        className={
+                          'font-roboto text-base font-normal capitalize'
+                        }
+                        aria-label={likes + ' likes'}>
+                        {likes}
+                      </span>
+                    </button>
+                    <button>
+                      <ThumbDownOutlined />
+                      <span
+                        className={
+                          'font-roboto text-base font-normal capitalize'
+                        }
+                        aria-label={dislikes + ' dislikes'}>
+                        {dislikes}
+                      </span>
+                    </button>
+                    <button>
+                      <ShareOutlined />
+                      <span
+                        className={
+                          ' font-roboto text-base font-normal capitalize'
+                        }>
+                        SHARE
+                      </span>
+                    </button>
+                    <button>
+                      <DownloadOutlined />
+                      <span
+                        className={
+                          ' font-roboto text-base font-normal capitalize'
+                        }>
+                        DOWNLOAD
+                      </span>
+                    </button>
+                    <button>
+                      <BookmarkAddOutlined />
+                      <span
+                        className={
+                          ' font-roboto text-base font-normal capitalize'
+                        }>
+                        SAVE
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div
+                id={'meta'}
+                className={'mb-6 pb-4 border-b-2 border-zinc-600'}>
+                <div
+                  id={'top-row'}
+                  className={'flex flex-grow flex-shrink mb-6 pt-4'}>
+                  <div className={'basis-full flex'}>
+                    <Link
+                      id={'author-image'}
+                      className={'rounded-full'}
+                      href={authorLink}>
+                      <a>
+                        <Image
+                          src={imageUrl ?? missingImage}
+                          width={48}
+                          height={48}
+                          alt={'Author Profile Image'}
+                          className={'rounded-full'}
+                        />
+                      </a>
+                    </Link>
+                    <div id={'upload-info'} className={'ml-4'}>
+                      <Link id={'author-name'} href={authorLink}>
+                        {author}
+                      </Link>
+                      <h4 id={'author-followers'} className={'mr-2'}>
+                        {authorFollows} Followers
+                      </h4>
+                    </div>
+                  </div>
+                  <button
+                    id={'follow-btn'}
+                    className={
+                      'rounded bg-zinc-500 text-white font-roboto text-sm font-normal capitalize px-4 py-2'
+                    }>
+                    FOLLOW
+                  </button>
+                </div>
+                <div id={'description-expander'} className={'ml-8'}>
+                  <MDXRemote {...description} />
+                </div>
+                {changelog && (
+                  <div>
+                    <MDXRemote {...changelog} />
+                  </div>
+                )}
+              </div>
+            </div>
+            <div id={'comments'} className={''}></div>
           </div>
         </div>
-        <div>separator</div>
-        <div>
-          <div>
-            <Image src={missingImage} alt={'Author Image'} />
-            <h6>Author</h6>
-            <p>Followers</p>
-            <button>Follow</button>
-          </div>
-
-          <article className={'prose prose-zinc lg:prose-xl'}>
-            <MDXRemote {...description} />
-          </article>
-        </div>
-        <div>separator</div>
-        {changelog && (
-          <>
-            <article>
-              <MDXRemote {...changelog} />
-            </article>
-            <div>separator</div>
-          </>
-        )}
-        <div>
-          <div>
-            <h6>Comments</h6>
-            <button>Sort By</button>
-          </div>
-          <div>
-            <Image src={missingImage} alt='There was an error' />
-            <textarea />
+        <div
+          id={'secondary'}
+          className={'min-w-[300px] my-3 mr-3 p-3 bg-zinc-800 rounded-r-2xl'}>
+          <div id={'secondary-inner'} className={''}>
+            <ul id={'panels'}></ul>
+            <ul id={'related'} className={'flex flex-col'}>
+              {recommendations}
+            </ul>
           </div>
         </div>
       </div>
@@ -98,7 +236,17 @@ export async function getStaticProps(context) {
     }
   return {
     props: {
-      data,
+      author: 'Author name',
+      authorLink: '/',
+      authorFollows: 0,
+      license: 'No License',
+      minAPI: '4.0.0',
+      tagline: '',
+      downloads: 0,
+      lastUpdated: 'now',
+      ...data,
+      likes: data.likes.length,
+      dislikes: data.dislikes.length,
       description: await serialize(data.description),
       changelog: data.changelog ? await serialize(data.changelog) : null,
     },
