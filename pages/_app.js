@@ -2,19 +2,20 @@ import '../styles/globals.css'
 import Head from 'next/head'
 import initAuth from '../lib/firebase/initAuth'
 import { Toaster } from 'react-hot-toast'
-import Header from '../components/Header'
+import Header from '../components/PageWrapper/Header'
 import { withAuthUser } from 'next-firebase-auth'
 import { useState } from 'react'
-import { ThemeProvider } from 'next-themes'
 import { domAnimation, LazyMotion } from 'framer-motion'
 import initEnv from '../lib/initEnv'
-import SidebarContext from '../components/SidebarContext'
+import SidebarContext from '../lib/SidebarContext'
+import { Theme, useTheme } from 'react-daisyui'
 
 initAuth()
 initEnv()
 
 const MyApp = ({ Component, pageProps }) => {
   const [sidebarOpen, setSidebarOpen] = useState(true)
+  const { theme } = useTheme()
 
   return (
     <>
@@ -31,7 +32,7 @@ const MyApp = ({ Component, pageProps }) => {
         <meta name='mobile-web-app-capable' content='yes' />
         <meta name='msapplication-TileColor' content='#121212' />
         <meta name='msapplication-tap-highlight' content='no' />
-        <meta name='theme-color' content='#18181B' />
+        <meta name='theme-color' content='#2a303c' />
 
         <link
           rel='apple-touch-icon'
@@ -46,7 +47,7 @@ const MyApp = ({ Component, pageProps }) => {
 
         <meta name='viewport' content='initial-scale=1.0, width=device-width' />
       </Head>
-      <ThemeProvider attribute={'class'} defaultTheme={'dark'}>
+      <Theme dataTheme={theme}>
         <SidebarContext.Provider value={{ sidebarOpen, setSidebarOpen }}>
           <LazyMotion strict features={domAnimation}>
             <Header />
@@ -58,8 +59,7 @@ const MyApp = ({ Component, pageProps }) => {
             </main>
           </LazyMotion>
         </SidebarContext.Provider>
-        <Toaster />
-      </ThemeProvider>
+      </Theme>
     </>
   )
 }

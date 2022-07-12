@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-.dark body {
+:root, [data-theme="dark"] {
     background-image: url('/background.png');
     background-repeat: repeat;
 }
@@ -15,4 +15,8 @@
 
 .text-center-webkit {
     text-align: -webkit-center;
+}
+
+.display-webkit-box {
+    display: -webkit-box;
 }

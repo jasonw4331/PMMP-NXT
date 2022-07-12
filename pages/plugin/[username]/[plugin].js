@@ -15,6 +15,7 @@ import {
   ThumbUpOutlined,
 } from '@mui/icons-material'
 import PluginRecommendationCard from '../../../components/PluginRecommendationCard'
+import { Tabs, TabsProps } from 'react-daisyui'
 
 const PluginData = ({
   id,
@@ -39,11 +40,11 @@ const PluginData = ({
   return (
     <>
       <Metatags title={id.split('_v')[0]} tagline={tagline} image={imageUrl} />
-      <div className={'flex justify-center max-w-[1754px] p-2'}>
+      <div className={'flex justify-around max-w-[1754px] bg-zinc-800'}>
         <div
           id={'primary'}
           className={
-            'flex-grow flex-shrink max-w-[1274.67px] min-w-[640px] my-3 ml-3 p-3 rounded-l-2xl bg-zinc-800'
+            'flex-grow flex-shrink max-w-[1274.67px] min-w-[640px] p-3'
           }>
           <div id={'primary-inner'} className={''}>
             {thumbnail && (
@@ -172,27 +173,26 @@ const PluginData = ({
                   <button
                     id={'follow-btn'}
                     className={
-                      'rounded bg-zinc-500 text-white font-roboto text-sm font-normal capitalize px-4 py-2'
+                      'rounded bg-zinc-500 text-white font-roboto text-sm font-normal capitalize px-4 py-2.5 max-h-9'
                     }>
                     FOLLOW
                   </button>
                 </div>
-                <div id={'description-expander'} className={'ml-8'}>
-                  <MDXRemote {...description} />
-                </div>
-                {changelog && (
-                  <div>
-                    <MDXRemote {...changelog} />
-                  </div>
-                )}
+                <Tabs aria-label={'Information Tabs'} style={'underline'}>
+                  <TabsProps value={0}>Tab 1</TabsProps>
+                  <Tabs.Item title={'Description'} active={true}>
+                    <MDXRemote {...description} />
+                  </Tabs.Item>
+                  <Tabs.Item title={'Changelog'} disabled={!changelog}>
+                    {changelog && <MDXRemote {...changelog} />}
+                  </Tabs.Item>
+                </Tabs>
               </div>
             </div>
             <div id={'comments'} className={''}></div>
           </div>
         </div>
-        <div
-          id={'secondary'}
-          className={'min-w-[300px] my-3 mr-3 p-3 bg-zinc-800 rounded-r-2xl'}>
+        <div id={'secondary'} className={'min-w-[300px] p-3'}>
           <div id={'secondary-inner'} className={''}>
             <ul id={'panels'}></ul>
             <ul id={'related'} className={'flex flex-col'}>
@@ -249,6 +249,68 @@ export async function getStaticProps(context) {
       dislikes: data.dislikes.length,
       description: await serialize(data.description),
       changelog: data.changelog ? await serialize(data.changelog) : null,
+      recommendations: [
+        {
+          key: 0,
+          name: 'NativeDimensions',
+          author: 'Jason Wynn',
+          downloads: 0,
+        },
+        {
+          key: 1,
+          name: 'NativeDimensions',
+          author: 'Jason Wynn',
+          downloads: 0,
+        },
+        {
+          key: 2,
+          name: 'NativeDimensions',
+          author: 'Jason Wynn',
+          downloads: 0,
+        },
+        {
+          key: 3,
+          name: 'NativeDimensions',
+          author: 'Jason Wynn',
+          downloads: 0,
+        },
+        {
+          key: 4,
+          name: 'NativeDimensions',
+          author: 'Jason Wynn',
+          downloads: 0,
+        },
+        {
+          key: 5,
+          name: 'NativeDimensions',
+          author: 'Jason Wynn',
+          downloads: 0,
+        },
+        {
+          key: 6,
+          name: 'NativeDimensions',
+          author: 'Jason Wynn',
+          downloads: 0,
+        },
+        {
+          key: 7,
+          name: 'NativeDimensions',
+          author: 'Jason Wynn',
+          downloads: 0,
+        },
+        {
+          key: 8,
+          name: 'NativeDimensions',
+          author: 'Jason Wynn',
+          downloads: 0,
+        },
+        {
+          key: 9,
+          name: 'NativeDimensions',
+          author: 'Jason Wynn',
+          downloads: 0,
+        },
+      ],
     },
     // Next.js will attempt to re-generate the page:
     // - When a request comes in

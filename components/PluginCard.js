@@ -12,7 +12,7 @@ const PluginCard = ({
   return (
     <li
       className={
-        'w-[281px] h-[382px] flex flex-col justify-start items-center bg-cover dark:text-white rounded tracking-wide border border-gray-200 shadow-md dark:bg-zinc-800 dark:border-gray-700'
+        'w-[281px] h-[382px] flex flex-col justify-start items-center bg-cover rounded tracking-wide border border-base-300 shadow-md bg-base-200'
       }>
       <h1
         className={
@@ -42,7 +42,7 @@ const PluginCard = ({
       <div className={'w-72 h-9 flex justify-center gap-3'}>
         <button
           className={
-            'text-purple-400 p-2 font-roboto uppercase text-sm leading-4 tracking-widest'
+            'text-primary p-2 font-roboto uppercase text-sm leading-4 tracking-widest'
           }>
           <Link
             href={'/plugin/[username]/[plugin]'}
@@ -53,7 +53,7 @@ const PluginCard = ({
         </button>
         <button
           className={
-            'text-purple-400 p-2 font-roboto uppercase text-sm leading-4 tracking-widest'
+            'text-primary p-2 font-roboto uppercase text-sm leading-4 tracking-widest'
           }>
           <Link href={downloadUrl}>
             <a>Download</a>

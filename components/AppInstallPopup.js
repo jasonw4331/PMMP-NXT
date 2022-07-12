@@ -12,15 +12,13 @@ const AppInstallPopup = ({ setPopupOpen }) => {
       className='overflow-y-auto overflow-x-hidden fixed right-0 left-0 top-32 z-50 justify-center items-center md:inset-32 h-modal sm:h-full'
       id='large-modal'>
       <div className='relative px-4 w-full max-w-4xl h-full md:h-auto'>
-        <div className='relative bg-white rounded-lg shadow dark:bg-zinc-700'>
-          <div className='flex justify-between items-center p-5 rounded-t border-b dark:border-zinc-600'>
-            <h3 className='text-xl font-medium text-zinc-900 dark:text-white'>
-              Releasing Plugins
-            </h3>
+        <div className='relative rounded-lg shadow bg-base-300'>
+          <div className='flex justify-between items-center p-5 rounded-t border-b'>
+            <h3 className='text-xl font-medium'>Releasing Plugins</h3>
             <button
               onClick={() => setPopupOpen(false)}
               type='button'
-              className='text-zinc-400 bg-transparent hover:bg-zinc-200 hover:text-zinc-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-zinc-600 dark:hover:text-white'
+              className='text-base-400 bg-transparent hover:bg-base-200 hover:text-base-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center'
               data-modal-toggle='large-modal'>
               <Close />
             </button>
@@ -29,13 +27,13 @@ const AppInstallPopup = ({ setPopupOpen }) => {
             {!authUser.firebaseUser.providerData.some(
               ({ providerId }) => providerId === 'github.com'
             ) && (
-              <li className='font-semibold leading-relaxed text-zinc-500 dark:text-zinc-300'>
+              <li className='font-semibold leading-relaxed'>
                 <span className={'mr-2'}>
                   Sign in with GitHub by clicking here:
                 </span>
                 <button
                   onClick={signInWithGitHub}
-                  className='max-w-sm text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center justify-center dark:focus:ring-gray-500 dark:hover:bg-[#414a55]'>
+                  className='max-w-sm bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center justify-center'>
                   <div className={'mr-2 -ml-1 w-4 h-4'}>
                     <Image src={githubMark} alt={'Github Mark'} />
                   </div>
@@ -43,21 +41,21 @@ const AppInstallPopup = ({ setPopupOpen }) => {
                 </button>
               </li>
             )}
-            <li className='font-semibold leading-relaxed text-zinc-500 dark:text-zinc-300'>
+            <li className='font-semibold leading-relaxed text-base-500'>
               Install the NXT GitHub App.
             </li>
-            <li className='font-semibold leading-relaxed text-zinc-500 dark:text-zinc-300'>
+            <li className='font-semibold leading-relaxed text-base-500'>
               Choose the github user or organizations to be accessed.
             </li>
-            <li className='font-semibold leading-relaxed text-zinc-500 dark:text-zinc-300'>
+            <li className='font-semibold leading-relaxed text-base-500'>
               Choose your wanted repositories.
             </li>
           </ol>
-          <div className='flex items-center p-6 space-x-2 rounded-b border-t border-zinc-200 dark:border-zinc-600'>
+          <div className='flex items-center p-6 space-x-2 rounded-b border-t border-base-200'>
             <Link href={'https://github.com/apps/pmmp-nxt'}>
               <a
                 type='button'
-                className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
+                className='bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center'>
                 {authUser.claims.developer
                   ? 'Manage App Settings'
                   : 'Install App'}
