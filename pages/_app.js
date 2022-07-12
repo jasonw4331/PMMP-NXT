@@ -42,18 +42,6 @@ const MyApp = ({ Component, pageProps }) => {
 
         <link rel='manifest' href='/manifest/manifest.webmanifest' />
 
-        <link rel='preconnect' href='https://fonts.googleapis.com' />
-        <link
-          rel='preconnect'
-          href='https://fonts.gstatic.com'
-          crossOrigin='anonymous'
-        />
-        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
-        <link
-          href='https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap'
-          rel='stylesheet'
-        />
-
         <title>PMMP NXT</title>
 
         <meta name='viewport' content='initial-scale=1.0, width=device-width' />
