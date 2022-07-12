@@ -2,7 +2,7 @@ import { AuthAction, useAuthUser, withAuthUser } from 'next-firebase-auth'
 import Metatags from '../../components/Metatags'
 import Link from 'next/link'
 import { useContext } from 'react'
-import SidebarContext from '../../components/SidebarContext'
+import SidebarContext from '../../lib/SidebarContext'
 
 const ProjectSettings = () => {
   const authUser = useAuthUser()

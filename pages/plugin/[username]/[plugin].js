@@ -2,7 +2,6 @@ import { getFirebaseAdmin, withAuthUser } from 'next-firebase-auth'
 import Metatags from '../../../components/Metatags'
 import { serialize } from 'next-mdx-remote/serialize'
 import { MDXRemote } from 'next-mdx-remote'
-import { msToDate } from '../../../lib/timeConverter'
 import Image from 'next/image'
 import missingImage from '../../../public/icons/missing.png'
 import { postToJSON } from '../../../lib/firebase/server/firestoreFuncs'
@@ -15,7 +14,6 @@ import {
   ThumbUpOutlined,
 } from '@mui/icons-material'
 import PluginRecommendationCard from '../../../components/PluginRecommendationCard'
-import { Tabs, TabsProps } from 'react-daisyui'
 
 const PluginData = ({
   id,
@@ -178,15 +176,6 @@ const PluginData = ({
                     FOLLOW
                   </button>
                 </div>
-                <Tabs aria-label={'Information Tabs'} style={'underline'}>
-                  <TabsProps value={0}>Tab 1</TabsProps>
-                  <Tabs.Item title={'Description'} active={true}>
-                    <MDXRemote {...description} />
-                  </Tabs.Item>
-                  <Tabs.Item title={'Changelog'} disabled={!changelog}>
-                    {changelog && <MDXRemote {...changelog} />}
-                  </Tabs.Item>
-                </Tabs>
               </div>
             </div>
             <div id={'comments'} className={''}></div>

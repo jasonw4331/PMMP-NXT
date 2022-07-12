@@ -1,7 +1,6 @@
 import '../styles/globals.css'
 import Head from 'next/head'
 import initAuth from '../lib/firebase/initAuth'
-import { Toaster } from 'react-hot-toast'
 import Header from '../components/PageWrapper/Header'
 import { withAuthUser } from 'next-firebase-auth'
 import { useState } from 'react'
