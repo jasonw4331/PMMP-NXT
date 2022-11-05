@@ -5,7 +5,7 @@ export default function SearchForm() {
   const router = useRouter()
   return (
     <div className='form-control'>
-      <div className={'input-group relative'}>
+      <div className={'relative flex'}>
         <input
           type='text'
           placeholder='Search…'
@@ -18,7 +18,7 @@ export default function SearchForm() {
               )
             }
           }}
-          className={'input input-bordered pl-10'}
+          className={'input input-bordered pl-10 grow'}
         />
         <div className={'absolute left-0 pl-2.5 pt-2.5 pointer-events-none'}>
           <svg
