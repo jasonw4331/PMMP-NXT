@@ -30,13 +30,13 @@ export default function UserPopup() {
       </div>
       <li className={'divider divider-vertical h-0'}></li>
       <li>
-        <Link href={'/'}>
+        <Link href={'/user/username'}>
           <MdOutlinePerson size={24} />
           <span>My Profile</span>
         </Link>
       </li>
       <li>
-        <Link href={'/'}>
+        <Link href={'/admin'}>
           <MdAdminPanelSettings size={24} />
           <span>Admin Panel</span>
         </Link>
@@ -55,19 +55,19 @@ export default function UserPopup() {
         </Link>
       </li>
       <li>
-        <Link href={'/'}>
+        <Link href={'/settings'}>
           <MdSettings size={24} />
           <span>Settings</span>
         </Link>
       </li>
       <li>
-        <Link href={'/'}>
+        <Link href={'/help'}>
           <MdHelpOutline size={24} />
           <span>Help</span>
         </Link>
       </li>
       <li>
-        <Link href={'/'}>
+        <Link href={'https://github.com/jasonwynn10/PMMP-NXT/issues'}>
           <MdOutlineFeedback size={24} />
           <span>Send Feedback</span>
         </Link>

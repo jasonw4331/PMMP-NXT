@@ -41,64 +41,64 @@ export default function Sidebar() {
         </Link>
       </li>
       <li>
-        <Link href={'/'}>
+        <Link href={'/feed/explore'}>
           <MdExplore size={24} />
           <span>Explore</span>
         </Link>
       </li>
       <li>
-        <Link href={'/'}>
+        <Link href={'/feed/bookmarks'}>
           <MdBookmark size={24} />
           <span>Bookmarked</span>
         </Link>
       </li>
       <li className={'divider'}></li>
       <li>
-        <Link href={'/'}>
+        <Link href={'/feed/library'}>
           <MdBookmarks size={24} />
           <span>Library</span>
         </Link>
       </li>
       <li>
-        <Link href={'/'}>
+        <Link href={'/feed/history'}>
           <MdHistory size={24} />
           <span>History</span>
         </Link>
       </li>
       <li className={'divider'}></li>
       <li>
-        <Link href={'/'}>
+        <Link href={'/review'}>
           <MdAssignment size={24} />
           <span>Review Plugins</span>
         </Link>
       </li>
       <li>
-        <Link href={'/'}>
+        <Link href={'/admin'}>
           <MdAdminPanelSettings size={24} />
           <span>Admin Panel</span>
         </Link>
       </li>
       <li className={'divider'}></li>
       <li>
-        <Link href={'/'}>
+        <Link href={'/settings'}>
           <MdSettings size={24} />
           <span>Settings</span>
         </Link>
       </li>
       <li>
-        <Link href={'/'}>
+        <Link href={'/reporthistory'}>
           <MdFlag size={24} />
           <span>Report History</span>
         </Link>
       </li>
       <li>
-        <Link href={'/'}>
+        <Link href={'/help'}>
           <MdHelp size={24} />
           <span>Help</span>
         </Link>
       </li>
       <li>
-        <Link href={'/'}>
+        <Link href={'https://github.com/jasonwynn10/PMMP-NXT/issues'}>
           <MdFeedback size={24} />
           <span>Send Feedback</span>
         </Link>
