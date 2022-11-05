@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root, [data-theme="dark"] {
+    background-image: url('/background.png');
+    background-repeat: repeat;
+}
