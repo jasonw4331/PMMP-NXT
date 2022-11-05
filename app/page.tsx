@@ -1,6 +1,8 @@
 import Card from '../components/Card'
 import { getReleases } from '../lib/GetPlugin'
 
+export const revalidate = 43200
+
 export default async function HomePage() {
   const data = await getReleases()
   return (
