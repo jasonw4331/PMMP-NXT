@@ -27,6 +27,6 @@ module.exports = {
     logs: process.env.NODE_ENV === 'development',
     rtl: false,
     prefix: '',
-    darkTheme: 'black',
+    darkTheme: 'dark',
   },
 }

@@ -61,7 +61,7 @@ export default function Card({
               More Details
             </Link>
           </button>
-          <button className='btn btn-primary'>
+          <button className='btn btn-secondary'>
             <Link href={downloadUrl}>Download</Link>
           </button>
         </div>
