@@ -40,7 +40,7 @@ export default function Sidebar() {
         <a>Send Feedback</a>
       </li>
       <div className={'absolute bottom-6'}>
-        <footer className={'font-normal text-sm text-base-content'}>
+        <footer className={'font-normal text-sm text-base-content text-center'}>
           <h2>&copy; {new Date().getFullYear()} PMMP-NXT</h2>
           <h5>
             Some Icons by <Link href='https://freepik.com'>freepik.com</Link>{' '}
