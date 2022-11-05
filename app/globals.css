@@ -2,7 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-:root, [data-theme="dark"] {
-    background-image: url('/background.png');
-    background-repeat: repeat;
+@media(prefers-color-scheme: dark) {
+    :root, [data-theme="dark"] {
+        background-image: url('/background.png');
+        background-repeat: repeat;
+    }
+}
+
+@media(prefers-color-scheme: light) {
+    :root, [data-theme="light"] {
+        background-image: url('/light-background.png');
+        background-repeat: repeat;
+    }
 }
