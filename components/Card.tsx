@@ -2,25 +2,6 @@ import Image, { StaticImageData } from 'next/image'
 import missingImage from '../public/icons/missing.png'
 import Link from 'next/link'
 
-export type CardData = {
-  id: string
-  author: string
-  tagline: string
-  iconUrl: string
-  downloadUrl: string
-  createdAt: number
-  lastUpdated: number
-  description: string
-  releaseStatus: number
-  minAPI: string
-  license: string
-  mainCategory: string
-  categories: string[]
-  subCategories: string[]
-  likes: string[]
-  dislikes: string[]
-}
-
 export default function Card({
   name,
   author,
