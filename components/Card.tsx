@@ -16,7 +16,9 @@ export default function Card({
   iconUrl: string | StaticImageData
 }) {
   return (
-    <li className={'card w-80 bg-base-100 shadow-xl'}>
+    <li
+      className={'card w-80 bg-base-100 shadow-xl'}
+      title={'made by ' + author}>
       <figure className={'px-10 pt-10'}>
         <Image
           src={iconUrl}
@@ -28,10 +30,8 @@ export default function Card({
           className={'rounded-xl'}></Image>
       </figure>
       <div className='card-body items-center text-center'>
-        <h2 className='card-title'>
-          {name.split('_v')[0]} by {author}
-        </h2>
-        <p>{tagline}</p>
+        <h2 className='card-title line-clamp-2'>{name.split('_v')[0]}</h2>
+        <p className={'line-clamp-2'}>{tagline}</p>
         <div className='card-actions'>
           <button className='btn btn-primary'>
             <Link
