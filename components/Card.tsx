@@ -16,7 +16,7 @@ export default function Card({
   iconUrl: string | StaticImageData
 }) {
   return (
-    <li className={'card w-96 bg-base-100 shadow-xl'}>
+    <li className={'card w-80 bg-base-100 shadow-xl'}>
       <figure className={'px-10 pt-10'}>
         <Image
           src={iconUrl}
