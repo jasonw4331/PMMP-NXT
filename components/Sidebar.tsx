@@ -1,4 +1,17 @@
 import Link from 'next/link'
+import {
+  MdAdminPanelSettings,
+  MdAssignment,
+  MdBookmark,
+  MdBookmarks,
+  MdExplore,
+  MdFeedback,
+  MdFlag,
+  MdHelp,
+  MdHistory,
+  MdHome,
+  MdSettings,
+} from 'react-icons/all'
 
 export default function Sidebar() {
   return (
@@ -22,40 +35,73 @@ export default function Sidebar() {
         </Link>
       </div>
       <li>
-        <a>Home</a>
+        <Link href={'/'}>
+          <MdHome size={24} />
+          <span>Home</span>
+        </Link>
       </li>
       <li>
-        <a>Explore</a>
+        <Link href={'/'}>
+          <MdExplore size={24} />
+          <span>Explore</span>
+        </Link>
       </li>
       <li>
-        <a>Bookmarked</a>
-      </li>
-      <li className={'divider'}></li>
-      <li>
-        <a>Library</a>
-      </li>
-      <li>
-        <a>History</a>
-      </li>
-      <li className={'divider'}></li>
-      <li>
-        <a>Review Plugins</a>
-      </li>
-      <li>
-        <a>Admin Panel</a>
+        <Link href={'/'}>
+          <MdBookmark size={24} />
+          <span>Bookmarked</span>
+        </Link>
       </li>
       <li className={'divider'}></li>
       <li>
-        <a>Settings</a>
+        <Link href={'/'}>
+          <MdBookmarks size={24} />
+          <span>Library</span>
+        </Link>
       </li>
       <li>
-        <a>Report History</a>
+        <Link href={'/'}>
+          <MdHistory size={24} />
+          <span>History</span>
+        </Link>
+      </li>
+      <li className={'divider'}></li>
+      <li>
+        <Link href={'/'}>
+          <MdAssignment size={24} />
+          <span>Review Plugins</span>
+        </Link>
       </li>
       <li>
-        <a>Help</a>
+        <Link href={'/'}>
+          <MdAdminPanelSettings size={24} />
+          <span>Admin Panel</span>
+        </Link>
+      </li>
+      <li className={'divider'}></li>
+      <li>
+        <Link href={'/'}>
+          <MdSettings size={24} />
+          <span>Settings</span>
+        </Link>
       </li>
       <li>
-        <a>Send Feedback</a>
+        <Link href={'/'}>
+          <MdFlag size={24} />
+          <span>Report History</span>
+        </Link>
+      </li>
+      <li>
+        <Link href={'/'}>
+          <MdHelp size={24} />
+          <span>Help</span>
+        </Link>
+      </li>
+      <li>
+        <Link href={'/'}>
+          <MdFeedback size={24} />
+          <span>Send Feedback</span>
+        </Link>
       </li>
       <div className={'absolute bottom-6'}>
         <footer className={'font-normal text-sm text-base-content text-center'}>
