@@ -4,7 +4,6 @@ import Link from 'next/link'
 
 export type CardData = {
   id: string
-  name: string
   author: string
   tagline: string
   iconUrl: string
