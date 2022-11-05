@@ -22,7 +22,7 @@ export type CardData = {
   dislikes: string[]
 }
 
-export default async function getPlugins(): Promise<CardData[]> {
+export async function getReleases(): Promise<CardData[]> {
   const docs = []
   const snapshot = await firestore
     .collectionGroup('plugins')

@@ -1,8 +1,8 @@
 import Card from '../components/Card'
-import getPlugins from '../lib/GetPlugin'
+import { getReleases } from '../lib/GetPlugin'
 
 export default async function HomePage() {
-  const data = await getPlugins()
+  const data = await getReleases()
   return (
     <ul className={'pt-2 flex flex-wrap gap-x-5 gap-y-10 justify-center'}>
       {data.map(doc => (

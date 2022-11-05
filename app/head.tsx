@@ -1,7 +1,7 @@
-import getPlugins from '../lib/GetPlugin'
+import { getReleases } from '../lib/GetPlugin'
 
 export default async function Head() {
-  const data = await getPlugins()
+  const data = await getReleases()
 
   return (
     <>
