@@ -12,7 +12,7 @@ export default function AppsPopup() {
   return (
     <ul
       tabIndex={0}
-      className='menu menu-horizontal dropdown-content mt-16 p-2 shadow bg-base-100 rounded-box w-screen max-w-xs'>
+      className='menu menu-horizontal dropdown-content mt-16 p-2 gap-2 shadow bg-base-100 rounded-box w-screen max-w-xs'>
       <li>
         <Link href={'https://pmmp.io/'} className={'flex flex-col'}>
           <IoMdGitPullRequest size={64} />
