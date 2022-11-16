@@ -2,6 +2,7 @@
  * Fetch all updated plugin records from firestore
  */
 import { firestore } from './firebase'
+import { notFound } from 'next/navigation'
 
 export type CardData = {
   id: string
@@ -66,4 +67,27 @@ export async function getSubmitted(): Promise<CardData[]> {
   }
 
   return docs
+}
+
+export async function getPlugin(
+  plugin: string,
+  username: string
+): Promise<CardData> {
+  const userSnapshot = await firestore
+    .collection('users')
+    .where('displayName', '==', username)
+    .limit(1)
+    .get()
+  if (userSnapshot.docs.length < 1) notFound() // throw 404 if user doesn't exist
+
+  const doc = await firestore
+    .doc(`users/${userSnapshot.docs[0].id}/plugins/${plugin}`)
+    .get()
+  const docData = await doc.data()
+  return {
+    ...docData,
+    id: doc.id,
+    createdAt: docData.createdAt.toMillis() || 0, // convert firestore timestamps to milliseconds
+    lastUpdated: docData.lastUpdated.toMillis() || 0,
+  } as CardData
 }
