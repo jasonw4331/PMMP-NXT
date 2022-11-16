@@ -1,7 +1,5 @@
 import { getSubmitted } from '../../lib/GetPlugin'
 
-export const revalidate = 3600 // revalidate every hour
-
 export default async function Head() {
   const data = await getSubmitted()
 
