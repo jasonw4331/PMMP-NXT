@@ -3,6 +3,8 @@ import './globals.css'
 import Sidebar from '../components/Sidebar'
 import Navbar from '../components/Navbar'
 
+export const revalidate = 43200 // revalidate every 12 hours
+
 export default function RootLayout({
   children,
 }: {
