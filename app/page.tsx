@@ -1,7 +1,7 @@
 import Card from '../components/Card'
 import { getReleases } from '../lib/GetPlugin'
 
-export const revalidate = 43200
+export const revalidate = 43200 // revalidate every 12 hours
 
 export default async function HomePage() {
   const data = await getReleases()

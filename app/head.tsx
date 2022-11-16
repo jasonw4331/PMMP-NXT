@@ -1,5 +1,7 @@
 import { getReleases } from '../lib/GetPlugin'
 
+export const revalidate = 43200 // revalidate every 12 hours
+
 export default async function Head() {
   const data = await getReleases()
 
