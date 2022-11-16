@@ -87,7 +87,7 @@ export async function getPlugin(
   return {
     ...docData,
     id: doc.id,
-    createdAt: docData.createdAt.toMillis() || 0, // convert firestore timestamps to milliseconds
-    lastUpdated: docData.lastUpdated.toMillis() || 0,
+    createdAt: docData?.createdAt.toMillis() || 0, // convert firestore timestamps to milliseconds
+    lastUpdated: docData?.lastUpdated.toMillis() || 0,
   } as CardData
 }
