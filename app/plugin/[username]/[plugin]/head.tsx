@@ -10,6 +10,7 @@ export default async function Head({
   plugin: string
 }) {
   const pluginData = await getPlugin(username, plugin)
+  const [pluginName, pluginVersion] = pluginData.id.split('_v')
 
   return (
     <>
@@ -45,17 +46,17 @@ export default async function Head({
 
       <meta name='viewport' content='initial-scale=1.0, width=device-width' />
 
-      <title>{pluginData.id} | PMMP NXT</title>
+      <title>{pluginName} | PMMP NXT</title>
 
       <meta name='twitter:card' content='summary' />
       <meta name='twitter:url' content='https://pmmp.io/nxt' />
-      <meta name='twitter:title' content={pluginData.id + ' | PMMP NXT'} />
+      <meta name='twitter:title' content={pluginName + ' | PMMP NXT'} />
       <meta name='twitter:description' content={pluginData.tagline} />
       <meta name='twitter:image' content={pluginData.iconUrl} />
       <meta name='twitter:creator' content='@jasonwynn10' />
 
       <meta property='og:type' content='website' />
-      <meta property='og:title' content={pluginData.id + ' | PMMP NXT'} />
+      <meta property='og:title' content={pluginName + ' | PMMP NXT'} />
       <meta property='og:description' content={pluginData.tagline} />
       <meta property='og:site_name' content='PMMP NXT' />
       <meta property='og:url' content='https://pmmp.io/nxt' />
