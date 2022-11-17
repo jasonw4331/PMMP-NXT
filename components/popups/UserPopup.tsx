@@ -33,13 +33,13 @@ export default function UserPopup() {
       </div>
       <li className={'divider divider-vertical h-0'}></li>
       <li>
-        <Link href={'/user/username'}>
+        <Link href={'/user/username'} prefetch={false}>
           <MdOutlinePerson size={24} />
           <span>My Profile</span>
         </Link>
       </li>
       <li>
-        <Link href={'/admin'}>
+        <Link href={'/admin'} prefetch={false}>
           <MdAdminPanelSettings size={24} />
           <span>Admin Panel</span>
         </Link>
@@ -86,13 +86,13 @@ export default function UserPopup() {
         </button>
       </li>
       <li>
-        <Link href={'/settings'}>
+        <Link href={'/settings'} prefetch={false}>
           <MdSettings size={24} />
           <span>Settings</span>
         </Link>
       </li>
       <li>
-        <Link href={'/help'}>
+        <Link href={'/help'} prefetch={false}>
           <MdHelpOutline size={24} />
           <span>Help</span>
         </Link>

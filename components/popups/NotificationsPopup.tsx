@@ -13,6 +13,7 @@ export default function NotificationsPopup() {
         <span className={'mt-3 text-xl'}>Notifications</span>
         <Link
           href={'/settings/notifications'}
+          prefetch={false}
           className={'btn btn-ghost btn-circle px-0 py-0'}>
           <MdSettings size={24} />
         </Link>
