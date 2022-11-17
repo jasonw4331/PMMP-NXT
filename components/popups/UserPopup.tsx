@@ -9,7 +9,7 @@ import {
   MdOutlineLogout,
   MdOutlinePerson,
   MdSettings,
-} from 'react-icons/all'
+} from 'react-icons/md'
 import Link from 'next/link'
 
 export default function UserPopup() {
