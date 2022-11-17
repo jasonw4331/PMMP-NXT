@@ -57,15 +57,13 @@ export default function UserPopup() {
           data-toggle-theme='business,light'
           data-act-class={'visible'}
           onMouseDown={(e: React.MouseEvent) => e.preventDefault()}
-          onMouseUp={
-            ((e: React.MouseEvent) => {
-              themeChange()
-              e.currentTarget.className = 'hidden'
-              e.currentTarget.parentElement!.querySelector(
-                '#dark-button'
-              )!.className = ''
-            }) as React.MouseEventHandler
-          }
+          onMouseUp={(e: React.MouseEvent) => {
+            themeChange()
+            e.currentTarget.className = 'hidden'
+            e.currentTarget.parentElement!.querySelector(
+              '#dark-button'
+            )!.className = ''
+          }}
           className={'dark:hidden'}>
           <MdOutlineLightMode size={24} />
           <span>Appearance: Light</span>
@@ -75,15 +73,13 @@ export default function UserPopup() {
           data-toggle-theme='business,light'
           data-act-class={'visible'}
           onMouseDown={(e: React.MouseEvent) => e.preventDefault()}
-          onMouseUp={
-            ((e: React.MouseEvent) => {
-              themeChange()
-              e.currentTarget.className = 'hidden'
-              e.currentTarget.parentElement!.querySelector(
-                '#light-button'
-              )!.className = ''
-            }) as React.MouseEventHandler
-          }
+          onMouseUp={(e: React.MouseEvent) => {
+            themeChange()
+            e.currentTarget.className = 'hidden'
+            e.currentTarget.parentElement!.querySelector(
+              '#light-button'
+            )!.className = ''
+          }}
           className={'hidden dark:visible'}>
           <MdOutlineDarkMode size={24} />
           <span>Appearance: Dark</span>
