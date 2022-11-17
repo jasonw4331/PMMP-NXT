@@ -1,5 +1,5 @@
 import Card from '../components/Card'
-import { getReleases } from '../lib/GetPlugin'
+import { getReleases } from '../lib/CommonQueries'
 
 export default async function HomePage() {
   const data = await getReleases()

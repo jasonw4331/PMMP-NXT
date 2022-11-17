@@ -1,4 +1,4 @@
-import { getReleases } from '../lib/GetPlugin'
+import { getReleases } from '../lib/CommonQueries'
 
 export default async function Head() {
   const data = await getReleases()

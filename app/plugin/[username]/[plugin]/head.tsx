@@ -1,4 +1,4 @@
-import { getPlugin } from '../../../../lib/GetPlugin'
+import { getPlugin } from '../../../../lib/CommonQueries'
 
 export const revalidate = 43200 // revalidate every 12 hours
 

@@ -1,5 +1,5 @@
 import Card from '../../components/Card'
-import { getSubmitted } from '../../lib/GetPlugin'
+import { getSubmitted } from '../../lib/CommonQueries'
 
 export default async function Review() {
   const data = await getSubmitted()

@@ -1,4 +1,4 @@
-import { getSubmitted } from '../../lib/GetPlugin'
+import { getSubmitted } from '../../lib/CommonQueries'
 
 export default async function Head() {
   const data = await getSubmitted()
