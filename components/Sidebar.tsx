@@ -15,8 +15,11 @@ import {
 
 export default function Sidebar() {
   return (
-    <ul className='menu p-4 overflow-y-auto w-60 bg-base-100 relative overflow-x-hidden'>
-      <div className='flex pl-0'>
+    <ul
+      className={
+        'menu p-2 w-60 h-screen bg-base-100 overflow-x-hidden flex-nowrap'
+      }>
+      <div className={'flex pl-0'}>
         <label htmlFor='my-drawer-3' className='btn btn-circle btn-ghost'>
           <svg
             xmlns='http://www.w3.org/2000/svg'
@@ -35,75 +38,77 @@ export default function Sidebar() {
         </Link>
       </div>
       <li>
-        <Link href={'/'}>
+        <Link href={'/'} className={'pl-3'}>
           <MdHome size={24} />
           <span>Home</span>
         </Link>
       </li>
       <li>
-        <Link href={'/feed/explore'}>
+        <Link href={'/feed/explore'} className={'pl-3'}>
           <MdExplore size={24} />
           <span>Explore</span>
         </Link>
       </li>
       <li>
-        <Link href={'/feed/bookmarks'}>
+        <Link href={'/feed/bookmarks'} className={'pl-3'}>
           <MdBookmarks size={24} />
           <span>Bookmarked</span>
         </Link>
       </li>
-      <li className={'divider'}></li>
+      <li className={'divider pl-0'}></li>
       <li>
-        <Link href={'/feed/library'}>
+        <Link href={'/feed/library'} className={'pl-3'}>
           <MdLibraryAdd size={24} />
           <span>Library</span>
         </Link>
       </li>
       <li>
-        <Link href={'/feed/history'}>
+        <Link href={'/feed/history'} className={'pl-3'}>
           <MdHistory size={24} />
           <span>History</span>
         </Link>
       </li>
-      <li className={'divider'}></li>
+      <li className={'divider pl-0'}></li>
       <li>
-        <Link href={'/review'}>
+        <Link href={'/review'} className={'pl-3'}>
           <MdAssignment size={24} />
           <span>Review Plugins</span>
         </Link>
       </li>
       <li>
-        <Link href={'/admin'}>
+        <Link href={'/admin'} className={'pl-3'}>
           <MdAdminPanelSettings size={24} />
           <span>Admin Panel</span>
         </Link>
       </li>
-      <li className={'divider'}></li>
+      <li className={'divider pl-0'}></li>
       <li>
-        <Link href={'/settings'}>
+        <Link href={'/settings'} className={'pl-3'}>
           <MdSettings size={24} />
           <span>Settings</span>
         </Link>
       </li>
       <li>
-        <Link href={'/reporthistory'}>
+        <Link href={'/reporthistory'} className={'pl-3'}>
           <MdFlag size={24} />
           <span>Report History</span>
         </Link>
       </li>
       <li>
-        <Link href={'/help'}>
+        <Link href={'/help'} className={'pl-3'}>
           <MdHelp size={24} />
           <span>Help</span>
         </Link>
       </li>
       <li>
-        <Link href={'https://github.com/jasonwynn10/PMMP-NXT/issues'}>
+        <Link
+          href={'https://github.com/jasonwynn10/PMMP-NXT/issues'}
+          className={'pl-3'}>
           <MdFeedback size={24} />
           <span>Send Feedback</span>
         </Link>
       </li>
-      <div className={'absolute bottom-6'}>
+      <div className={'mt-auto'}>
         <footer className={'font-normal text-sm text-base-content text-center'}>
           <h2>&copy; {new Date().getFullYear()} PMMP-NXT</h2>
           <h5>
