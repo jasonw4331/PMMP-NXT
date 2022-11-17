@@ -2,7 +2,6 @@ import Link from 'next/link'
 import {
   MdAdminPanelSettings,
   MdAssignment,
-  MdBookmark,
   MdBookmarks,
   MdExplore,
   MdFeedback,
@@ -10,6 +9,7 @@ import {
   MdHelp,
   MdHistory,
   MdHome,
+  MdLibraryAdd,
   MdSettings,
 } from 'react-icons/all'
 
@@ -48,14 +48,14 @@ export default function Sidebar() {
       </li>
       <li>
         <Link href={'/feed/bookmarks'}>
-          <MdBookmark size={24} />
+          <MdBookmarks size={24} />
           <span>Bookmarked</span>
         </Link>
       </li>
       <li className={'divider'}></li>
       <li>
         <Link href={'/feed/library'}>
-          <MdBookmarks size={24} />
+          <MdLibraryAdd size={24} />
           <span>Library</span>
         </Link>
       </li>
