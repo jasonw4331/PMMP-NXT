@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link'
-import { MdSettings } from 'react-icons/all'
+import { MdSettings } from 'react-icons/md'
 
 export default function NotificationsPopup() {
   // TODO: Add notification data from service worker
