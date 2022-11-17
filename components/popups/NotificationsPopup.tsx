@@ -3,7 +3,8 @@ import Link from 'next/link'
 import { MdSettings } from 'react-icons/all'
 
 export default function NotificationsPopup() {
-  // TODO: Add notifications from service worker
+  // TODO: Add notification data from service worker
+  const notifications = []
   return (
     <ul
       tabIndex={0}
@@ -18,7 +19,9 @@ export default function NotificationsPopup() {
       </div>
       <li className={'divider divider-vertical h-0'}></li>
       <li>
-        <span>You don't have any notifications!</span>
+        {notifications.length < 1 && (
+          <span>You don't have any notifications!</span>
+        )}
       </li>
     </ul>
   )
