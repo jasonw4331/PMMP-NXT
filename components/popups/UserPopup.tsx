@@ -6,11 +6,13 @@ import {
   MdHelpOutline,
   MdOutlineDarkMode,
   MdOutlineFeedback,
+  MdOutlineLightMode,
   MdOutlineLogout,
   MdOutlinePerson,
   MdSettings,
 } from 'react-icons/md'
 import Link from 'next/link'
+import { themeChange } from 'theme-change'
 
 export default function UserPopup() {
   return (
@@ -50,10 +52,42 @@ export default function UserPopup() {
       </li>
       <li className={'divider divider-vertical h-0'}></li>
       <li>
-        <Link href={'/'}>
+        <button
+          id={'light-button'}
+          data-toggle-theme='business,light'
+          data-act-class={'visible'}
+          onMouseDown={(e: React.MouseEvent) => e.preventDefault()}
+          onMouseUp={
+            ((e: React.MouseEvent) => {
+              themeChange()
+              e.currentTarget.className = 'hidden'
+              e.currentTarget.parentElement!.querySelector(
+                '#dark-button'
+              )!.className = ''
+            }) as React.MouseEventHandler
+          }
+          className={'dark:hidden'}>
+          <MdOutlineLightMode size={24} />
+          <span>Appearance: Light</span>
+        </button>
+        <button
+          id={'dark-button'}
+          data-toggle-theme='business,light'
+          data-act-class={'visible'}
+          onMouseDown={(e: React.MouseEvent) => e.preventDefault()}
+          onMouseUp={
+            ((e: React.MouseEvent) => {
+              themeChange()
+              e.currentTarget.className = 'hidden'
+              e.currentTarget.parentElement!.querySelector(
+                '#light-button'
+              )!.className = ''
+            }) as React.MouseEventHandler
+          }
+          className={'hidden dark:visible'}>
           <MdOutlineDarkMode size={24} />
           <span>Appearance: Dark</span>
-        </Link>
+        </button>
       </li>
       <li>
         <Link href={'/settings'}>
