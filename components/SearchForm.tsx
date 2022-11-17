@@ -7,13 +7,15 @@ export default function SearchForm() {
     <div className='form-control'>
       <div className={'relative flex'}>
         <input
+          id='searchbar'
           type='text'
           placeholder='Search…'
           onKeyDown={e => {
             if (e.key === 'Enter') {
               router.push(
                 `/results?q=${encodeURI(
-                  document.querySelector('input')?.value || ''
+                  (document.querySelector('#searchbar') as HTMLInputElement)
+                    ?.value || ''
                 )}`
               )
             }
