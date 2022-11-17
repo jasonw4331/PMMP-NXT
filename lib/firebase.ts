@@ -1,6 +1,4 @@
 import * as firebaseAdmin from 'firebase-admin'
-import { app, AppOptions } from 'firebase-admin'
-import App = app.App
 import 'server-only'
 
 const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID
@@ -10,18 +8,21 @@ const storageBucket = `${projectId}.appspot.com`
 const messagingSenderId =
   process.env.NEXT_PUBLIC_FIREBASE_APP_ID?.split(':')[1] || ''
 
-export const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_PUBLIC_API_KEY,
-  authDomain,
+export const firebaseConfig: firebaseAdmin.AppOptions = {
+  credential: firebaseAdmin.credential.cert({
+    projectId,
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL as string,
+    privateKey: process.env.FIREBASE_PRIVATE_KEY as string,
+  } as firebaseAdmin.ServiceAccount),
   databaseURL,
-  projectId,
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
-  messagingSenderId,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  serviceAccountId: process.env.FIREBASE_CLIENT_EMAIL,
   storageBucket,
+  projectId,
 }
 
-function createFirebaseApp(config: AppOptions): App {
+function createFirebaseApp(
+  config: firebaseAdmin.AppOptions
+): firebaseAdmin.app.App {
   try {
     return firebaseAdmin.app()
   } catch {
@@ -29,14 +30,14 @@ function createFirebaseApp(config: AppOptions): App {
   }
 }
 
-const firebaseApp = createFirebaseApp(firebaseConfig)
+export const firebaseApp = createFirebaseApp(firebaseConfig)
+export default firebaseAdmin
 
 // Auth exports
-export const auth = firebaseApp.auth()
+export const auth = firebaseAdmin.auth()
 
 // Firestore exports
-export const firestore = firebaseApp.firestore()
+export const firestore = firebaseAdmin.firestore()
 
 // Storage exports
-export const storage = firebaseApp.storage()
-export const STATE_CHANGED = 'state_changed'
+export const storage = firebaseAdmin.storage()
