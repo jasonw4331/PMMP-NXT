@@ -3,10 +3,9 @@ import 'server-only'
 
 const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID
 const databaseURL = `https://${projectId}.firebaseio.com`
-const authDomain = `${projectId}.firebaseapp.com`
+//const authDomain = `${projectId}.firebaseapp.com`
 const storageBucket = `${projectId}.appspot.com`
-const messagingSenderId =
-  process.env.NEXT_PUBLIC_FIREBASE_APP_ID?.split(':')[1] || ''
+//const messagingSenderId = process.env.NEXT_PUBLIC_FIREBASE_APP_ID?.split(':')[1] || ''
 
 export const firebaseConfig: firebaseAdmin.AppOptions = {
   credential: firebaseAdmin.credential.cert({
