@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-head-element */
 import './globals.css'
 import Sidebar from '../components/Sidebar'
-import Navbar from '../components/Navbar'
+import Navbar from '../components/navbar/Navbar'
 
 export const revalidate = 43200 // revalidate every 12 hours
 

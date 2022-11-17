@@ -6,11 +6,11 @@ import {
   MdApps,
   MdSearch,
 } from 'react-icons/all'
-import AppsPopup from './AppsPopup'
-import NotificationsPopup from './NotificationsPopup'
+import AppsPopup from '../popups/AppsPopup'
+import NotificationsPopup from '../popups/NotificationsPopup'
 import Image from 'next/image'
-import missingImage from '../public/icons/missing.png'
-import UserPopup from './UserPopup'
+import missingImage from '../../public/icons/missing.png'
+import UserPopup from '../popups/UserPopup'
 
 export default function Navbar() {
   return (
@@ -37,9 +37,11 @@ export default function Navbar() {
         <SearchForm />
       </div>
       <div className='navbar-end'>
-        <button className='btn btn-ghost btn-circle flex lg:hidden'>
+        <Link
+          href={'/results'}
+          className='btn btn-ghost btn-circle flex lg:hidden'>
           <MdSearch size={24} />
-        </button>
+        </Link>
         <button className='btn btn-ghost btn-circle'>
           <FaWrench size={22} />
         </button>

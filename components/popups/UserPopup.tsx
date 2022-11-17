@@ -1,4 +1,4 @@
-import missingImage from '../public/icons/missing.png'
+import missingImage from '../../public/icons/missing.png'
 import Image from 'next/image'
 import {
   MdAdminPanelSettings,
