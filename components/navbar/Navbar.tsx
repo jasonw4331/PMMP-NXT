@@ -1,16 +1,12 @@
 import Link from 'next/link'
 import SearchForm from './SearchForm'
-import {
-  FaWrench,
-  IoMdNotificationsOutline,
-  MdApps,
-  MdSearch,
-} from 'react-icons/all'
+import { FaWrench, MdApps, MdSearch } from 'react-icons/all'
 import AppsPopup from '../popups/AppsPopup'
 import NotificationsPopup from '../popups/NotificationsPopup'
 import Image from 'next/image'
 import missingImage from '../../public/icons/missing.png'
 import UserPopup from '../popups/UserPopup'
+import NotificationsBadge from './NotificationsBadge'
 
 export default function Navbar() {
   return (
@@ -53,12 +49,7 @@ export default function Navbar() {
         </div>
         <div className='dropdown dropdown-end'>
           <label tabIndex={0} className='btn btn-ghost btn-circle'>
-            <div className='indicator'>
-              <IoMdNotificationsOutline size={24} />
-              <span className='badge badge-sm badge-primary indicator-item'>
-                1
-              </span>
-            </div>
+            <NotificationsBadge />
           </label>
           <NotificationsPopup />
         </div>
