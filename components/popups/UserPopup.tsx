@@ -16,7 +16,7 @@ export default function UserPopup() {
   return (
     <ul
       tabIndex={0}
-      className='menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-screen max-w-sm'>
+      className='menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-screen max-w-sm max-sm:max-w-xs max-sm:-left-72'>
       <div className={'my-1 mx-2 h-10 flex gap-2 block text-sm'}>
         <Image
           src={missingImage}

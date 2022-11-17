@@ -7,7 +7,7 @@ export default function NotificationsPopup() {
   return (
     <ul
       tabIndex={0}
-      className='menu dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-screen max-w-sm'>
+      className='menu dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-screen max-w-sm max-sm:max-w-xs max-sm:-left-60'>
       <div className={'flex flex-row justify-between'}>
         <span className={'mt-3 text-xl'}>Notifications</span>
         <Link
