@@ -1,7 +1,5 @@
 import Link from 'next/link'
 import {
-  MdAdminPanelSettings,
-  MdAssignment,
   MdBookmarks,
   MdExplore,
   MdFeedback,
@@ -11,7 +9,8 @@ import {
   MdHome,
   MdLibraryAdd,
   MdSettings,
-} from 'react-icons/all'
+} from 'react-icons/md'
+import AdminSidebarSegment from './AdminSidebarSegment'
 
 export default function Sidebar() {
   return (
@@ -69,18 +68,7 @@ export default function Sidebar() {
         </Link>
       </li>
       <li className={'divider pl-0'}></li>
-      <li>
-        <Link href={'/review'} className={'pl-3'}>
-          <MdAssignment size={24} />
-          <span>Review Plugins</span>
-        </Link>
-      </li>
-      <li>
-        <Link href={'/admin'} className={'pl-3'}>
-          <MdAdminPanelSettings size={24} />
-          <span>Admin Panel</span>
-        </Link>
-      </li>
+      <AdminSidebarSegment />
       <li className={'divider pl-0'}></li>
       <li>
         <Link href={'/settings'} className={'pl-3'}>
