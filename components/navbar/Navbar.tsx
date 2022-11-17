@@ -33,13 +33,13 @@ export default function Navbar() {
           NXT
         </Link>
       </div>
-      <div className='navbar-center basis-1/2 hidden lg:block'>
+      <div tabIndex={-1} className='navbar-center basis-1/2 hidden md:block'>
         <SearchForm />
       </div>
       <div className='navbar-end'>
         <Link
           href={'/results'}
-          className='btn btn-ghost btn-circle flex lg:hidden'>
+          className='btn btn-ghost btn-circle flex md:hidden'>
           <MdSearch size={24} />
         </Link>
         <button className='btn btn-ghost btn-circle'>
