@@ -1,7 +1,7 @@
 /*
  * Fetch all updated plugin records from firestore
  */
-import { firestore } from './firebase'
+import { firestore } from './ServerFirebase'
 import { notFound } from 'next/navigation'
 
 export type CardData = {

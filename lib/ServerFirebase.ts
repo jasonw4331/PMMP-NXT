@@ -7,7 +7,7 @@ const databaseURL = `https://${projectId}.firebaseio.com`
 const storageBucket = `${projectId}.appspot.com`
 //const messagingSenderId = process.env.NEXT_PUBLIC_FIREBASE_APP_ID?.split(':')[1] || ''
 
-export const firebaseConfig: firebaseAdmin.AppOptions = {
+const firebaseConfig: firebaseAdmin.AppOptions = {
   credential: firebaseAdmin.credential.cert({
     projectId,
     clientEmail: process.env.FIREBASE_CLIENT_EMAIL as string,
@@ -29,7 +29,7 @@ function createFirebaseApp(
   }
 }
 
-export const firebaseApp = createFirebaseApp(firebaseConfig)
+const firebaseApp = createFirebaseApp(firebaseConfig)
 export default firebaseAdmin
 
 // Auth exports
