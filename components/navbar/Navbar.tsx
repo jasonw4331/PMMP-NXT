@@ -3,10 +3,8 @@ import SearchForm from './SearchForm'
 import { FaWrench, MdApps, MdSearch } from 'react-icons/all'
 import AppsPopup from '../popups/AppsPopup'
 import NotificationsPopup from '../popups/NotificationsPopup'
-import Image from 'next/image'
-import missingImage from '../../public/icons/missing.png'
-import UserPopup from '../popups/UserPopup'
 import NotificationsBadge from './NotificationsBadge'
+import NavbarProfile from './NavbarProfile'
 
 export default function Navbar() {
   return (
@@ -54,17 +52,7 @@ export default function Navbar() {
           <NotificationsPopup />
         </div>
         <div className='dropdown dropdown-end pl-2'>
-          <label tabIndex={0} className='btn btn-ghost btn-square avatar'>
-            <div className={'w-10 rounded-xl'}>
-              <Image
-                src={missingImage} // TODO: Replace with user avatar
-                width={1}
-                height={1}
-                alt='User Profile Image'
-              />
-            </div>
-          </label>
-          <UserPopup />
+          <NavbarProfile />
         </div>
       </div>
     </div>
