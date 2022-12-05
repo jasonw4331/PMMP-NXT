@@ -3,15 +3,25 @@
 @tailwind utilities;
 
 @media(prefers-color-scheme: dark) {
-    :root, [data-theme="dark"] {
+    :root {
         background-image: url('/background.png');
         background-repeat: repeat;
     }
 }
 
 @media(prefers-color-scheme: light) {
-    :root, [data-theme="light"] {
+    :root {
         background-image: url('/light-background.png');
         background-repeat: repeat;
     }
+}
+
+[data-theme="light"] {
+    background-image: url('/light-background.png');
+    background-repeat: repeat;
+}
+
+[data-theme="dark"], [data-theme="business"] {
+    background-image: url('/background.png');
+    background-repeat: repeat;
 }

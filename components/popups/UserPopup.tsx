@@ -13,8 +13,12 @@ import {
 } from 'react-icons/md'
 import Link from 'next/link'
 import { themeChange } from 'theme-change'
+import { useEffect } from 'react'
 
 export default function UserPopup() {
+  useEffect(() => {
+    themeChange(false) // false parameter is required for react project
+  }, [])
   return (
     <ul
       tabIndex={0}
@@ -54,11 +58,11 @@ export default function UserPopup() {
       <li>
         <button
           id={'light-button'}
-          data-toggle-theme='business,light'
+          data-toggle-theme='business,business'
           data-act-class={'visible'}
           onMouseDown={(e: React.MouseEvent) => e.preventDefault()}
           onMouseUp={(e: React.MouseEvent) => {
-            themeChange()
+            themeChange(false)
             e.currentTarget.className = 'hidden'
             e.currentTarget.parentElement!.querySelector(
               '#dark-button'
@@ -70,11 +74,11 @@ export default function UserPopup() {
         </button>
         <button
           id={'dark-button'}
-          data-toggle-theme='business,light'
+          data-toggle-theme='light,light'
           data-act-class={'visible'}
           onMouseDown={(e: React.MouseEvent) => e.preventDefault()}
           onMouseUp={(e: React.MouseEvent) => {
-            themeChange()
+            themeChange(false)
             e.currentTarget.className = 'hidden'
             e.currentTarget.parentElement!.querySelector(
               '#light-button'
