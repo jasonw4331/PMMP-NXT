@@ -12,7 +12,6 @@ import {
   GoogleAuthProvider,
   TwitterAuthProvider,
 } from '@firebase/auth'
-import { getMessaging, Messaging } from '@firebase/messaging'
 
 const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID
 const databaseURL = `https://${projectId}.firebaseio.com`
@@ -49,4 +48,4 @@ export const githubAuthProvider = new GithubAuthProvider()
 export const twitterAuthProvider = new TwitterAuthProvider()
 
 // Messaging exports
-export const messaging: Messaging = getMessaging(firebaseApp)
+//export const messaging: Messaging = getMessaging(firebaseApp)
