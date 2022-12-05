@@ -8,11 +8,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "firebase": "^9.14.0",
     "firebase-admin": "^11.2.0",
     "next": "latest",
     "next-mdx-remote": "^4.1.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-firebase-hooks": "^5.1.1",
     "react-icons": "^4.6.0",
     "theme-change": "^2.2.0"
   },
