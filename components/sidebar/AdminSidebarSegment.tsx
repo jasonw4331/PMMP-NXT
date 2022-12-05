@@ -7,13 +7,13 @@ import {
 } from 'react-icons/md'
 import { use, useContext } from 'react'
 import { UserContext } from '../../lib/UserContext'
-import { ParsedToken } from '@firebase/auth'
+import { IdTokenResult, ParsedToken } from '@firebase/auth'
 
 export default function AdminSidebarSegment() {
   const { user } = useContext(UserContext)
   const tokenResult = user?.getIdTokenResult()
   const claims =
-    tokenResult instanceof Promise
+    tokenResult instanceof Promise<IdTokenResult>
       ? (use(tokenResult)?.claims as ParsedToken)
       : null
 
