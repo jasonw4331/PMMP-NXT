@@ -7,6 +7,7 @@ import {
   MdOutlineDarkMode,
   MdOutlineFeedback,
   MdOutlineLightMode,
+  MdOutlineLogin,
   MdOutlineLogout,
   MdOutlinePerson,
   MdSettings,
@@ -15,6 +16,8 @@ import Link from 'next/link'
 import { themeChange } from 'theme-change'
 import { useContext, useEffect } from 'react'
 import { UserContext } from '../../lib/UserContext'
+import { signOut } from '@firebase/auth'
+import { auth } from '../../lib/ClientFirebase'
 
 export default function UserPopup() {
   const { user, username } = useContext(UserContext)
@@ -51,10 +54,21 @@ export default function UserPopup() {
         </Link>
       </li>
       <li>
-        <Link href={'/'}>
-          <MdOutlineLogout size={24} />
-          <span>Sign Out</span>
-        </Link>
+        {!user && (
+          <Link href={'/login'}>
+            <MdOutlineLogin size={24} />
+            <span>Sign In</span>
+          </Link>
+        )}
+        {user && (
+          <button
+            onMouseDown={(e: React.MouseEvent) => e.preventDefault()}
+            onMouseUp={() => signOut(auth)}
+            onContextMenu={(e: React.MouseEvent) => e.preventDefault()}>
+            <MdOutlineLogout size={24} />
+            <span>Sign Out</span>
+          </button>
+        )}
       </li>
       <li className={'divider divider-vertical h-0'}></li>
       <li>
