@@ -13,9 +13,11 @@ import {
 } from 'react-icons/md'
 import Link from 'next/link'
 import { themeChange } from 'theme-change'
-import { useEffect } from 'react'
+import { useContext, useEffect } from 'react'
+import { UserContext } from '../../lib/UserContext'
 
 export default function UserPopup() {
+  const { user, username } = useContext(UserContext)
   useEffect(() => {
     themeChange(false) // false parameter is required for react project
   }, [])
@@ -25,14 +27,14 @@ export default function UserPopup() {
       className='menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-screen max-w-sm max-sm:max-w-xs max-sm:-left-72'>
       <div className={'my-1 mx-2 h-10 flex gap-2 block text-sm'}>
         <Image
-          src={missingImage}
+          src={user?.photoURL ?? missingImage}
           width={40}
           height={40}
           alt='User Icon'
           className='rounded-full'
         />
         <div>
-          <span className='block text-sm'>Not logged in</span>
+          <span className='block text-sm'>{username ?? 'Not logged in'}</span>
         </div>
       </div>
       <li className={'divider divider-vertical h-0'}></li>
