@@ -49,16 +49,16 @@ export default function Sidebar() {
         </Link>
       </li>
       <li>
-        <Link href={'/feed/bookmarks'} className={'pl-3'}>
+        <Link href={'/feed/following'} className={'pl-3'}>
           <MdBookmarks size={24} />
-          <span>Bookmarked</span>
+          <span>Followed Authors</span>
         </Link>
       </li>
       <li className={'divider pl-0'}></li>
       <li>
-        <Link href={'/feed/library'} className={'pl-3'}>
+        <Link href={'/feed/watching'} className={'pl-3'}>
           <MdLibraryAdd size={24} />
-          <span>Library</span>
+          <span>Watching</span>
         </Link>
       </li>
       <li>
