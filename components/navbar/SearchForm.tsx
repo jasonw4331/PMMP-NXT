@@ -24,7 +24,7 @@ export default function SearchForm() {
           className={'input input-bordered pl-10 grow'}
         />
         <div className={'absolute left-0 pl-2.5 pt-3 pointer-events-none'}>
-          <MdSearch className={'h-6 w-6'} width={24} height={24} />
+          <MdSearch className={'h-6 w-6'} size={24} />
         </div>
       </div>
     </div>
