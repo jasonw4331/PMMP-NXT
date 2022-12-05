@@ -69,7 +69,6 @@ export default function Sidebar() {
       </li>
       <li className={'divider pl-0'}></li>
       <AdminSidebarSegment />
-      <li className={'divider pl-0'}></li>
       <li>
         <Link href={'/settings'} className={'pl-3'}>
           <MdSettings size={24} />
