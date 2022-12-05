@@ -1,6 +1,6 @@
 import { getSubmitted } from '../../lib/CommonQueries'
 
-export default async function Head() {
+export default async function ReviewHead() {
   const data = await getSubmitted()
 
   return (

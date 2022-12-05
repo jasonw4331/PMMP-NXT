@@ -1,7 +1,7 @@
 import Card from '../../components/Card'
 import { getSubmitted } from '../../lib/CommonQueries'
 
-export default async function Review() {
+export default async function ReviewPage() {
   const data = await getSubmitted()
   return (
     <ul className={'pt-2 flex flex-wrap gap-x-5 gap-y-10 justify-center'}>
