@@ -20,11 +20,11 @@ export default function AdminSidebarSegment() {
   return user === null ? (
     <>
       <p className={'text-center'}>
-        Sign in to like plugins, comment, and follow.
+        Sign in to like plugins, leave comments, and follow authors!
       </p>
       <li>
         <Link href={'/login'} className={'pl-3'}>
-          <MdOutlinePerson />
+          <MdOutlinePerson size={24} />
           <span>Sign In</span>
         </Link>
       </li>
