@@ -5,13 +5,7 @@ import {
   getApp,
   initializeApp,
 } from '@firebase/app'
-import {
-  Auth,
-  getAuth,
-  GithubAuthProvider,
-  GoogleAuthProvider,
-  TwitterAuthProvider,
-} from '@firebase/auth'
+import { Auth, getAuth } from '@firebase/auth'
 
 const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID
 const databaseURL = `https://${projectId}.firebaseio.com`
@@ -43,9 +37,6 @@ const firebaseApp: FirebaseApp = createFirebaseApp(firebaseConfig)
 
 // Auth exports
 export const auth: Auth = getAuth(firebaseApp)
-export const googleAuthProvider = new GoogleAuthProvider()
-export const githubAuthProvider = new GithubAuthProvider()
-export const twitterAuthProvider = new TwitterAuthProvider()
 
 // Messaging exports
 //export const messaging: Messaging = getMessaging(firebaseApp)
