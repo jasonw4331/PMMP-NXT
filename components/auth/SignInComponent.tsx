@@ -25,7 +25,7 @@ export default function SignInComponent() {
             title='Please enter a valid email address'
           />
           <label className='label hidden input-invalid' htmlFor='email'>
-            <span className='label-text-alt text-left'>
+            <span className='label-text-alt'>
               Please enter a valid email address
             </span>
           </label>
@@ -40,7 +40,7 @@ export default function SignInComponent() {
             title='Password must be at least 6 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.'
           />
           <label className='label hidden input-invalid' htmlFor='password'>
-            <span className='label-text-alt text-left'>
+            <span className='label-text-alt'>
               Password must be: &ge; 6 characters long, &ge; 1 uppercase letter,
               1 lowercase letter, 1 number, and 1 special character.
             </span>
