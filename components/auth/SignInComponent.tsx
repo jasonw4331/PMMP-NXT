@@ -50,7 +50,7 @@ export default function SignInComponent() {
         <div className={'flex justify-between items-center'}>
           <label className={'label cursor-pointer'}>
             <span className='label-text'>Remember me</span>
-            <input type='checkbox' className='checkbox checkbox-info ml-3' />
+            <input type='checkbox' className='checkbox checkbox-primary ml-3' />
           </label>
           <Link href='#!' className='link link-accent'>
             Forgot password?
@@ -68,20 +68,14 @@ export default function SignInComponent() {
 
         <div className={'divider uppercase'}>or</div>
 
-        <div className='btn-group btn-group-vertical lg:btn-group-horizontal w-full justify-around'>
-          <button
-            className={
-              'btn grow bg-blue-500 hover:bg-blue-500/90 active:bg-blue-500/90'
-            }>
+        <div className='flex gap-x-3 w-full justify-around'>
+          <button className={'btn btn-square btn-info grow'}>
             <FaTwitter size={32} />
           </button>
-          <button
-            className={
-              'btn grow bg-orange-700 hover:bg-orange-700/90 active:bg-orange-700/90'
-            }>
+          <button className={'btn btn-square btn-error grow'}>
             <FaGoogle size={32} />
           </button>
-          <button className={'btn grow'}>
+          <button className={'btn btn-square btn-neural grow'}>
             <FaGithub size={32} />
           </button>
         </div>
