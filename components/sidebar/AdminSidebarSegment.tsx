@@ -23,10 +23,12 @@ export default function AdminSidebarSegment() {
         Sign in to like plugins, leave comments, and follow authors!
       </p>
       <li>
-        <Link href={'/login'} className={'pl-3'}>
+        <label
+          htmlFor='SignIn'
+          onMouseUp={() => document.getElementById('SideBar')?.click()}>
           <MdOutlinePerson size={24} />
           <span>Sign In</span>
-        </Link>
+        </label>
       </li>
       <li className={'divider pl-0'}></li>
     </>

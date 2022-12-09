@@ -55,10 +55,10 @@ export default function UserPopup() {
       </li>
       <li>
         {!user && (
-          <Link href={'/login'}>
+          <label htmlFor='SignIn'>
             <MdOutlineLogin size={24} />
             <span>Sign In</span>
-          </Link>
+          </label>
         )}
         {user && (
           <button
