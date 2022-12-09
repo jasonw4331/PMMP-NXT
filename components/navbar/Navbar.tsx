@@ -10,7 +10,7 @@ export default function Navbar() {
   return (
     <div className='navbar bg-base-100'>
       <div className='navbar-start'>
-        <label htmlFor='my-drawer-3' className='btn btn-circle btn-ghost'>
+        <label htmlFor='SideBar' className='btn btn-circle btn-ghost'>
           <svg
             xmlns='http://www.w3.org/2000/svg'
             fill='none'

@@ -19,7 +19,7 @@ export default function Sidebar() {
         'menu p-2 w-60 h-screen bg-base-100 overflow-x-hidden flex-nowrap'
       }>
       <div className={'flex pl-0'}>
-        <label htmlFor='my-drawer-3' className='btn btn-circle btn-ghost'>
+        <label htmlFor='SideBar' className='btn btn-circle btn-ghost'>
           <svg
             xmlns='http://www.w3.org/2000/svg'
             fill='none'
