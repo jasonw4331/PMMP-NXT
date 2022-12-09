@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { FaGithub, FaGoogle, FaTwitter } from 'react-icons/fa'
-import { createUserWithEmailAndPassword } from '@firebase/auth'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
 import {
   auth,
   signInWithGithub,
@@ -9,7 +9,7 @@ import {
   signInWithTwitter,
 } from '../../lib/ClientFirebase'
 import { useContext, useState } from 'react'
-import { doc, getFirestore, writeBatch } from '@firebase/firestore'
+import { doc, getFirestore, writeBatch } from 'firebase/firestore'
 import { UserContext } from '../../lib/UserContext'
 
 export default function SignInComponent() {

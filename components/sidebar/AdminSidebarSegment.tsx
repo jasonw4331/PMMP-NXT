@@ -7,7 +7,7 @@ import {
 } from 'react-icons/md'
 import { use, useContext } from 'react'
 import { UserContext } from '../../lib/UserContext'
-import { IdTokenResult, ParsedToken } from '@firebase/auth'
+import { IdTokenResult, ParsedToken } from 'firebase/auth'
 
 export default function AdminSidebarSegment() {
   const { user } = useContext(UserContext)

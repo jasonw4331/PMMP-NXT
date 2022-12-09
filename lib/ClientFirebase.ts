@@ -4,7 +4,7 @@ import {
   FirebaseOptions,
   getApp,
   initializeApp,
-} from '@firebase/app'
+} from 'firebase/app'
 import {
   Auth,
   getAuth,
@@ -12,7 +12,7 @@ import {
   GoogleAuthProvider,
   signInWithRedirect,
   TwitterAuthProvider,
-} from '@firebase/auth'
+} from 'firebase/auth'
 
 const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID
 const databaseURL = `https://${projectId}.firebaseio.com`
