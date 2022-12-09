@@ -5,7 +5,14 @@ import {
   getApp,
   initializeApp,
 } from '@firebase/app'
-import { Auth, getAuth } from '@firebase/auth'
+import {
+  Auth,
+  getAuth,
+  GithubAuthProvider,
+  GoogleAuthProvider,
+  signInWithRedirect,
+  TwitterAuthProvider,
+} from '@firebase/auth'
 
 const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID
 const databaseURL = `https://${projectId}.firebaseio.com`
@@ -37,6 +44,18 @@ const firebaseApp: FirebaseApp = createFirebaseApp(firebaseConfig)
 
 // Auth exports
 export const auth: Auth = getAuth(firebaseApp)
+
+export const signInWithTwitter = async () =>
+  await signInWithRedirect(auth, new TwitterAuthProvider())
+
+export const signInWithGoogle = async () =>
+  await signInWithRedirect(auth, new GoogleAuthProvider())
+
+export const signInWithGithub = async () =>
+  await signInWithRedirect(
+    auth,
+    new GithubAuthProvider().addScope('user:email')
+  )
 
 // Messaging exports
 //export const messaging: Messaging = getMessaging(firebaseApp)

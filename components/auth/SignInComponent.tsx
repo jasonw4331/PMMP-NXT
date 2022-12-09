@@ -1,11 +1,51 @@
 'use client'
 import Link from 'next/link'
 import { FaGithub, FaGoogle, FaTwitter } from 'react-icons/fa'
+import { createUserWithEmailAndPassword } from '@firebase/auth'
+import {
+  auth,
+  signInWithGithub,
+  signInWithGoogle,
+  signInWithTwitter,
+} from '../../lib/ClientFirebase'
+import { useContext, useState } from 'react'
+import { doc, getFirestore, writeBatch } from '@firebase/firestore'
+import { UserContext } from '../../lib/UserContext'
 
 export default function SignInComponent() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [formValue, setFormValue] = useState('')
+  const [isValid, setIsValid] = useState(false)
+  const [loading, setLoading] = useState(false)
+
+  const { user, username } = useContext(UserContext)
+
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    // Create refs for both documents if uid is valid
+    if (user?.uid) {
+      const batch = writeBatch(getFirestore())
+
+      const userDoc = doc(getFirestore(), 'users', user?.uid)
+      batch.set(userDoc, {
+        username: formValue,
+        photoURL: user?.photoURL,
+        displayName: user?.displayName,
+      })
+
+      const usernameDoc = doc(getFirestore(), 'usernames', formValue)
+      batch.set(usernameDoc, { uid: user?.uid })
+
+      await batch.commit()
+    }
+  }
+
   return (
     <section className={'flex justify-center'}>
       <form
+        onSubmit={onSubmit}
         className={
           'form-control w-full max-w-xs lg:max-w-lg text-center gap-y-3'
         }>
@@ -18,6 +58,7 @@ export default function SignInComponent() {
         <div>
           <input
             id='email'
+            name='email'
             type='email'
             placeholder='Email Address'
             className='input input-bordered input-invalid w-full'
@@ -33,6 +74,7 @@ export default function SignInComponent() {
         <div>
           <input
             id='password'
+            name='password'
             type='password'
             placeholder='Password'
             className='input input-bordered input-invalid w-full'
@@ -58,7 +100,16 @@ export default function SignInComponent() {
         </div>
 
         <div className={'flex justify-around'}>
-          <button type='submit' className='btn btn-primary w-1/3'>
+          <button
+            onMouseUp={async () => {
+              const user = await createUserWithEmailAndPassword(
+                auth,
+                email,
+                password
+              )
+            }}
+            type='submit'
+            className='btn btn-primary w-1/3'>
             Sign Up
           </button>
           <button type='submit' className='btn btn-secondary w-1/3'>
@@ -69,13 +120,19 @@ export default function SignInComponent() {
         <div className={'divider uppercase'}>or</div>
 
         <div className='flex gap-x-3 w-full justify-around'>
-          <button className={'btn btn-square btn-info grow'}>
+          <button
+            onMouseUp={signInWithTwitter}
+            className={'btn btn-square btn-info grow'}>
             <FaTwitter size={32} />
           </button>
-          <button className={'btn btn-square btn-error grow'}>
+          <button
+            onMouseUp={signInWithGoogle}
+            className={'btn btn-square btn-error grow'}>
             <FaGoogle size={32} />
           </button>
-          <button className={'btn btn-square btn-neural grow'}>
+          <button
+            onMouseUp={signInWithGithub}
+            className={'btn btn-square btn-neural grow'}>
             <FaGithub size={32} />
           </button>
         </div>
