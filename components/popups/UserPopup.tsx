@@ -16,7 +16,7 @@ import Link from 'next/link'
 import { themeChange } from 'theme-change'
 import { useContext, useEffect } from 'react'
 import { UserContext } from '../../lib/UserContext'
-import { signOut } from '@firebase/auth'
+import { signOut } from 'firebase/auth'
 import { auth } from '../../lib/ClientFirebase'
 
 export default function UserPopup() {
