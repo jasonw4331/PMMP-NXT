@@ -1,5 +1,5 @@
 import ReleaseCard from '../../../components/cards/ReleaseCard'
-import { getTrending } from '../../../lib/CommonQueries'
+import { getTrending } from '../../../lib/ServerFirestoreQueries'
 
 export default async function ExplorePage() {
   const data = await getTrending()

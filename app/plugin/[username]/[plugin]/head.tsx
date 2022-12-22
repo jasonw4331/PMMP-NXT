@@ -1,4 +1,4 @@
-import { getPlugin } from '../../../../lib/CommonQueries'
+import { getPlugin } from '../../../../lib/ServerFirestoreQueries'
 import { notFound, useSearchParams } from 'next/navigation'
 
 export const revalidate = 43200 // revalidate every 12 hours

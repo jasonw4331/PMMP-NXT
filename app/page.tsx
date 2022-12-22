@@ -1,5 +1,5 @@
 import ReleaseCard from '../components/cards/ReleaseCard'
-import { getReleases } from '../lib/CommonQueries'
+import { getReleases } from '../lib/ServerFirestoreQueries'
 
 export default async function HomePage() {
   const data = await getReleases()

@@ -1,5 +1,5 @@
 import ReleaseCard from '../../components/cards/ReleaseCard'
-import { getSubmitted } from '../../lib/CommonQueries'
+import { getSubmitted } from '../../lib/ServerFirestoreQueries'
 
 export default async function ReviewPage() {
   const data = await getSubmitted()

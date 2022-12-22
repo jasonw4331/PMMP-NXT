@@ -1,8 +1,8 @@
-/*
- * Fetch all updated plugin records from firestore
- */
 import { firestore } from './ServerFirebase'
-import { notFound } from 'next/navigation'
+import { firestore as firestoreAdmin } from 'firebase-admin'
+import DocumentSnapshot = firestoreAdmin.DocumentSnapshot
+import QuerySnapshot = firestoreAdmin.QuerySnapshot
+import DocumentData = firestoreAdmin.DocumentData
 
 export type CardData = {
   id: string
@@ -93,19 +93,26 @@ export async function getSubmitted(): Promise<CardData[]> {
 }
 
 export async function getPlugin(
+  username: string,
   plugin: string,
-  username: string
-): Promise<CardData> {
-  const userSnapshot = await firestore
-    .collection('users')
-    .where('displayName', '==', username)
-    .limit(1)
-    .get()
-  if (userSnapshot.docs.length < 1) notFound() // throw 404 if user doesn't exist
-
-  const doc = await firestore
-    .doc(`users/${userSnapshot.docs[0].id}/plugins/${plugin}`)
-    .get()
+  version: string | null = null
+): Promise<CardData | null> {
+  let query = firestore.collection('users').where('displayName', '==', username)
+  let userSnapshot: QuerySnapshot<DocumentData>
+  let doc: DocumentSnapshot<DocumentData>
+  if (version === null || version === undefined) {
+    userSnapshot = await query.limit(1).get()
+    if (userSnapshot.empty) return null
+    doc = await firestore
+      .doc(`users/${userSnapshot.docs[0].id}/plugins/${plugin}`)
+      .get()
+  } else {
+    userSnapshot = await query.get()
+    if (userSnapshot.empty) return null
+    doc = await firestore
+      .doc(`users/${userSnapshot.docs[0].id}/plugins/${plugin}_v${version}`)
+      .get()
+  }
   const docData = await doc.data()
   return {
     ...docData,
