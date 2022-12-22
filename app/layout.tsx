@@ -25,8 +25,8 @@ export default function RootLayout({
     <html>
       <body>
         <div className='drawer'>
+          <input id='SideBar' type='checkbox' className='drawer-toggle' />
           <ClientContextProvider>
-            <input id='SideBar' type='checkbox' className='drawer-toggle' />
             <div className='drawer-content flex flex-col'>
               <Navbar />
               <main>{children}</main>
