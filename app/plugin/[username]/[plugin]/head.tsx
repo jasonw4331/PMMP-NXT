@@ -1,15 +1,20 @@
 import { getPlugin } from '../../../../lib/CommonQueries'
+import { notFound, useSearchParams } from 'next/navigation'
 
 export const revalidate = 43200 // revalidate every 12 hours
 
 export default async function Head({
-  username,
-  plugin,
+  params,
 }: {
-  username: string
-  plugin: string
+  params: { username: string; plugin: string }
 }) {
-  const pluginData = await getPlugin(username, plugin)
+  const searchParams = useSearchParams()
+  const pluginData = await getPlugin(
+    params.plugin,
+    params.username,
+    searchParams.get('v') ?? searchParams.get('version')
+  )
+  if (pluginData === null) notFound()
   const [pluginName, pluginVersion] = pluginData.id.split('_v')
 
   return (
