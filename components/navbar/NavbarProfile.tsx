@@ -2,7 +2,7 @@
 import Image from 'next/image'
 import missingImage from '../../public/icons/missing.png'
 import UserPopup from '../popups/UserPopup'
-import { UserContext } from '../../lib/UserContext'
+import { UserContext } from '../../lib/client/UserContext'
 import { useContext } from 'react'
 
 export default function NavbarProfile() {

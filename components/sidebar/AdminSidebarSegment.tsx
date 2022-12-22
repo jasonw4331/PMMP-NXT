@@ -6,7 +6,7 @@ import {
   MdOutlinePerson,
 } from 'react-icons/md'
 import { use, useContext } from 'react'
-import { UserContext } from '../../lib/UserContext'
+import { UserContext } from '../../lib/client/UserContext'
 import { IdTokenResult, ParsedToken } from 'firebase/auth'
 
 export default function AdminSidebarSegment() {

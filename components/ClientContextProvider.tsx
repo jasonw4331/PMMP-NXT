@@ -1,6 +1,6 @@
 'use client'
-import { UserContext, UserContextType } from '../lib/UserContext'
-import { useUserData } from '../lib/UserHooks'
+import { UserContext, UserContextType } from '../lib/client/UserContext'
+import { useUserData } from '../lib/client/UserHooks'
 
 export default function ClientContextProvider({
   children,

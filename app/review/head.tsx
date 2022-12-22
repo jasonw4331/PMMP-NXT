@@ -1,4 +1,4 @@
-import { getSubmitted } from '../../lib/ServerFirestoreQueries'
+import { getSubmitted } from '../../lib/server/ServerFirestoreQueries'
 
 export default async function ReviewHead() {
   const data = await getSubmitted()
