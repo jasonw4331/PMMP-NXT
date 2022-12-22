@@ -55,6 +55,20 @@ export default function SignInComponent() {
         </p>
         <div>
           <input
+            id='username'
+            name='username'
+            type='username'
+            required={true}
+            placeholder='Username'
+            className='input input-bordered input-invalid w-full'
+            title='Please enter a new username'
+          />
+          <label className='label hidden input-invalid' htmlFor='email'>
+            <span className='label-text-alt'>Please enter a new username</span>
+          </label>
+        </div>
+        <div>
+          <input
             id='email'
             name='email'
             type='email'
@@ -99,18 +113,17 @@ export default function SignInComponent() {
 
         <div className={'flex justify-around'}>
           <button
-            onMouseUp={async () => {
-              const user = await createUserWithEmailAndPassword(
-                auth,
-                email,
-                password
-              )
-            }}
             type='submit'
+            name='SignUp'
+            value={'SignUp'}
             className='btn btn-primary w-1/3'>
             Sign Up
           </button>
-          <button type='submit' className='btn btn-secondary w-1/3'>
+          <button
+            type='submit'
+            name='LogIn'
+            value={'LogIn'}
+            className='btn btn-secondary w-1/3'>
             Log in
           </button>
         </div>
