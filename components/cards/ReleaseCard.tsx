@@ -1,8 +1,8 @@
 import Image, { StaticImageData } from 'next/image'
-import missingImage from '../public/icons/missing.png'
+import missingImage from '../../public/icons/missing.png'
 import Link from 'next/link'
 
-export default function Card({
+export default function ReleaseCard({
   name,
   author,
   tagline,
@@ -17,7 +17,7 @@ export default function Card({
 }) {
   return (
     <li
-      className={'card w-80 bg-base-100 shadow-xl'}
+      className={'card card-bordered w-80 bg-base-100 shadow-xl'}
       title={'made by ' + author}>
       <figure className={'px-10 pt-10'}>
         <Image
