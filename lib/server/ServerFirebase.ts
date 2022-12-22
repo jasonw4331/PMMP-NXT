@@ -1,5 +1,5 @@
-import * as firebaseAdmin from 'firebase-admin'
 import 'server-only'
+import * as firebaseAdmin from 'firebase-admin'
 
 const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID
 const databaseURL = `https://${projectId}.firebaseio.com`

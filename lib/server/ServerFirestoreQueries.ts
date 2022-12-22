@@ -1,3 +1,4 @@
+import 'server-only'
 import { firestore } from './ServerFirebase'
 import { firestore as firestoreAdmin } from 'firebase-admin'
 import DocumentSnapshot = firestoreAdmin.DocumentSnapshot
