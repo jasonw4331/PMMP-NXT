@@ -3,7 +3,6 @@ import './globals.css'
 import Sidebar from '../components/sidebar/Sidebar'
 import Navbar from '../components/navbar/Navbar'
 import PopupModal from '../components/popups/PopupModal'
-import SignInComponent from '../components/auth/SignInComponent'
 import Providers from '../components/auth/providers'
 
 export const revalidate = 43200 // revalidate every 12 hours
@@ -11,7 +10,7 @@ export const revalidate = 43200 // revalidate every 12 hours
 function SignInModal() {
   return (
     <PopupModal id='SignIn'>
-      <SignInComponent />
+      <></>
     </PopupModal>
   )
 }
