@@ -7,7 +7,7 @@ export default async function AdminPage() {
     <>
       <AccessRestriction />
       <Suspense fallback={<Loading />}>
-        <></>
+        <div></div>
       </Suspense>
     </>
   )

@@ -7,7 +7,7 @@ export default async function DeveloperPage() {
     <>
       <AccessRestriction />
       <Suspense fallback={<Loading />}>
-        <></>
+        <div></div>
       </Suspense>
     </>
   )
