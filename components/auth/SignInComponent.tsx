@@ -8,7 +8,11 @@ import {
 } from '../../lib/client/ClientFirebase'
 import { doc, getFirestore, writeBatch } from 'firebase/firestore'
 import * as z from 'zod'
-import { createTsForm, useDescription } from '@ts-react/form'
+import {
+  createTsForm,
+  createUniqueFieldSchema,
+  useDescription,
+} from '@ts-react/form'
 import { useSession } from 'next-auth/react'
 
 function TextField({
@@ -40,10 +44,14 @@ function TextField({
   )
 }
 
+const username = createUniqueFieldSchema(z.string(), 'username')
+const email = createUniqueFieldSchema(z.string(), 'email')
+const password = createUniqueFieldSchema(z.string(), 'password')
+
 const mapping = [
-  [z.string(), TextField] as const,
-  [z.string(), TextField] as const,
-  [z.string(), TextField] as const,
+  [username, TextField] as const,
+  [email, TextField] as const,
+  [password, TextField] as const,
 ] as const
 
 const SignInForm = createTsForm(mapping)
