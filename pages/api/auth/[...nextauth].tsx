@@ -1,10 +1,8 @@
 import NextAuth, { User } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import GoogleProvider, { GoogleProfile } from 'next-auth/providers/google'
-import GithubProvider, { GithubProfile } from 'next-auth/providers/github'
-import TwitterProvider, {
-  TwitterLegacyProfile,
-} from 'next-auth/providers/twitter'
+import GoogleProvider from 'next-auth/providers/google'
+import GithubProvider from 'next-auth/providers/github'
+import TwitterProvider from 'next-auth/providers/twitter'
 import { FirestoreAdapter } from '@next-auth/firebase-adapter'
 import {
   createUserWithEmailAndPassword,
@@ -69,7 +67,7 @@ export default NextAuth({
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-      profile(profile: GoogleProfile) {
+      profile(profile) {
         console.log(profile)
         return {
           id: profile.id,
@@ -83,7 +81,7 @@ export default NextAuth({
     GithubProvider({
       clientId: process.env.GITHUB_APP_CLIENT_ID as string,
       clientSecret: process.env.GITHUB_APP_CLIENT_SECRET as string,
-      profile(profile: GithubProfile) {
+      profile(profile) {
         console.log(profile)
         return {
           id: profile.id.toString(),
@@ -97,7 +95,7 @@ export default NextAuth({
     TwitterProvider({
       clientId: process.env.TWITTER_CLIENT_ID as string,
       clientSecret: process.env.TWITTER_CLIENT_SECRET as string,
-      profile(profile: TwitterLegacyProfile) {
+      profile(profile) {
         console.log(profile)
         return {
           id: profile.id_str,
