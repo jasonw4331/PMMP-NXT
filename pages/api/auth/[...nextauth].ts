@@ -47,40 +47,19 @@ export default NextAuth({
     //   },
     // }),
     GoogleProvider({
-      clientId: process.env.GOOGLE_ID as string,
-      clientSecret: process.env.GOOGLE_SECRET as string,
-      profile(profile) {
-        return {
-          // Return all the profile information you need.
-          // The only truly required field is `id`
-          // to be able to identify the account when added to a database
-        }
-      },
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
       allowDangerousEmailAccountLinking: true,
     }),
     GithubProvider({
       clientId: process.env.GITHUB_APP_CLIENT_ID as string,
       clientSecret: process.env.GITHUB_APP_CLIENT_SECRET as string,
-      profile(profile) {
-        return {
-          // Return all the profile information you need.
-          // The only truly required field is `id`
-          // to be able to identify the account when added to a database
-        }
-      },
       allowDangerousEmailAccountLinking: true,
     }),
     TwitterProvider({
       clientId: process.env.TWITTER_CLIENT_ID as string,
       clientSecret: process.env.TWITTER_CLIENT_SECRET as string,
       version: '2.0', // opt-in to Twitter OAuth 2.0
-      profile(profile) {
-        return {
-          // Return all the profile information you need.
-          // The only truly required field is `id`
-          // to be able to identify the account when added to a database
-        }
-      },
       allowDangerousEmailAccountLinking: true,
     }),
   ],
