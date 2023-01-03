@@ -2,18 +2,9 @@
 import './globals.css'
 import Sidebar from '../components/sidebar/Sidebar'
 import Navbar from '../components/navbar/Navbar'
-import PopupModal from '../components/popups/PopupModal'
 import Providers from '../components/auth/providers'
 
 export const revalidate = 43200 // revalidate every 12 hours
-
-function SignInModal() {
-  return (
-    <PopupModal id='SignIn'>
-      <></>
-    </PopupModal>
-  )
-}
 
 export default function RootLayout({
   children,
@@ -36,7 +27,6 @@ export default function RootLayout({
             </div>
           </Providers>
         </div>
-        <SignInModal />
       </body>
     </html>
   )
