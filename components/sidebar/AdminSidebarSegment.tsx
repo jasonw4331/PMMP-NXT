@@ -8,9 +8,9 @@ import {
 import { signIn, useSession } from 'next-auth/react'
 
 export default function AdminSidebarSegment() {
-  const { data: session, status } = useSession()
+  const { data: session } = useSession()
 
-  return status !== 'authenticated' ? (
+  return session?.user?.permissionLevel < 1 ? (
     <>
       <p className={'text-center'}>
         Sign in to like plugins, leave comments, and follow authors!
@@ -24,24 +24,22 @@ export default function AdminSidebarSegment() {
       <li className={'divider pl-0'}></li>
     </>
   ) : (
-    session?.user?.permissionLevel > 1 && (
-      <>
+    <>
+      <li>
+        <Link href={'/review'} className={'pl-3'}>
+          <MdAssignment size={24} />
+          <span>Review Plugins</span>
+        </Link>
+      </li>
+      {session?.user?.permissionLevel === 3 && (
         <li>
-          <Link href={'/review'} className={'pl-3'}>
-            <MdAssignment size={24} />
-            <span>Review Plugins</span>
+          <Link href={'/admin'} className={'pl-3'}>
+            <MdAdminPanelSettings size={24} />
+            <span>Admin Panel</span>
           </Link>
         </li>
-        {session?.user?.permissionLevel === 3 && (
-          <li>
-            <Link href={'/admin'} className={'pl-3'}>
-              <MdAdminPanelSettings size={24} />
-              <span>Admin Panel</span>
-            </Link>
-          </li>
-        )}
-        <li className={'divider pl-0'}></li>
-      </>
-    )
+      )}
+      <li className={'divider pl-0'}></li>
+    </>
   )
 }
