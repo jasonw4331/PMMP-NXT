@@ -18,7 +18,7 @@ import { useEffect } from 'react'
 import { signIn, signOut, useSession } from 'next-auth/react'
 
 export default function UserPopup() {
-  const { data } = useSession()
+  const { data: session } = useSession()
   useEffect(() => {
     themeChange(false) // false parameter is required for react project
   }, [])
@@ -28,7 +28,7 @@ export default function UserPopup() {
       className='menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-screen max-w-sm max-sm:max-w-xs max-sm:-left-72'>
       <div className={'my-1 mx-2 h-10 flex gap-2 block text-sm'}>
         <Image
-          src={data?.user?.image ?? missingImage}
+          src={session?.user?.image ?? missingImage}
           width={40}
           height={40}
           alt='User Icon'
@@ -36,7 +36,17 @@ export default function UserPopup() {
         />
         <div>
           <span className='block text-sm'>
-            {data?.user?.name ?? 'Not logged in'}
+            {session?.user?.name ?? 'Not logged in'}
+          </span>
+          <span className='block text-sm font-medium'>
+            {session?.user?.permissionLevel === 1
+              ? 'Developer'
+              : session?.user?.permissionLevel === 2
+              ? 'Reviwer'
+              : session?.user?.permissionLevel === 3
+              ? 'Admin'
+              : 'User'}{' '}
+            Account
           </span>
         </div>
       </div>
@@ -54,13 +64,13 @@ export default function UserPopup() {
         </Link>
       </li>
       <li>
-        {!data?.user && (
+        {!session?.user && (
           <label htmlFor='SignIn'>
             <MdOutlineLogin size={24} />
             <span onMouseUp={async e => signIn()}>Sign In</span>
           </label>
         )}
-        {data?.user && (
+        {session?.user && (
           <button
             onMouseDown={(e: React.MouseEvent) => e.preventDefault()}
             onMouseUp={e => signOut({ callbackUrl: '/' })}
