@@ -2,9 +2,9 @@
 import './globals.css'
 import Sidebar from '../components/sidebar/Sidebar'
 import Navbar from '../components/navbar/Navbar'
-import ClientContextProvider from '../components/ClientContextProvider'
 import PopupModal from '../components/popups/PopupModal'
 import SignInComponent from '../components/auth/SignInComponent'
+import Providers from '../components/auth/providers'
 
 export const revalidate = 43200 // revalidate every 12 hours
 
@@ -26,7 +26,7 @@ export default function RootLayout({
       <body>
         <div className='drawer'>
           <input id='SideBar' type='checkbox' className='drawer-toggle' />
-          <ClientContextProvider>
+          <Providers>
             <div className='drawer-content flex flex-col'>
               <Navbar />
               <main>{children}</main>
@@ -35,7 +35,7 @@ export default function RootLayout({
               <label htmlFor='SideBar' className='drawer-overlay'></label>
               <Sidebar />
             </div>
-          </ClientContextProvider>
+          </Providers>
         </div>
         <SignInModal />
       </body>
