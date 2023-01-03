@@ -5,19 +5,12 @@ import {
   MdAssignment,
   MdOutlinePerson,
 } from 'react-icons/md'
-import { use, useContext } from 'react'
-import { UserContext } from '../../lib/client/UserContext'
-import { IdTokenResult, ParsedToken } from 'firebase/auth'
+import { useSession } from 'next-auth/react'
 
 export default function AdminSidebarSegment() {
-  const { user } = useContext(UserContext)
-  const tokenResult = user?.getIdTokenResult()
-  const claims =
-    tokenResult instanceof Promise<IdTokenResult>
-      ? (use(tokenResult)?.claims as ParsedToken)
-      : null
+  const { data, status } = useSession()
 
-  return user === null ? (
+  return status !== 'authenticated' ? (
     <>
       <p className={'text-center'}>
         Sign in to like plugins, leave comments, and follow authors!

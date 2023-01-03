@@ -14,13 +14,13 @@ import {
 } from 'react-icons/md'
 import Link from 'next/link'
 import { themeChange } from 'theme-change'
-import { useContext, useEffect } from 'react'
-import { UserContext } from '../../lib/client/UserContext'
+import { useEffect } from 'react'
 import { signOut } from 'firebase/auth'
 import { auth } from '../../lib/client/ClientFirebase'
+import { useSession } from 'next-auth/react'
 
 export default function UserPopup() {
-  const { user, username } = useContext(UserContext)
+  const { data, status } = useSession()
   useEffect(() => {
     themeChange(false) // false parameter is required for react project
   }, [])
@@ -30,14 +30,16 @@ export default function UserPopup() {
       className='menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-screen max-w-sm max-sm:max-w-xs max-sm:-left-72'>
       <div className={'my-1 mx-2 h-10 flex gap-2 block text-sm'}>
         <Image
-          src={user?.photoURL ?? missingImage}
+          src={data?.user?.image ?? missingImage}
           width={40}
           height={40}
           alt='User Icon'
           className='rounded-full'
         />
         <div>
-          <span className='block text-sm'>{username ?? 'Not logged in'}</span>
+          <span className='block text-sm'>
+            {data?.user?.name ?? 'Not logged in'}
+          </span>
         </div>
       </div>
       <li className={'divider divider-vertical h-0'}></li>
@@ -54,13 +56,13 @@ export default function UserPopup() {
         </Link>
       </li>
       <li>
-        {!user && (
+        {!data?.user && (
           <label htmlFor='SignIn'>
             <MdOutlineLogin size={24} />
             <span>Sign In</span>
           </label>
         )}
-        {user && (
+        {data?.user && (
           <button
             onMouseDown={(e: React.MouseEvent) => e.preventDefault()}
             onMouseUp={() => signOut(auth)}

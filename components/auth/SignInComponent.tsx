@@ -6,11 +6,10 @@ import {
   signInWithGoogle,
   signInWithTwitter,
 } from '../../lib/client/ClientFirebase'
-import { useContext } from 'react'
 import { doc, getFirestore, writeBatch } from 'firebase/firestore'
-import { UserContext } from '../../lib/client/UserContext'
 import * as z from 'zod'
 import { createTsForm, useDescription } from '@ts-react/form'
+import { useSession } from 'next-auth/react'
 
 function TextField({
   type,
@@ -62,17 +61,17 @@ const SignInSchema = z.object({
 })
 
 export default function SignInComponent() {
-  const { user, username } = useContext(UserContext)
+  const { data: userData, status } = useSession()
   async function onSubmit(data: z.infer<typeof SignInSchema>) {
     // Create refs for both documents if uid is valid
-    if (user?.uid) {
+    if (userData?.user) {
       const batch = writeBatch(getFirestore())
 
       const userDoc = doc(getFirestore(), 'users', user?.uid)
       batch.set(userDoc, {
         username: data.username,
-        photoURL: user?.photoURL,
-        displayName: user?.displayName,
+        photoURL: userData.user.image,
+        displayName: userData.user.name,
       })
 
       const usernameDoc = doc(getFirestore(), 'usernames', data.username)
