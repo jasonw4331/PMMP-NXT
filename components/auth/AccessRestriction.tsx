@@ -7,8 +7,8 @@ export default function AccessRestriction() {
   })
 
   if (status === 'loading') {
-    return 'Loading or not authenticated...'
+    return <div className={'loading'}>Loading...</div>
   }
 
-  return 'User is logged in'
+  return <div>User is logged in</div>
 }
