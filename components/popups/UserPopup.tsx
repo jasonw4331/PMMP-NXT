@@ -15,12 +15,10 @@ import {
 import Link from 'next/link'
 import { themeChange } from 'theme-change'
 import { useEffect } from 'react'
-import { signOut } from 'firebase/auth'
-import { auth } from '../../lib/client/ClientFirebase'
-import { useSession } from 'next-auth/react'
+import { signIn, signOut, useSession } from 'next-auth/react'
 
 export default function UserPopup() {
-  const { data, status } = useSession()
+  const { data } = useSession()
   useEffect(() => {
     themeChange(false) // false parameter is required for react project
   }, [])
@@ -59,13 +57,13 @@ export default function UserPopup() {
         {!data?.user && (
           <label htmlFor='SignIn'>
             <MdOutlineLogin size={24} />
-            <span>Sign In</span>
+            <span onMouseUp={async e => signIn()}>Sign In</span>
           </label>
         )}
         {data?.user && (
           <button
             onMouseDown={(e: React.MouseEvent) => e.preventDefault()}
-            onMouseUp={() => signOut(auth)}
+            onMouseUp={e => signOut({ callbackUrl: '/' })}
             onContextMenu={(e: React.MouseEvent) => e.preventDefault()}>
             <MdOutlineLogout size={24} />
             <span>Sign Out</span>

@@ -5,7 +5,7 @@ import {
   MdAssignment,
   MdOutlinePerson,
 } from 'react-icons/md'
-import { useSession } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 
 export default function AdminSidebarSegment() {
   const { data, status } = useSession()
@@ -16,9 +16,7 @@ export default function AdminSidebarSegment() {
         Sign in to like plugins, leave comments, and follow authors!
       </p>
       <li>
-        <label
-          htmlFor='SignIn'
-          onMouseUp={() => document.getElementById('SideBar')?.click()}>
+        <label htmlFor='SignIn' onMouseUp={e => signIn()}>
           <MdOutlinePerson size={24} />
           <span>Sign In</span>
         </label>
