@@ -1,4 +1,4 @@
-import 'server-only'
+//import 'server-only'
 import * as firebaseAdmin from 'firebase-admin'
 
 const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID
