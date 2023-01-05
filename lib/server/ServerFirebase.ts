@@ -7,12 +7,12 @@ const databaseURL = `https://${projectId}.firebaseio.com`
 const storageBucket = `${projectId}.appspot.com`
 //const messagingSenderId = process.env.NEXT_PUBLIC_FIREBASE_APP_ID?.split(':')[1] || ''
 
-const firebaseConfig: firebaseAdmin.AppOptions = {
+export const firebaseConfig: firebaseAdmin.AppOptions = {
   credential: firebaseAdmin.credential.cert({
     projectId,
-    clientEmail: process.env.FIREBASE_CLIENT_EMAIL as string,
-    privateKey: process.env.FIREBASE_PRIVATE_KEY as string,
-  } as firebaseAdmin.ServiceAccount),
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    privateKey: process.env.FIREBASE_PRIVATE_KEY,
+  }),
   databaseURL,
   serviceAccountId: process.env.FIREBASE_CLIENT_EMAIL,
   storageBucket,
