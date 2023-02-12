@@ -39,13 +39,7 @@ export default function UserPopup() {
             {session?.user?.name ?? 'Not logged in'}
           </span>
           <span className='block text-sm font-medium'>
-            {session?.user?.permissionLevel === 1
-              ? 'Developer'
-              : session?.user?.permissionLevel === 2
-              ? 'Reviwer'
-              : session?.user?.permissionLevel === 3
-              ? 'Admin'
-              : 'User'}{' '}
+            {session?.user?.userRole + ' '}
             Account
           </span>
         </div>
