@@ -20,7 +20,7 @@ specifiers:
   firebase: ^9.17.1
   firebase-admin: ^11.5.0
   gray-matter: ^4.0.3
-  next: ^13.1.6
+  next: latest
   next-auth: ^4.19.2
   next-pwa: ^5.6.0
   postcss: ^8.4.21
