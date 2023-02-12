@@ -10,7 +10,7 @@ import { signIn, useSession } from 'next-auth/react'
 export default function AdminSidebarSegment() {
   const { data: session } = useSession()
 
-  return session?.user?.permissionLevel < 1 ? (
+  return session?.user?.userRole === null ? (
     <>
       <p className={'text-center'}>
         Sign in to like plugins, leave comments, and follow authors!
@@ -31,7 +31,7 @@ export default function AdminSidebarSegment() {
           <span>Review Plugins</span>
         </Link>
       </li>
-      {session?.user?.permissionLevel === 3 && (
+      {session?.user?.userRole === 'admin' && (
         <li>
           <Link href={'/admin'} className={'pl-3'}>
             <MdAdminPanelSettings size={24} />

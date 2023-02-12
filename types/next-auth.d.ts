@@ -16,7 +16,6 @@ declare module 'next-auth' {
     user?: {
       /** The user's role. */
       userRole?: 'admin' | 'reviewer' | 'developer' | 'user'
-      permissionLevel: number
     } & DefaultSession['user']
   }
   /**
