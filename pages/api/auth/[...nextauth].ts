@@ -11,7 +11,7 @@ export default NextAuth({
     async jwt({ token, account, profile }) {
       // Persist the OAuth access_token to the token right after signin
       if (account != null && account.userId != null) {
-        const writer = firestore.bulkWriter()
+        const writer = firestore.batch()
         let user_role = (
           await firestore.collection('users').doc(account.userId).get()
         ).get('user_role').user_role
@@ -32,8 +32,7 @@ export default NextAuth({
           recent_submissions: [],
         })
 
-        await writer.flush()
-        await writer.close()
+        await writer.commit()
       }
       return token
     },
