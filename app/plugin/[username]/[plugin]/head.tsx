@@ -57,7 +57,7 @@ export default async function Head({
       <meta name='twitter:url' content='https://pmmp.io/nxt' />
       <meta name='twitter:title' content={pluginName + ' | PMMP NXT'} />
       <meta name='twitter:description' content={pluginData.tagline} />
-      <meta name='twitter:image' content={pluginData.iconUrl} />
+      <meta name='twitter:image' content={pluginData.icon_url} />
       <meta name='twitter:creator' content='@jasonwynn10' />
 
       <meta property='og:type' content='website' />
@@ -65,7 +65,7 @@ export default async function Head({
       <meta property='og:description' content={pluginData.tagline} />
       <meta property='og:site_name' content='PMMP NXT' />
       <meta property='og:url' content='https://pmmp.io/nxt' />
-      <meta property='og:image' content={pluginData.iconUrl} />
+      <meta property='og:image' content={pluginData.icon_url} />
     </>
   )
 }
