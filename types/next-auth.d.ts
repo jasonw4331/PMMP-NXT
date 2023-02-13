@@ -15,7 +15,7 @@ declare module 'next-auth' {
   interface Session extends DefaultSession {
     user?: {
       /** The user's role. */
-      userRole?: 'admin' | 'reviewer' | 'developer' | 'user'
+      user_role?: 'admin' | 'reviewer' | 'developer' | 'user'
     } & DefaultSession['user']
   }
   /**
@@ -35,6 +35,6 @@ declare module 'next-auth' {
 declare module 'next-auth/jwt' {
   interface JWT extends Record<string, unknown>, DefaultJWT {
     /** The user's role. */
-    userRole?: 'admin' | 'reviewer' | 'developer' | 'user'
+    user_role?: 'admin' | 'reviewer' | 'developer' | 'user'
   }
 }

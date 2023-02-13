@@ -39,8 +39,9 @@ export default function UserPopup() {
             {session?.user?.name ?? 'Not logged in'}
           </span>
           <span className='block text-sm font-medium'>
-            {session?.user?.userRole + ' '}
-            Account
+            {session?.user?.user_role != null
+              ? session.user.user_role + ' Account'
+              : ''}
           </span>
         </div>
       </div>
