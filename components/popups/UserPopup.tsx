@@ -46,18 +46,22 @@ export default function UserPopup() {
         </div>
       </div>
       <li className={'divider divider-vertical h-0'}></li>
-      <li>
-        <Link href={'/user/username'} prefetch={false}>
-          <MdOutlinePerson size={24} />
-          <span>My Profile</span>
-        </Link>
-      </li>
-      <li>
-        <Link href={'/admin'} prefetch={false}>
-          <MdAdminPanelSettings size={24} />
-          <span>Admin Panel</span>
-        </Link>
-      </li>
+      {session?.user?.name != null && (
+        <li>
+          <Link href={'/user/' + encodeURI(session.user.name)} prefetch={false}>
+            <MdOutlinePerson size={24} />
+            <span>My Profile</span>
+          </Link>
+        </li>
+      )}
+      {session?.user?.user_role === 'admin' && (
+        <li>
+          <Link href={'/admin'} prefetch={false}>
+            <MdAdminPanelSettings size={24} />
+            <span>Admin Panel</span>
+          </Link>
+        </li>
+      )}
       <li>
         {!session?.user && (
           <label htmlFor='SignIn'>
