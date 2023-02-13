@@ -26,10 +26,16 @@ export type CardData = {
 
 export async function getTrending(): Promise<CardData[]> {
   const docs = []
-  const snapshot = await firestore
-    .collectionGroup('plugins')
-    .where('release_status', '==', 2)
-    .get()
+  let snapshot: QuerySnapshot<DocumentData>
+  try {
+    snapshot = await firestore
+      .collectionGroup('plugins')
+      .where('release_status', '==', 2)
+      .get()
+  } catch (e) {
+    console.log(e)
+    return []
+  }
   for (const doc of snapshot.docs) {
     if (doc.ref.parent.parent === null) continue // filter plugins without user docs
     const userDoc = await doc.ref.parent.parent.get()
@@ -49,10 +55,16 @@ export async function getTrending(): Promise<CardData[]> {
 
 export async function getReleases(): Promise<CardData[]> {
   const docs = []
-  const snapshot = await firestore
-    .collectionGroup('plugins')
-    .where('release_status', '==', 2)
-    .get()
+  let snapshot: QuerySnapshot<DocumentData>
+  try {
+    snapshot = await firestore
+      .collectionGroup('plugins')
+      .where('release_status', '==', 2)
+      .get()
+  } catch (e) {
+    console.log(e)
+    return []
+  }
   for (const doc of snapshot.docs) {
     if (doc.ref.parent.parent === null) continue // filter plugins without user docs
     const userDoc = await doc.ref.parent.parent.get()
@@ -72,10 +84,16 @@ export async function getReleases(): Promise<CardData[]> {
 
 export async function getSubmitted(): Promise<CardData[]> {
   const docs = []
-  const snapshot = await firestore
-    .collectionGroup('plugins')
-    .where('release_status', '==', 1)
-    .get()
+  let snapshot: QuerySnapshot<DocumentData>
+  try {
+    snapshot = await firestore
+      .collectionGroup('plugins')
+      .where('release_status', '==', 1)
+      .get()
+  } catch (e) {
+    console.log(e)
+    return []
+  }
   for (const doc of snapshot.docs) {
     if (doc.ref.parent.parent === null) continue // filter plugins without user docs
     const userDoc = await doc.ref.parent.parent.get()
