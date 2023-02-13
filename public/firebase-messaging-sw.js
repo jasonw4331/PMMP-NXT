@@ -2,9 +2,11 @@
 // Note that you can only use Firebase Messaging here. Other Firebase libraries
 // are not available in the service worker.
 importScripts('./localforage.min.js')
-importScripts('https://www.gstatic.com/firebasejs/9.2.0/firebase-app-compat.js')
 importScripts(
-  'https://www.gstatic.com/firebasejs/9.2.0/firebase-messaging-compat.js'
+  'https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js'
+)
+importScripts(
+  'https://www.gstatic.com/firebasejs/9.17.1/firebase-messaging-compat.js'
 )
 
 // Initialize the Firebase app in the service worker by passing in
