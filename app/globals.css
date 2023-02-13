@@ -6,28 +6,29 @@
  * Handle default colorscheme and backgrounds and enable switching
  */
 
-@media(prefers-color-scheme: dark) {
-    :root {
-        background-image: url('/background.png');
-        background-repeat: repeat;
-    }
-}
-
-@media(prefers-color-scheme: light) {
-    :root {
-        background-image: url('/light-background.png');
-        background-repeat: repeat;
-    }
-}
-
-[data-theme="light"] {
-    background-image: url('/light-background.png');
-    background-repeat: repeat;
-}
-
-[data-theme="dark"], [data-theme="business"] {
+@media (prefers-color-scheme: dark) {
+  :root {
     background-image: url('/background.png');
     background-repeat: repeat;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    background-image: url('/light-background.png');
+    background-repeat: repeat;
+  }
+}
+
+[data-theme='light'] {
+  background-image: url('/light-background.png');
+  background-repeat: repeat;
+}
+
+[data-theme='dark'],
+[data-theme='business'] {
+  background-image: url('/background.png');
+  background-repeat: repeat;
 }
 
 /*
@@ -37,93 +38,93 @@
 /* Updates the background, border, and text color of the input when it is valid */
 input:valid.input-valid,
 input:in-range.input-valid {
-    --tw-border-opacity: 1;
-    border-color: hsl(var(--su) / var(--tw-border-opacity));
-    --tw-bg-opacity: 1;
-    background-color: hsl(var(--su) / var(--tw-bg-opacity));
-    --tw-text-opacity: 1;
-    color: hsl(var(--suc, var(--nc)) / var(--tw-text-opacity));
+  --tw-border-opacity: 1;
+  border-color: hsl(var(--su) / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: hsl(var(--su) / var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: hsl(var(--suc, var(--nc)) / var(--tw-text-opacity));
 }
 
 /* Updates the background, border, and text color of the input when it is valid while the input is focused */
 input:valid:hover.input-valid,
 input:in-range.btn-active.input-valid {
-    --tw-border-opacity: 1;
-    border-color: hsl(var(--su) / var(--tw-border-opacity));
-    --tw-bg-opacity: 1;
-    background-color: hsl(var(--su) / var(--tw-bg-opacity));
+  --tw-border-opacity: 1;
+  border-color: hsl(var(--su) / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: hsl(var(--su) / var(--tw-bg-opacity));
 }
 
 /* Outlines the input when it is valid while focus is visible */
 input:valid:focus-visible.input-valid,
 input:in-range:focus-visible.input-valid {
-    outline: 2px solid hsl(var(--su));
+  outline: 2px solid hsl(var(--su));
 }
 
 /* Changes visibility of a neighboring label when the input is invalid */
 input:invalid.input-valid ~ label.input-valid,
 input:out-of-range.input-valid ~ label.input-valid {
-    visibility: hidden;
-    display: none;
+  visibility: hidden;
+  display: none;
 }
 
 /* Changes visibility of a neighboring label when the input is invalid */
-input:invalid:hover.input-valid ~ label.input-valid ,
+input:invalid:hover.input-valid ~ label.input-valid,
 input:out-of-range.btn-active.input-valid ~ label.input-valid {
-    visibility: hidden;
-    display: none;
+  visibility: hidden;
+  display: none;
 }
 
 /* Changes visibility of a neighboring label when the input is invalid */
 input:invalid:focus-visible.input-valid ~ label.input-valid,
 input:out-of-range:focus-visible.input-valid ~ label.input-valid {
-    visibility: hidden;
-    display: none;
+  visibility: hidden;
+  display: none;
 }
 
 /* Updates the background, border, and text color of the input when it is invalid */
 input:invalid.input-invalid,
 input:out-of-range.input-invalid {
-    --tw-border-opacity: 1;
-    border-color: hsl(var(--er) / var(--tw-border-opacity));
-    --tw-bg-opacity: 1;
-    background-color: hsl(var(--er) / var(--tw-bg-opacity));
-    --tw-text-opacity: 1;
-    color: hsl(var(--erc, var(--nc)) / var(--tw-text-opacity));
+  --tw-border-opacity: 1;
+  border-color: hsl(var(--er) / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: hsl(var(--er) / var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: hsl(var(--erc, var(--nc)) / var(--tw-text-opacity));
 }
 
 /* Updates the background, border, and text color of the input when it is invalid while the input is focused */
 input:invalid:hover.input-invalid,
 input:out-of-range.btn-active.input-invalid {
-    --tw-border-opacity: 1;
-    border-color: hsl(var(--er) / var(--tw-border-opacity));
-    --tw-bg-opacity: 1;
-    background-color: hsl(var(--er) / var(--tw-bg-opacity));
+  --tw-border-opacity: 1;
+  border-color: hsl(var(--er) / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: hsl(var(--er) / var(--tw-bg-opacity));
 }
 
 /* Outlines the input when it is invalid while focus is visible */
 input:invalid:focus-visible.input-invalid,
 input:out-of-range:focus-visible.input-invalid {
-    outline: 2px solid hsl(var(--er));
+  outline: 2px solid hsl(var(--er));
 }
 
 /* Changes visibility of a neighboring label when the input is invalid */
 input:invalid.input-invalid ~ label.input-invalid,
 input:out-of-range.input-invalid ~ label.input-invalid {
-    visibility: visible;
-    display: contents;
+  visibility: visible;
+  display: contents;
 }
 
 /* Changes visibility of a neighboring label when the input is invalid */
-input:invalid:hover.input-invalid ~ label.input-invalid ,
+input:invalid:hover.input-invalid ~ label.input-invalid,
 input:out-of-range.btn-active.input-invalid ~ label.input-invalid {
-    visibility: visible;
-    display: contents;
+  visibility: visible;
+  display: contents;
 }
 
 /* Changes visibility of a neighboring label when the input is invalid */
 input:invalid:focus-visible.input-invalid ~ label.input-invalid,
 input:out-of-range:focus-visible.input-invalid ~ label.input-invalid {
-    visibility: visible;
-    display: contents;
+  visibility: visible;
+  display: contents;
 }
