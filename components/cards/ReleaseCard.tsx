@@ -6,14 +6,14 @@ export default function ReleaseCard({
   name,
   author,
   tagline,
-  downloadUrl = '/404',
-  iconUrl = missingImage,
+  download_url = '/404',
+  icon_url = missingImage,
 }: {
   name: string
   author: string
   tagline: string
-  downloadUrl: string
-  iconUrl: string | StaticImageData
+  download_url: string
+  icon_url: string | StaticImageData
 }) {
   return (
     <li
@@ -21,11 +21,11 @@ export default function ReleaseCard({
       title={'made by ' + author}>
       <figure className={'px-10 pt-10'}>
         <Image
-          src={iconUrl}
+          src={icon_url}
           alt='Plugin Icon'
           width={205}
           height={205}
-          placeholder={typeof iconUrl === 'string' ? 'empty' : 'blur'}
+          placeholder={typeof icon_url === 'string' ? 'empty' : 'blur'}
           loading={'lazy'}
           className={'rounded-xl'}></Image>
       </figure>
@@ -42,7 +42,7 @@ export default function ReleaseCard({
             </Link>
           </button>
           <button className='btn btn-secondary'>
-            <Link href={downloadUrl}>Download</Link>
+            <Link href={download_url}>Download</Link>
           </button>
         </div>
       </div>

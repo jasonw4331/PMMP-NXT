@@ -8,7 +8,7 @@ import { firestore } from '../../../lib/server/ServerFirebase'
 // https://next-auth.js.org/configuration/options
 export default NextAuth({
   callbacks: {
-    async jwt({ token, account }) {
+    async jwt({ token, account, profile }) {
       // Persist the OAuth access_token to the token right after signin
       if (account != null && account.userId != null) {
         const writer = firestore.bulkWriter()
