@@ -16,7 +16,7 @@ export default function Sidebar() {
   return (
     <ul
       className={
-        'menu p-2 w-60 h-screen bg-base-100 overflow-x-hidden flex-nowrap'
+        'menu p-2 w-60 h-screen bg-base-300 overflow-x-hidden flex-nowrap'
       }>
       <div className={'flex pl-0'}>
         <label htmlFor='SideBar' className='btn btn-circle btn-ghost'>
