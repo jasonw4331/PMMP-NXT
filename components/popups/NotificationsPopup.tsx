@@ -21,7 +21,7 @@ export default function NotificationsPopup() {
       <li className={'divider divider-vertical h-0'}></li>
       <li>
         {notifications.length < 1 && (
-          <span>You don't have any notifications!</span>
+          <span>You don&apos;t have any notifications!</span>
         )}
       </li>
     </ul>

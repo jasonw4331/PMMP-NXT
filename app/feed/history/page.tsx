@@ -13,7 +13,9 @@ export default function HistoryPage() {
           <h3 className={'mb-4 text-2xl leading-8'}>
             Keep track of what you view
           </h3>
-          <p className={'mt-2'}>Page history isn't viewable when signed out.</p>
+          <p className={'mt-2'}>
+            Page history isn&apos;t viewable when signed out.
+          </p>
         </div>
         <Link className={'btn btn-outline rounded-xl gap-3'} href={'/login'}>
           <MdOutlinePerson size={24} />

@@ -10,7 +10,9 @@ export default function WatchingPage() {
         }>
         <MdLibraryAdd className={'self-center'} size={120} />
         <div className={'my-6'}>
-          <h3 className={'mb-4 text-2xl leading-8'}>Don't miss new updates</h3>
+          <h3 className={'mb-4 text-2xl leading-8'}>
+            Don&apos;t miss new updates
+          </h3>
           <p className={'mt-2'}>
             Sign in to see updates for your favorite plugins
           </p>
