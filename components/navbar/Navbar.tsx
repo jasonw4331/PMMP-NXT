@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import SearchForm from './SearchForm'
-import { FaWrench, MdApps, MdSearch } from 'react-icons/all'
+import { FaWrench } from 'react-icons/fa'
+import { MdApps, MdSearch } from 'react-icons/md'
 import AppsPopup from '../popups/AppsPopup'
 import NotificationsPopup from '../popups/NotificationsPopup'
 import NotificationsBadge from './NotificationsBadge'

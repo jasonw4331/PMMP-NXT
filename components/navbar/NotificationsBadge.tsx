@@ -1,5 +1,6 @@
 'use client'
-import { IoMdNotificationsOutline } from 'react-icons/all'
+
+import { IoMdNotificationsOutline } from 'react-icons/io'
 
 export default function NotificationsBadge() {
   // TODO: Add notification count from service worker

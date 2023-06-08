@@ -1,12 +1,10 @@
 import Link from 'next/link'
-import {
-  CgWebsite,
-  FaGithub,
-  IoLogoDiscord,
-  IoMdGitPullRequest,
-  MdOutlineForum,
-  TiDocumentText,
-} from 'react-icons/all'
+import { IoMdGitPullRequest } from 'react-icons/io'
+import { MdOutlineForum } from 'react-icons/md'
+import { FaGithub } from 'react-icons/fa'
+import { TiDocumentText } from 'react-icons/ti'
+import { CgWebsite } from 'react-icons/cg'
+import { IoLogoDiscord } from 'react-icons/io5'
 
 export default function AppsPopup() {
   return (

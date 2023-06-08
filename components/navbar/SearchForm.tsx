@@ -1,6 +1,6 @@
 'use client'
 import { useRouter } from 'next/navigation'
-import { MdSearch } from 'react-icons/all'
+import { MdSearch } from 'react-icons/md'
 
 export default function SearchForm() {
   const router = useRouter()
