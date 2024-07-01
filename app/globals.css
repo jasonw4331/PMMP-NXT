@@ -7,27 +7,24 @@
  */
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    background-image: url('/background.png');
-    background-repeat: repeat;
-  }
+  --background-image: url('/background.png');
 }
 
 @media (prefers-color-scheme: light) {
-  :root {
-    background-image: url('/light-background.png');
-    background-repeat: repeat;
-  }
+  --background-image: url('/light-background.png');
 }
 
 [data-theme='light'] {
-  background-image: url('/light-background.png');
-  background-repeat: repeat;
+  --background-image: url('/light-background.png');
 }
 
 [data-theme='dark'],
 [data-theme='business'] {
-  background-image: url('/background.png');
+  --background-image: url('/background.png');
+}
+
+:root {
+  background-image: var(--background-image);
   background-repeat: repeat;
 }
 
