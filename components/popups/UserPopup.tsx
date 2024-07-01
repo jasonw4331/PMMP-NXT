@@ -1,27 +1,21 @@
-'use client'
-import missingImage from '../../public/icons/missing.png'
-import Image from 'next/image'
+import missingImage from '@/public/icons/missing.png'
+import Image from 'next/legacy/image'
 import {
   MdAdminPanelSettings,
   MdHelpOutline,
-  MdOutlineDarkMode,
   MdOutlineFeedback,
-  MdOutlineLightMode,
   MdOutlineLogin,
   MdOutlineLogout,
   MdOutlinePerson,
   MdSettings,
 } from 'react-icons/md'
 import Link from 'next/link'
-import { themeChange } from 'theme-change'
-import { useEffect } from 'react'
+import ThemeSwapper from '@/components/ThemeSwapper'
 import { signIn, signOut, useSession } from 'next-auth/react'
 
-export default function UserPopup() {
-  const { data: session } = useSession()
-  useEffect(() => {
-    themeChange(false) // false parameter is required for react project
-  }, [])
+export default async function UserPopup() {
+  const { data, status } = await useSession()
+
   return (
     <ul
       tabIndex={0}

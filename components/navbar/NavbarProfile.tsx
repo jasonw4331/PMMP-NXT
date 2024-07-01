@@ -1,11 +1,11 @@
 'use client'
-import Image from 'next/image'
+import Image from 'next/legacy/image'
 import missingImage from '../../public/icons/missing.png'
 import UserPopup from '../popups/UserPopup'
 import { useSession } from 'next-auth/react'
 
-export default function NavbarProfile() {
-  const { data, status } = useSession()
+export default async function NavbarProfile() {
+  const { data, status } = await useSession()
   return (
     <>
       <label tabIndex={0} className='btn btn-ghost btn-square avatar'>

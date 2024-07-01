@@ -1,5 +1,3 @@
-import { getTrending } from '../../../lib/server/ServerFirestoreQueries'
-
 export default async function TrendingHead() {
   const data = await getTrending()
 

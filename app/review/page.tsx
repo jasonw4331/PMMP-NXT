@@ -1,5 +1,4 @@
 import ReleaseCard from '../../components/cards/ReleaseCard'
-import { getSubmitted } from '../../lib/server/ServerFirestoreQueries'
 import AccessRestriction from '../../components/auth/AccessRestriction'
 import { Suspense } from 'react'
 import Loading from './loading'

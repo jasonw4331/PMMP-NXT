@@ -2,20 +2,18 @@ const withPWA = require('next-pwa')({
   dest: 'public',
   sw: '/sw.js',
   disable: process.env.NODE_ENV === 'development',
-  buildExcludes: [/chunks\/images\/.*$/],
-  publicExcludes: ['!noprecache/**/*'],
   cacheOnFrontEndNav: true,
 })
 
-/** @type {import('next').NextConfig} */
-module.exports = withPWA({
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+})
+
+const nextConfig = {
   reactStrictMode: true,
-  experimental: {
-    appDir: true,
-  },
   images: {
     domains: [
-      'lh3.googleusercontent.com',
+      '*.googleusercontent.com',
       'raw.githubusercontent.com',
       'avatars.githubusercontent.com',
     ],
@@ -35,4 +33,8 @@ module.exports = withPWA({
     ]
   },
   swcMinify: true,
-})
+  output: 'standalone',
+}
+
+/** @type {import('next').NextConfig} */
+module.exports = withBundleAnalyzer(withPWA(nextConfig))

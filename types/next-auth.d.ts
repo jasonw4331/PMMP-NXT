@@ -1,40 +1,26 @@
-import {
-  Account as DefaultAccount,
-  DefaultSession,
-  DefaultUser,
-  Profile as DefaultProfile,
-} from 'next-auth'
-import { DefaultJWT } from 'next-auth/jwt/types'
-
-// Read more at: https://next-auth.js.org/getting-started/typescript#module-augmentation
+import { type DefaultSession } from 'next-auth'
+import { type DefaultJWT } from 'next-auth/jwt'
 
 declare module 'next-auth' {
-  /**
-   * Returned by `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
-   */
+  // Returned by `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
   interface Session extends DefaultSession {
-    user?: {
+    // A JWT which can be used as Authorization header with supabase-js for RLS.
+    supabaseAccessToken?: string
+    user: {
       /** The user's role. */
       user_role?: 'admin' | 'reviewer' | 'developer' | 'user'
     } & DefaultSession['user']
+    error?: 'RefreshAccessTokenError'
   }
-  /**
-   * The shape of the user object returned in the OAuth providers' `profile` callback,
-   * or the second parameter of the `session` callback, when using a database.
-   */
-  interface User extends DefaultUser {}
-  /**
-   * Usually contains information about the provider being used
-   * and also extends `TokenSet`, which is different tokens returned by OAuth Providers.
-   */
-  interface Account extends DefaultAccount {}
-  /** The OAuth profile returned from your provider */
-  interface Profile extends DefaultProfile {}
 }
 
 declare module 'next-auth/jwt' {
   interface JWT extends Record<string, unknown>, DefaultJWT {
     /** The user's role. */
     user_role?: 'admin' | 'reviewer' | 'developer' | 'user'
+    access_token: string
+    expires_at: number
+    refresh_token: string
+    error?: 'RefreshAccessTokenError'
   }
 }
