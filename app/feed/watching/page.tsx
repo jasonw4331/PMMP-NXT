@@ -3,7 +3,15 @@ import Link from 'next/link'
 import ReleaseCard from '@/components/cards/ReleaseCard'
 
 export default async function WatchingPage() {
-  const releases = [] //await getReleases()
+  const releases = [
+    {
+      id: 'Plugin_v1.0.0',
+      author: 'Author',
+      tagline: 'Tagline',
+      download_url: '/404',
+      icon_url: '/icons/missing.png',
+    },
+  ] //await getReleases()
   return (
     <>
       {releases ? (

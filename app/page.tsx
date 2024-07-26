@@ -1,7 +1,15 @@
 import ReleaseCard from '@/components/cards/ReleaseCard'
 
 export default async function HomePage() {
-  const data = [] //await getReleases()
+  const data = [
+    {
+      id: 'Plugin_v1.0.0',
+      author: 'Author',
+      tagline: 'A tagline',
+      download_url: 'https://github.com',
+      icon_url: 'https://via.placeholder.com/150',
+    },
+  ] //await getReleases()
   return (
     <ul className={'pt-2 flex flex-wrap gap-x-5 gap-y-10 justify-center'}>
       {data.map(doc => (

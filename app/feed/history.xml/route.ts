@@ -15,7 +15,17 @@ export async function GET() {
     ttl: 60,
   })
 
-  const allPosts = await getHistory()
+  const allPosts = [
+    {
+      id: 'Plugin_v1.0.0',
+      title: 'Test',
+      description: 'Test',
+      url: `https://${process.env.NEXT_BASE_URL}/posts/1`,
+      categories: ['test'],
+      tags: ['test'],
+      date: new Date().toUTCString(),
+    },
+  ] //await getHistory()
 
   if (allPosts) {
     allPosts.map(post => {
