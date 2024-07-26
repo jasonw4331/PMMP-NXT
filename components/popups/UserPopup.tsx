@@ -4,17 +4,18 @@ import {
   MdAdminPanelSettings,
   MdHelpOutline,
   MdOutlineFeedback,
-  MdOutlineLogin,
   MdOutlineLogout,
   MdOutlinePerson,
   MdSettings,
 } from 'react-icons/md'
 import Link from 'next/link'
 import ThemeSwapper from '@/components/ThemeSwapper'
-import { signIn, signOut, useSession } from 'next-auth/react'
+import { signOut } from 'next-auth/react'
+import { auth } from '@/auth'
+import SignInButton from '@/components/auth/SignInButton'
 
 export default async function UserPopup() {
-  const { data, status } = await useSession()
+  const session = await auth()
 
   return (
     <ul
@@ -57,13 +58,9 @@ export default async function UserPopup() {
         </li>
       )}
       <li>
-        {!session?.user && (
-          <label htmlFor='SignIn'>
-            <MdOutlineLogin size={24} />
-            <span onMouseUp={async e => signIn()}>Sign In</span>
-          </label>
-        )}
-        {session?.user && (
+        {!session?.user ? (
+          <SignInButton />
+        ) : (
           <button
             onMouseDown={(e: React.MouseEvent) => e.preventDefault()}
             onMouseUp={e => signOut({ callbackUrl: '/' })}

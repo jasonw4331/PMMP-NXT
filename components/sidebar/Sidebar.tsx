@@ -48,6 +48,9 @@ export default function Sidebar() {
           <span>Explore</span>
         </Link>
       </li>
+      <SignedInSidebarSegmentLazy />
+      <li className={'divider divider-vertical pl-0'}></li>
+      <AdminSidebarSegmentLazy />
       <li>
         <Link href={'/feed/following'} className={'pl-3'}>
           <MdBookmarks size={24} />

@@ -1,45 +1,41 @@
-'use client'
 import Link from 'next/link'
-import {
-  MdAdminPanelSettings,
-  MdAssignment,
-  MdOutlinePerson,
-} from 'react-icons/md'
-import { signIn, useSession } from 'next-auth/react'
+import { MdAdminPanelSettings, MdAssignment } from 'react-icons/md'
+import { auth } from '@/auth'
+import SignInButton from '@/components/auth/SignInButton'
 
-export default function AdminSidebarSegment() {
-  const { data: session } = useSession()
+export default async function AdminSidebarSegment() {
+  const session = await auth()
 
-  return session?.user?.user_role === null ? (
+  return !session?.user.role ? (
     <>
       <p className={'text-center'}>
         Sign in to like plugins, leave comments, and follow authors!
       </p>
       <li>
-        <label htmlFor='SignIn' onMouseUp={e => signIn()}>
-          <MdOutlinePerson size={24} />
-          <span>Sign In</span>
-        </label>
+        <SignInButton />
       </li>
-      <li className={'divider pl-0'}></li>
+      <li className={'divider divider-vertical pl-0'}></li>
     </>
   ) : (
     <>
-      <li>
-        <Link href={'/review'} className={'pl-3'}>
-          <MdAssignment size={24} />
-          <span>Review Plugins</span>
-        </Link>
-      </li>
-      {session?.user?.user_role === 'admin' && (
+      {(session?.user.role === 'reviewer' ||
+        session?.user.role === 'admin') && (
         <li>
-          <Link href={'/admin'} className={'pl-3'}>
+          <Link href={'/review'} className={'pl-3'} prefetch={false}>
+            <MdAssignment size={24} />
+            <span>Review Plugins</span>
+          </Link>
+        </li>
+      )}
+      {session?.user.role === 'admin' && (
+        <li>
+          <Link href={'/admin'} className={'pl-3'} prefetch={false}>
             <MdAdminPanelSettings size={24} />
             <span>Admin Panel</span>
           </Link>
         </li>
       )}
-      <li className={'divider pl-0'}></li>
+      <li className={'divider divider-vertical pl-0'}></li>
     </>
   )
 }
