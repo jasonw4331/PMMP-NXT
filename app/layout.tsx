@@ -1,6 +1,5 @@
-/* eslint-disable @next/next/no-head-element */
-import './globals.css'
-import Navbar from '../components/navbar/Navbar'
+import '@/app/globals.css'
+import Navbar from '@/components/navbar/Navbar'
 import { Linefont, Noto_Sans, Wavefont } from 'next/font/google'
 import Sidebar from '@/components/sidebar/Sidebar'
 

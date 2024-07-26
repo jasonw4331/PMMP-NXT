@@ -1,4 +1,4 @@
-import RootLayout from '../layout'
+import RootLayout from '@/app/layout'
 
 export const revalidate = 0
 

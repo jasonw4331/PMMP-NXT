@@ -1,4 +1,4 @@
-import ReleaseCard from '../components/cards/ReleaseCard'
+import ReleaseCard from '@/components/cards/ReleaseCard'
 
 export default async function HomePage() {
   const data = [] //await getReleases()
