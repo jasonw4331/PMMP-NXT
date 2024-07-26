@@ -1,5 +1,4 @@
 import RSS from 'rss'
-import { getPostsMeta } from '@/lib/posts'
 
 export async function GET() {
   const feed = new RSS({
@@ -16,7 +15,7 @@ export async function GET() {
     ttl: 60,
   })
 
-  const allPosts = await getPostsMeta()
+  const allPosts = [] //await getPostsMeta()
 
   if (allPosts) {
     allPosts.map(post => {
