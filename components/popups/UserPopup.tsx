@@ -9,7 +9,7 @@ import {
   MdSettings,
 } from 'react-icons/md'
 import Link from 'next/link'
-import ThemeSwapper from '@/components/ThemeSwapper'
+import ThemeSwapper from '@/components/popups/ThemeSwapper'
 import { signOut } from 'next-auth/react'
 import { auth } from '@/auth'
 import SignInButton from '@/components/auth/SignInButton'
