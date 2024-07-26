@@ -1,7 +1,5 @@
-import { getReleases } from '../lib/server/ServerFirestoreQueries'
-
 export default async function Head() {
-  const data = await getReleases()
+  const data = [] //await getReleases()
 
   return (
     <>
