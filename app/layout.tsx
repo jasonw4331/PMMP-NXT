@@ -43,7 +43,10 @@ export default async function RootLayout({
             <main>{children}</main>
           </div>
           <div className='drawer-side'>
-            <label htmlFor='SideBar' className='drawer-overlay'></label>
+            <label
+              htmlFor='SideBar'
+              aria-label='close sidebar'
+              className='drawer-overlay'></label>
             <Sidebar />
           </div>
         </div>
