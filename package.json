@@ -42,6 +42,7 @@
     "@types/node": "18.11.3",
     "@types/react": "18.0.21",
     "@types/react-dom": "18.0.6",
+    "@types/rss": "^0.0.32",
     "autoprefixer": "^10.4.19",
     "cors": "^2.8.5",
     "cssnano": "^5.1.15",
