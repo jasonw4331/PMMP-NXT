@@ -6,25 +6,17 @@
  * Handle default colorscheme and backgrounds and enable switching
  */
 
-@media (prefers-color-scheme: dark) {
-  --background-image: url('/background.png');
-}
-
-@media (prefers-color-scheme: light) {
+:root &[data-theme='light'] {
   --background-image: url('/light-background.png');
 }
 
-[data-theme='light'] {
-  --background-image: url('/light-background.png');
-}
-
-[data-theme='dark'],
-[data-theme='business'] {
+:root &[data-theme='dark'],
+&[data-theme='business'] {
   --background-image: url('/background.png');
 }
 
 :root {
-  background-image: var(--background-image);
+  background-image: var(--background-image, url('/light-background.png'));
   background-repeat: repeat;
 }
 
