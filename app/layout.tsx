@@ -32,9 +32,7 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html
-      lang={'en'}
-      className={`${noto_sans.variable} ${linefont.variable} ${wavefont.variable}`}>
+    <html lang={'en'} className={`font-sans`}>
       <body>
         <div className='drawer'>
           <input id='SideBar' type='checkbox' className='drawer-toggle' />

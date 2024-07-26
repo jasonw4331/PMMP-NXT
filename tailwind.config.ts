@@ -1,5 +1,7 @@
 import type { Config } from 'tailwindcss'
 
+const defaultTheme = require('tailwindcss/defaultTheme')
+
 export default {
   content: [
     './app/**/*.{js,ts,jsx,tsx}',
@@ -9,9 +11,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        NotoSans: ['var(--font-noto-sans)', 'Noto Sans'],
-        Line: ['var(--font-line)', 'Line'],
-        Wave: ['var(--font-wave)', 'Wave'],
+        sans: ['var(--font-noto-sans)', ...defaultTheme.fontFamily.sans],
+        mono: ['var(--font-roboto-mono)', ...defaultTheme.fontFamily.mono],
       },
     },
   },
