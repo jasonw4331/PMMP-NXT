@@ -8,6 +8,7 @@ const noto_sans = Noto_Sans({
   style: ['normal'],
   display: 'swap',
   variable: '--font-noto-sans',
+  subsets: ['latin'],
 })
 
 const linefont = Linefont({
