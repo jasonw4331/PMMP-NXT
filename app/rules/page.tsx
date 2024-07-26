@@ -12,7 +12,7 @@ export default function RulesPage() {
       className={
         'mx-6 pt-6 lg:mx-24 lg:pt-24 prose prose-p:font-semibold prose-sm sm:prose-base md:prose-lg lg:prose-xl max-w-none'
       }>
-      <ReactMarkdown children={source} remarkPlugins={[remarkGfm]} />
+      <ReactMarkdown remarkPlugins={[remarkGfm]}>{source}</ReactMarkdown>
     </article>
   )
 }
