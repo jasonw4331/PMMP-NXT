@@ -27,7 +27,7 @@ export default {
 
   // daisyUI config (optional)
   daisyui: {
-    themes: false,
+    themes: ['business', 'emerald'],
     darkTheme: 'business',
     base: true,
     styled: true,

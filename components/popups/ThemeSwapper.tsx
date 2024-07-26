@@ -18,7 +18,7 @@ export default function ThemeSwapper() {
     // apply data-theme to the document to maintain sync with the theme
     document.documentElement.setAttribute(
       'data-theme',
-      isDark ? 'business' : 'light'
+      isDark ? 'business' : 'emerald'
     )
   }, [isDark])
   return (
@@ -28,7 +28,7 @@ export default function ThemeSwapper() {
       <input
         id={'theme-swap'}
         type={'checkbox'}
-        value={'dark'}
+        value={'business'}
         defaultChecked={isDark}
         onClick={() => setIsDark(!isDark)}
         className='theme-controller invisible'
