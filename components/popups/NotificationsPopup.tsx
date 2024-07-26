@@ -18,7 +18,7 @@ export default function NotificationsPopup() {
           <MdSettings size={24} />
         </Link>
       </div>
-      <li className={'divider divider-vertical h-0'}></li>
+      <li className={'divider h-1'} />
       <li>
         {notifications.length < 1 && (
           <span>You don&apos;t have any notifications!</span>

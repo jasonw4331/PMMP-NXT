@@ -14,7 +14,7 @@ export default async function AdminSidebarSegment() {
       <li>
         <SignInButton />
       </li>
-      <li className={'divider divider-vertical pl-0'}></li>
+      <li className={'divider pl-0 h-1'} />
     </>
   ) : (
     <>
@@ -35,7 +35,7 @@ export default async function AdminSidebarSegment() {
           </Link>
         </li>
       )}
-      <li className={'divider divider-vertical pl-0'}></li>
+      <li className={'divider pl-0 h-1'} />
     </>
   )
 }

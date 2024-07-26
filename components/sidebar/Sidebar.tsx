@@ -53,7 +53,7 @@ export default function Sidebar() {
         </Link>
       </li>
       <SignedInSidebarSegmentLazy />
-      <li className={'divider divider-vertical pl-0'}></li>
+      <li className={'divider pl-0 h-1'} />
       <AdminSidebarSegmentLazy />
       <li>
         <Link href={'/settings'} className={'pl-3'} prefetch={false}>

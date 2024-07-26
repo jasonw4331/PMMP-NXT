@@ -12,7 +12,7 @@ export default async function SignedInSidebarSegment() {
           <span>Followed Authors</span>
         </Link>
       </li>
-      <li className={'divider divider-vertical pl-0'}></li>
+      <li className={'divider pl-0 h-1'} />
       <li>
         <Link href={'/feed/watching'} className={'pl-3'} prefetch={false}>
           <MdLibraryAdd size={24} />

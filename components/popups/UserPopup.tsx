@@ -45,7 +45,7 @@ export default async function UserPopup() {
           </span>
         </div>
       </div>
-      <li className={'divider divider-vertical h-0'}></li>
+      <li className={'divider h-1'} />
       {session?.user?.name != null && (
         <li>
           <Link href={'/user/' + encodeURI(session.user.name)} prefetch={false}>
@@ -74,7 +74,7 @@ export default async function UserPopup() {
           </button>
         )}
       </li>
-      <li className={'divider divider-vertical h-0'}></li>
+      <li className={'divider h-1'} />
       <li>
         <ThemeSwapper />
       </li>
