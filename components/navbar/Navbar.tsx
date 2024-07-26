@@ -15,7 +15,7 @@ const NotificationsPopupLazy = dynamic(
   () => import('@/components/popups/NotificationsPopup')
 )
 const AppsPopupLazy = dynamic(() => import('@/components/popups/AppsPopup'))
-const UserPopupLazy = dynamic(() => import('@/components/popups/UserPopup'))
+//const UserPopupLazy = dynamic(() => import('@/components/popups/UserPopup'))\
 
 export default function Navbar() {
   return (
@@ -35,7 +35,7 @@ export default function Navbar() {
             />
           </svg>
         </label>
-        <Link href={'/'} className={'btn btn-ghost text-4xl'}>
+        <Link href={'/'} className={`text-4xl font-mono font-extrabold ml-2`}>
           NXT
         </Link>
       </div>

@@ -37,7 +37,7 @@ export default function Sidebar() {
             />
           </svg>
         </label>
-        <Link href={'/'} className={'btn btn-ghost text-4xl'}>
+        <Link href={'/'} className={`text-4xl font-mono font-extrabold ml-2`}>
           NXT
         </Link>
       </div>
