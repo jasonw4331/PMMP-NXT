@@ -1,31 +1,50 @@
 /* eslint-disable @next/next/no-head-element */
 import './globals.css'
-import Sidebar from '../components/sidebar/Sidebar'
 import Navbar from '../components/navbar/Navbar'
-import Providers from '../components/auth/providers'
+import { Linefont, Noto_Sans, Wavefont } from 'next/font/google'
+import Sidebar from '@/components/sidebar/Sidebar'
 
-export const revalidate = 43200 // revalidate every 12 hours
+const noto_sans = Noto_Sans({
+  weight: ['400'],
+  style: ['normal'],
+  display: 'swap',
+  variable: '--font-noto-sans',
+})
 
-export default function RootLayout({
+const linefont = Linefont({
+  weight: ['400'],
+  style: ['normal'],
+  display: 'swap',
+  variable: '--font-line',
+})
+
+const wavefont = Wavefont({
+  weight: ['400'],
+  style: ['normal'],
+  display: 'swap',
+  variable: '--font-wave',
+})
+
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   return (
-    <html>
+    <html
+      lang={'en'}
+      className={`${noto_sans.variable} ${linefont.variable} ${wavefont.variable}`}>
       <body>
         <div className='drawer'>
           <input id='SideBar' type='checkbox' className='drawer-toggle' />
-          <Providers>
-            <div className='drawer-content flex flex-col'>
-              <Navbar />
-              <main>{children}</main>
-            </div>
-            <div className='drawer-side'>
-              <label htmlFor='SideBar' className='drawer-overlay'></label>
-              <Sidebar />
-            </div>
-          </Providers>
+          <div className='drawer-content flex flex-col'>
+            <Navbar />
+            <main>{children}</main>
+          </div>
+          <div className='drawer-side'>
+            <label htmlFor='SideBar' className='drawer-overlay'></label>
+            <Sidebar />
+          </div>
         </div>
       </body>
     </html>
