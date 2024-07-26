@@ -21,21 +21,26 @@ export default async function UserPopup() {
     <ul
       tabIndex={0}
       className='menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-screen max-w-sm max-sm:max-w-xs max-sm:-left-72'>
-      <div className={'my-1 mx-2 h-10 flex gap-2 block text-sm'}>
-        <Image
-          src={session?.user?.image ?? missingImage}
-          width={40}
-          height={40}
-          alt='User Icon'
-          className='rounded-full'
-        />
+      <div className={'my-1 mx-2 h-10 flex gap-2 text-sm'}>
+        <div className={'avatar'}>
+          <div className={'w-10 rounded-xl'}>
+            <Image
+              src={session?.user?.image ?? missingImage}
+              width={40}
+              height={40}
+              alt='User Profile Image'
+            />
+          </div>
+        </div>
         <div>
           <span className='block text-sm'>
             {session?.user?.name ?? 'Not logged in'}
           </span>
           <span className='block text-sm font-medium'>
-            {session?.user?.user_role != null
-              ? session.user.user_role + ' Account'
+            {session?.user?.role
+              ? session.user.role.charAt(0).toUpperCase() +
+                session.user.role.slice(1) +
+                ' Account'
               : ''}
           </span>
         </div>
@@ -49,7 +54,7 @@ export default async function UserPopup() {
           </Link>
         </li>
       )}
-      {session?.user?.user_role === 'admin' && (
+      {session?.user?.role === 'admin' && (
         <li>
           <Link href={'/admin'} prefetch={false}>
             <MdAdminPanelSettings size={24} />
@@ -62,9 +67,8 @@ export default async function UserPopup() {
           <SignInButton />
         ) : (
           <button
-            onMouseDown={(e: React.MouseEvent) => e.preventDefault()}
-            onMouseUp={e => signOut({ callbackUrl: '/' })}
-            onContextMenu={(e: React.MouseEvent) => e.preventDefault()}>
+            onClick={() => signOut({ callbackUrl: '/' })}
+            onContextMenu={e => e.preventDefault()}>
             <MdOutlineLogout size={24} />
             <span>Sign Out</span>
           </button>

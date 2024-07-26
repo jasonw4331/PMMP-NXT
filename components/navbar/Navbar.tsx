@@ -2,12 +2,22 @@ import Link from 'next/link'
 import SearchForm from './SearchForm'
 import { FaWrench } from 'react-icons/fa'
 import { MdApps, MdSearch } from 'react-icons/md'
-import AppsPopup from '../popups/AppsPopup'
-import NotificationsPopup from '../popups/NotificationsPopup'
-import NotificationsBadge from './NotificationsBadge'
-import NavbarProfile from './NavbarProfile'
+import dynamic from 'next/dynamic'
+import React from 'react'
+import NavbarProfile from '@/components/navbar/NavbarProfile'
+import UserPopup from '@/components/popups/UserPopup'
 
-export default function Navbar() {
+// create dynamic components
+const NotificationsBadgeLazy = dynamic(
+  () => import('@/components/navbar/NotificationsBadge')
+)
+const NotificationsPopupLazy = dynamic(
+  () => import('@/components/popups/NotificationsPopup')
+)
+const AppsPopupLazy = dynamic(() => import('@/components/popups/AppsPopup'))
+const UserPopupLazy = dynamic(() => import('@/components/popups/UserPopup'))
+
+export default async function Navbar() {
   return (
     <div className='navbar bg-base-100'>
       <div className='navbar-start'>
@@ -24,7 +34,7 @@ export default function Navbar() {
               d='M4 6h16M4 12h16M4 18h16'></path>
           </svg>
         </label>
-        <Link href={'/'} className={'font-extrabold text-4xl ml-2'}>
+        <Link href={'/'} className={'btn btn-ghost text-4xl'}>
           NXT
         </Link>
       </div>
@@ -44,16 +54,17 @@ export default function Navbar() {
           <label tabIndex={0} className='btn btn-ghost btn-circle'>
             <MdApps size={26} />
           </label>
-          <AppsPopup />
+          <AppsPopupLazy />
         </div>
         <div className='dropdown dropdown-end'>
           <label tabIndex={0} className='btn btn-ghost btn-circle'>
-            <NotificationsBadge />
+            <NotificationsBadgeLazy />
           </label>
-          <NotificationsPopup />
+          <NotificationsPopupLazy />
         </div>
         <div className='dropdown dropdown-end pl-2'>
           <NavbarProfile />
+          <UserPopup />
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import Image, { StaticImageData } from 'next/legacy/image'
-import missingImage from '../../public/icons/missing.png'
+import missingImage from '@/public/icons/missing.png'
 import Link from 'next/link'
 
 export default function ReleaseCard({

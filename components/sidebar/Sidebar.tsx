@@ -1,22 +1,26 @@
 import Link from 'next/link'
 import {
-  MdBookmarks,
   MdExplore,
   MdFeedback,
   MdFlag,
   MdHelp,
-  MdHistory,
   MdHome,
-  MdLibraryAdd,
   MdSettings,
 } from 'react-icons/md'
-import AdminSidebarSegment from './AdminSidebarSegment'
+import dynamic from 'next/dynamic'
+
+const AdminSidebarSegmentLazy = dynamic(
+  () => import('@/components/sidebar/AdminSidebarSegment')
+)
+const SignedInSidebarSegmentLazy = dynamic(
+  () => import('@/components/sidebar/SignedInSidebarSegment')
+)
 
 export default function Sidebar() {
   return (
     <ul
       className={
-        'menu p-2 w-60 h-screen bg-base-300 overflow-x-hidden flex-nowrap'
+        'menu p-2 w-60 h-screen bg-base-300 overflow-x-hidden flex-nowrap flex-col'
       }>
       <div className={'flex pl-0'}>
         <label htmlFor='SideBar' className='btn btn-circle btn-ghost'>
@@ -32,7 +36,7 @@ export default function Sidebar() {
               d='M4 6h16M4 12h16M4 18h16'></path>
           </svg>
         </label>
-        <Link href={'/'} className={'font-extrabold text-4xl ml-2'}>
+        <Link href={'/'} className={'btn btn-ghost text-4xl'}>
           NXT
         </Link>
       </div>
@@ -43,7 +47,7 @@ export default function Sidebar() {
         </Link>
       </li>
       <li>
-        <Link href={'/feed/explore'} className={'pl-3'}>
+        <Link href={'/feed/explore'} className={'pl-3'} prefetch={false}>
           <MdExplore size={24} />
           <span>Explore</span>
         </Link>
@@ -52,40 +56,19 @@ export default function Sidebar() {
       <li className={'divider divider-vertical pl-0'}></li>
       <AdminSidebarSegmentLazy />
       <li>
-        <Link href={'/feed/following'} className={'pl-3'}>
-          <MdBookmarks size={24} />
-          <span>Followed Authors</span>
-        </Link>
-      </li>
-      <li className={'divider pl-0'}></li>
-      <li>
-        <Link href={'/feed/watching'} className={'pl-3'}>
-          <MdLibraryAdd size={24} />
-          <span>Watching</span>
-        </Link>
-      </li>
-      <li>
-        <Link href={'/feed/history'} className={'pl-3'}>
-          <MdHistory size={24} />
-          <span>History</span>
-        </Link>
-      </li>
-      <li className={'divider pl-0'}></li>
-      <AdminSidebarSegment />
-      <li>
-        <Link href={'/settings'} className={'pl-3'}>
+        <Link href={'/settings'} className={'pl-3'} prefetch={false}>
           <MdSettings size={24} />
           <span>Settings</span>
         </Link>
       </li>
       <li>
-        <Link href={'/reporthistory'} className={'pl-3'}>
+        <Link href={'/reporthistory'} className={'pl-3'} prefetch={false}>
           <MdFlag size={24} />
           <span>Report History</span>
         </Link>
       </li>
       <li>
-        <Link href={'/help'} className={'pl-3'}>
+        <Link href={'/help'} className={'pl-3'} prefetch={false}>
           <MdHelp size={24} />
           <span>Help</span>
         </Link>
@@ -93,7 +76,8 @@ export default function Sidebar() {
       <li>
         <Link
           href={'https://github.com/jasonwynn10/PMMP-NXT/issues'}
-          className={'pl-3'}>
+          className={'pl-3'}
+          prefetch={false}>
           <MdFeedback size={24} />
           <span>Send Feedback</span>
         </Link>
