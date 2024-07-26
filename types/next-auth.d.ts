@@ -8,7 +8,7 @@ declare module 'next-auth' {
     supabaseAccessToken?: string
     user: {
       /** The user's role. */
-      user_role?: 'admin' | 'reviewer' | 'developer' | 'user'
+      role?: 'admin' | 'reviewer' | 'developer' | 'user'
     } & DefaultSession['user']
     error?: 'RefreshAccessTokenError'
   }
@@ -17,7 +17,7 @@ declare module 'next-auth' {
 declare module 'next-auth/jwt' {
   interface JWT extends Record<string, unknown>, DefaultJWT {
     /** The user's role. */
-    user_role?: 'admin' | 'reviewer' | 'developer' | 'user'
+    role?: 'admin' | 'reviewer' | 'developer' | 'user'
     access_token: string
     expires_at: number
     refresh_token: string
