@@ -1,4 +1,3 @@
-import { getPlugin } from '../../../../lib/server/ServerFirestoreQueries'
 import { notFound, useSearchParams } from 'next/navigation'
 
 export const revalidate = 43200 // revalidate every 12 hours
@@ -9,11 +8,11 @@ export default async function Head({
   params: { username: string; plugin: string }
 }) {
   const searchParams = useSearchParams()
-  const pluginData = await getPlugin(
-    params.plugin,
-    params.username,
-    searchParams.get('v') ?? searchParams.get('version')
-  )
+  const pluginData = {
+    id: 'plugin_v1.0.0',
+    tagline: 'A plugin for PocketMine-MP',
+    icon_url: '/icons/logo/icon.svg',
+  } //await getPlugin()
   if (pluginData === null) notFound()
   const [pluginName, pluginVersion] = pluginData.id.split('_v')
 
