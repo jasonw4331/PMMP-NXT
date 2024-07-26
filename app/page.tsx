@@ -6,8 +6,6 @@ export default async function HomePage() {
       id: 'Plugin_v1.0.0',
       author: 'Author',
       tagline: 'A tagline',
-      download_url: 'https://github.com',
-      icon_url: 'https://via.placeholder.com/150',
     },
   ] //await getReleases()
   return (
