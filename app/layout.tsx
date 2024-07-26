@@ -2,6 +2,7 @@ import '@/app/globals.css'
 import Navbar from '@/components/navbar/Navbar'
 import { Linefont, Noto_Sans, Wavefont } from 'next/font/google'
 import Sidebar from '@/components/sidebar/Sidebar'
+import FirstTimeModal from '@/components/FirstTimeModal'
 
 const noto_sans = Noto_Sans({
   weight: ['400'],
@@ -46,6 +47,7 @@ export default async function RootLayout({
             <Sidebar />
           </div>
         </div>
+        <FirstTimeModal />
       </body>
     </html>
   )
