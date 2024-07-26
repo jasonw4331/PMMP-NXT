@@ -75,54 +75,7 @@ export default async function UserPopup() {
       </li>
       <li className={'divider divider-vertical h-0'}></li>
       <li>
-        <button
-          id={'light-button'}
-          data-toggle-theme='business,business'
-          data-act-class={'visible'}
-          onMouseDown={(e: React.MouseEvent) => e.preventDefault()}
-          onMouseUp={(e: React.MouseEvent) => {
-            themeChange(false)
-            e.currentTarget.className = 'hidden'
-            e.currentTarget.parentElement!.querySelector(
-              '#dark-button'
-            )!.className = ''
-          }}
-          onContextMenu={(e: React.MouseEvent) => {
-            e.preventDefault()
-            themeChange(false)
-            e.currentTarget.className = 'hidden'
-            e.currentTarget.parentElement!.querySelector(
-              '#dark-button'
-            )!.className = ''
-          }}
-          className={'dark:hidden'}>
-          <MdOutlineLightMode size={24} />
-          <span>Appearance: Light</span>
-        </button>
-        <button
-          id={'dark-button'}
-          data-toggle-theme='light,light'
-          data-act-class={'visible'}
-          onMouseDown={(e: React.MouseEvent) => e.preventDefault()}
-          onMouseUp={(e: React.MouseEvent) => {
-            themeChange(false)
-            e.currentTarget.className = 'hidden'
-            e.currentTarget.parentElement!.querySelector(
-              '#light-button'
-            )!.className = ''
-          }}
-          onContextMenu={(e: React.MouseEvent) => {
-            e.preventDefault()
-            themeChange(false)
-            e.currentTarget.className = 'hidden'
-            e.currentTarget.parentElement!.querySelector(
-              '#light-button'
-            )!.className = ''
-          }}
-          className={'hidden dark:visible'}>
-          <MdOutlineDarkMode size={24} />
-          <span>Appearance: Dark</span>
-        </button>
+        <ThemeSwapper />
       </li>
       <li>
         <Link href={'/settings'} prefetch={false}>
