@@ -91,7 +91,9 @@ export default async function UserPopup() {
         </Link>
       </li>
       <li>
-        <Link href={'https://github.com/jasonwynn10/PMMP-NXT/issues'}>
+        <Link
+          href={'https://github.com/jasonwynn10/PMMP-NXT/issues'}
+          prefetch={false}>
           <MdOutlineFeedback size={24} />
           <span>Send Feedback</span>
         </Link>
