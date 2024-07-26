@@ -17,7 +17,7 @@ const NotificationsPopupLazy = dynamic(
 const AppsPopupLazy = dynamic(() => import('@/components/popups/AppsPopup'))
 const UserPopupLazy = dynamic(() => import('@/components/popups/UserPopup'))
 
-export default async function Navbar() {
+export default function Navbar() {
   return (
     <div className='navbar bg-base-100'>
       <div className='navbar-start'>
