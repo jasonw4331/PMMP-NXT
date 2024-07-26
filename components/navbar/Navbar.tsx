@@ -44,25 +44,25 @@ export default async function Navbar() {
       <div className='navbar-end'>
         <Link
           href={'/results'}
-          className='btn btn-ghost btn-circle flex md:hidden'>
+          className='btn btn-ghost btn-circle flex md:hidden w-10 md:w-12'>
           <MdSearch size={24} />
         </Link>
-        <button className='btn btn-ghost btn-circle'>
+        <button className='btn btn-ghost btn-circle w-10 md:w-12'>
           <FaWrench size={22} />
         </button>
         <div className='dropdown dropdown-end'>
-          <label tabIndex={0} className='btn btn-ghost btn-circle'>
+          <label tabIndex={0} className='btn btn-ghost btn-circle w-10 md:w-12'>
             <MdApps size={26} />
           </label>
           <AppsPopupLazy />
         </div>
         <div className='dropdown dropdown-end'>
-          <label tabIndex={0} className='btn btn-ghost btn-circle'>
+          <label tabIndex={0} className='btn btn-ghost btn-circle w-10 md:w-12'>
             <NotificationsBadgeLazy />
           </label>
           <NotificationsPopupLazy />
         </div>
-        <div className='dropdown dropdown-end pl-2'>
+        <div className='dropdown dropdown-end md:pl-2'>
           <NavbarProfile />
           <UserPopup />
         </div>
