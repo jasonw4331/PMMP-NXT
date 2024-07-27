@@ -1,6 +1,6 @@
 import '@/app/globals.css'
 import Navbar from '@/components/navbar/Navbar'
-import { Linefont, Noto_Sans, Wavefont } from 'next/font/google'
+import { Linefont, Noto_Sans, Roboto_Mono, Wavefont } from 'next/font/google'
 import Sidebar from '@/components/sidebar/Sidebar'
 import FirstTimeModal from '@/components/FirstTimeModal'
 
@@ -9,6 +9,14 @@ const noto_sans = Noto_Sans({
   style: ['normal'],
   display: 'swap',
   variable: '--font-noto-sans',
+  subsets: ['latin', 'latin-ext', 'cyrillic'],
+})
+
+const roboto_mono = Roboto_Mono({
+  weight: ['400'],
+  style: ['normal'],
+  display: 'swap',
+  variable: '--font-roboto-mono',
   subsets: ['latin'],
 })
 
@@ -32,7 +40,9 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang={'en'} className={`font-sans`}>
+    <html
+      lang={'en'}
+      className={`${noto_sans.variable} ${roboto_mono.variable} ${linefont.variable} ${wavefont.variable} font-sans`}>
       <body>
         <div className='drawer'>
           <input id='SideBar' type='checkbox' className='drawer-toggle' />
