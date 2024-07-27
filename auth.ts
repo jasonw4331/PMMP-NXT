@@ -4,7 +4,7 @@ import GitHub, { GitHubProfile } from 'next-auth/providers/github'
 import Google, { GoogleProfile } from 'next-auth/providers/google'
 import Twitter, { TwitterProfile } from 'next-auth/providers/twitter'
 import { SupabaseAdapter } from '@auth/supabase-adapter'
-import jose from 'jose'
+import * as jose from 'jose'
 import { JWTPayload } from 'jose/dist/types/types'
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
