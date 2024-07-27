@@ -1,9 +1,11 @@
 import NextAuth from 'next-auth'
-import Discord from 'next-auth/providers/discord'
-import GitHub from 'next-auth/providers/github'
-import Google from 'next-auth/providers/google'
-import Twitter from 'next-auth/providers/twitter'
+import Discord, { DiscordProfile } from 'next-auth/providers/discord'
+import GitHub, { GitHubProfile } from 'next-auth/providers/github'
+import Google, { GoogleProfile } from 'next-auth/providers/google'
+import Twitter, { TwitterProfile } from 'next-auth/providers/twitter'
 import { SupabaseAdapter } from '@auth/supabase-adapter'
+import jose from 'jose'
+import { JWTPayload } from 'jose/dist/types/types'
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -45,51 +47,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   //experimental: { enableWebAuthn: true },
   callbacks: {
     async session({ session, user }) {
-      // const [googleAccount] = await prisma.account.findMany({
-      //   where: { userId: user.id, provider: 'google' },
-      // })
-      // if (googleAccount.expires_at * 1000 < Date.now()) {
-      //   // If the access token has expired, try to refresh it
-      //   try {
-      //     // https://accounts.google.com/.well-known/openid-configuration
-      //     // We need the `token_endpoint`.
-      //     const response = await fetch('https://oauth2.googleapis.com/token', {
-      //       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      //       body: new URLSearchParams({
-      //         client_id: process.env.AUTH_GOOGLE_ID!,
-      //         client_secret: process.env.AUTH_GOOGLE_SECRET!,
-      //         grant_type: 'refresh_token',
-      //         refresh_token: googleAccount.refresh_token,
-      //       }),
-      //       method: 'POST',
-      //     })
-      //
-      //     const responseTokens = await response.json()
-      //
-      //     if (!response.ok) throw responseTokens
-      //
-      //     await prisma.account.update({
-      //       data: {
-      //         access_token: responseTokens.access_token,
-      //         expires_at: Math.floor(
-      //           Date.now() / 1000 + responseTokens.expires_in
-      //         ),
-      //         refresh_token:
-      //           responseTokens.refresh_token ?? googleAccount.refresh_token,
-      //       },
-      //       where: {
-      //         provider_providerAccountId: {
-      //           provider: 'google',
-      //           providerAccountId: googleAccount.providerAccountId,
-      //         },
-      //       },
-      //     })
-      //   } catch (error) {
-      //     console.error('Error refreshing access token', error)
-      //     // The error property can be used client-side to handle the refresh token error
-      //     session.error = 'RefreshAccessTokenError'
-      //   }
-      // }
+      // TODO: automatic token rotation
+      const signingSecret = process.env.AUTH_SUPABASE_JWT
+      if (signingSecret) {
+        const secret = new TextEncoder().encode(signingSecret)
+        session.supabaseAccessToken = await new jose.SignJWT({
+          aud: 'authenticated',
+          exp: Math.floor(new Date(session.expires).getTime() / 1000),
+          sub: user.id,
+          email: user.email,
+          role: 'authenticated',
+        } satisfies JWTPayload).sign(secret)
+      }
       session.user.role = user.role
       return session
     },
