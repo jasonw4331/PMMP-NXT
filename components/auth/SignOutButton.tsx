@@ -1,7 +1,7 @@
 'use client'
 
-import { signOut } from 'next-auth/react'
 import { MdOutlinePerson } from 'react-icons/md'
+import { signOut } from '@/auth'
 
 export default function SignOutButton() {
   return (

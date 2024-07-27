@@ -1,7 +1,7 @@
 'use client'
 
-import { signIn } from 'next-auth/react'
 import { MdOutlinePerson } from 'react-icons/md'
+import { signIn } from '@/auth'
 
 export default function SignInButton() {
   return (

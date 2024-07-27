@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { signIn } from 'next-auth/react'
+import { signIn } from '@/auth'
 
 export default function FirstTimeModal() {
   const [isFirstTimeUser, setIsFirstTimeUser] = useState(

@@ -10,8 +10,7 @@ import {
 } from 'react-icons/md'
 import Link from 'next/link'
 import ThemeSwapper from '@/components/popups/ThemeSwapper'
-import { signOut } from 'next-auth/react'
-import { auth } from '@/auth'
+import { auth, signOut } from '@/auth'
 import SignInButton from '@/components/auth/SignInButton'
 
 export default async function UserPopup() {
@@ -67,7 +66,7 @@ export default async function UserPopup() {
           <SignInButton />
         ) : (
           <button
-            onClick={() => signOut({ callbackUrl: '/' })}
+            onClick={() => signOut()}
             onContextMenu={e => e.preventDefault()}>
             <MdOutlineLogout size={24} />
             <span>Sign Out</span>
