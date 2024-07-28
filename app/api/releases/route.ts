@@ -1,7 +1,7 @@
 import { auth } from '@/auth'
 import { createClient } from '@supabase/supabase-js'
 import { Session } from 'next-auth'
-import Database from '@/database.types'
+import { type Database } from '@/types/SupabaseTypes'
 
 export async function GET() {
   const session: Session | null = await auth()
