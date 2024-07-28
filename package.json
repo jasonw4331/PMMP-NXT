@@ -36,6 +36,7 @@
     "theme-change": "^2.5.0"
   },
   "devDependencies": {
+    "@builder.io/partytown": "^0.10.2",
     "@hookform/resolvers": "^2.9.11",
     "@simplewebauthn/types": "^10.0.0",
     "@tailwindcss/aspect-ratio": "^0.4.2",

@@ -18,6 +18,8 @@ const withMDX = require('@next/mdx')({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
+    typedRoutes: true,
+    nextScriptWorkers: true,
     mdxRs: true,
   },
   reactStrictMode: true,
