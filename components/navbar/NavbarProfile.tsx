@@ -12,6 +12,7 @@ export default async function NavbarProfile() {
           width={40}
           height={40}
           alt='User Profile Image'
+          priority
         />
       </div>
     </label>
