@@ -1,3 +1,5 @@
+import remarkGfm from 'remark-gfm'
+
 const withPWA = require('next-pwa')({
   dest: 'public',
   sw: '/sw.js',
@@ -9,8 +11,15 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
 
+const withMDX = require('@next/mdx')({
+  remarkPlugins: [remarkGfm],
+})
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    mdxRs: true,
+  },
   reactStrictMode: true,
   images: {
     domains: [
@@ -19,6 +28,7 @@ const nextConfig = {
       'avatars.githubusercontent.com',
     ],
   },
+  pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
   async redirects() {
     return [
       {
@@ -38,4 +48,4 @@ const nextConfig = {
 }
 
 /** @type {import('next').NextConfig} */
-module.exports = withBundleAnalyzer(withPWA(nextConfig))
+module.exports = withBundleAnalyzer(withPWA(withMDX(nextConfig)))
