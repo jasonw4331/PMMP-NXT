@@ -1,17 +1,20 @@
-const remarkGfm = require('remark-gfm')
+import remarkGfm from 'remark-gfm'
+import { default as nextPWA } from 'next-pwa'
+import NextBundleAnalyzer from '@next/bundle-analyzer'
+import nextMDX from '@next/mdx'
 
-const withPWA = require('next-pwa')({
+const withPWA = nextPWA({
   dest: 'public',
   sw: '/sw.js',
   disable: process.env.NODE_ENV === 'development',
   cacheOnFrontEndNav: true,
 })
 
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
+const withBundleAnalyzer = NextBundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
 })
 
-const withMDX = require('@next/mdx')({
+const withMDX = nextMDX({
   remarkPlugins: [remarkGfm],
 })
 
@@ -49,5 +52,4 @@ const nextConfig = {
   output: 'standalone',
 }
 
-/** @type {import('next').NextConfig} */
-module.exports = withBundleAnalyzer(withPWA(withMDX(nextConfig)))
+export default withBundleAnalyzer(withPWA(withMDX(nextConfig)))
