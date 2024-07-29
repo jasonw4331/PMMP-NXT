@@ -1,4 +1,4 @@
-import remarkGfm from 'remark-gfm'
+const remarkGfm = require('remark-gfm')
 
 const withPWA = require('next-pwa')({
   dest: 'public',
