@@ -2,7 +2,7 @@ import RSS from 'rss'
 import { auth } from '@/auth'
 import { NextResponse } from 'next/server'
 
-export async function GET() {
+export const GET = auth(async function GET(req) {
   const feed = new RSS({
     title: 'Recently Viewed Plugins',
     description: '',
@@ -47,4 +47,4 @@ export async function GET() {
       'Content-Type': 'application/xml; charset=utf-8',
     },
   })
-}
+})

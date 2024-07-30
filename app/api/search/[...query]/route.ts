@@ -3,17 +3,14 @@ import { createClient } from '@supabase/supabase-js'
 import { type Database } from '@/types/Supabase'
 import { NextResponse } from 'next/server'
 
-export async function GET() {
-  const session: Session | null = await auth()
-  const { supabaseAccessToken } = session
-
+export const GET = auth(async function GET(req) {
   const supabase = createClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
       global: {
         headers: {
-          Authorization: `Bearer ${supabaseAccessToken}`,
+          Authorization: `Bearer ${req.auth?.supabaseAccessToken}`,
         },
       },
     }
@@ -27,4 +24,4 @@ export async function GET() {
       'Content-Type': 'application/json',
     },
   })
-}
+})
