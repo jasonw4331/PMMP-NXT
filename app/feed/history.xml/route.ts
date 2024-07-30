@@ -1,4 +1,6 @@
 import RSS from 'rss'
+import { auth } from '@/auth'
+import { NextResponse } from 'next/server'
 
 export async function GET() {
   const feed = new RSS({
@@ -40,7 +42,7 @@ export async function GET() {
     })
   }
 
-  return new Response(feed.xml({ indent: true }), {
+  return new NextResponse(feed.xml({ indent: true }), {
     headers: {
       'Content-Type': 'application/xml; charset=utf-8',
     },

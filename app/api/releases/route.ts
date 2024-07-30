@@ -1,6 +1,7 @@
 import { auth } from '@/auth'
 import { createClient } from '@supabase/supabase-js'
 import { type Database } from '@/types/Supabase'
+import { NextResponse } from 'next/server'
 
 export const GET = auth(async function GET(req) {
   const supabase = createClient<Database>(
@@ -18,7 +19,7 @@ export const GET = auth(async function GET(req) {
   const { data, error } = await supabase.from('releases').select('*')
 
   // This is the default route for the search API and should return a json object with the search results
-  return new Response(JSON.stringify({}), {
+  return new NextResponse(JSON.stringify({}), {
     headers: {
       'Content-Type': 'application/json',
     },
