@@ -1,9 +1,7 @@
-'use client'
-
 import { MdOutlinePerson } from 'react-icons/md'
-import { signIn } from '@/auth'
+import { signIn } from 'next-auth/react'
 
-export default function SignInButton() {
+export function SignInButton() {
   return (
     <button onClick={() => signIn()}>
       <MdOutlinePerson size={24} />
