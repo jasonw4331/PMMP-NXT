@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js'
 import { type Database } from '@/types/Supabase'
 import { NextResponse } from 'next/server'
 
-export const GET = auth(async function GET(req) {
+export const GET = auth(async function GET(req, { params }) {
   const supabase = createClient<Database>(
     process.env.AUTH_SUPABASE_URL as string,
     process.env.AUTH_SUPABASE_KEY as string,
