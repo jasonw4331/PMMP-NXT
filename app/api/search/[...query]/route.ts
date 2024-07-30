@@ -19,9 +19,5 @@ export const GET = auth(async function GET(req, { params }) {
   const { data, error } = await supabase.from('software').select('*')
 
   // This is the default route for the search API and should return a json object with the search results
-  return new NextResponse(JSON.stringify({}), {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
+  return NextResponse.json({}, { status: 200 })
 })
