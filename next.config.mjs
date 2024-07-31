@@ -23,6 +23,7 @@ const nextConfig = {
   experimental: {
     nextScriptWorkers: true,
     mdxRs: true,
+    turbotrace: {},
   },
   reactStrictMode: true,
   images: {
