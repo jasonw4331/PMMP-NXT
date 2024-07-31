@@ -41,14 +41,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     // }),
   ],
   adapter: SupabaseAdapter({
-    url: process.env.AUTH_SUPABASE_URL as string,
-    secret: process.env.AUTH_SUPABASE_SERVICE_ROLE_KEY as string,
+    url: process.env.AUTH_SUPABASE_URL!,
+    secret: process.env.AUTH_SUPABASE_KEY!,
   }),
   //experimental: { enableWebAuthn: true },
   callbacks: {
     async session({ session, user }) {
       // TODO: automatic token rotation
-      const signingSecret = process.env.AUTH_SUPABASE_JWT
+      const signingSecret = process.env.AUTH_SUPABASE_JWT!
       if (signingSecret) {
         const secret = new TextEncoder().encode(signingSecret)
         session.supabaseAccessToken = await new jose.SignJWT({
