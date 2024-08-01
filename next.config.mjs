@@ -27,11 +27,23 @@ const nextConfig = {
   },
   reactStrictMode: true,
   images: {
-    domains: [
-      '*.googleusercontent.com',
-      'raw.githubusercontent.com',
-      'avatars.githubusercontent.com',
-    ],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**.googleusercontent.com',
+        port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'raw.githubusercontent.com',
+        port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'avatars.githubusercontent.com',
+        port: '',
+      },
+    ]
   },
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
   async redirects() {
