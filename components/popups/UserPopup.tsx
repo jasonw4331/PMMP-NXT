@@ -32,16 +32,20 @@ export default async function UserPopup() {
           </div>
         </div>
         <div>
-          <span className='block text-sm'>
-            {session?.user?.name ?? 'Not logged in'}
-          </span>
-          <span className='block text-sm font-medium'>
-            {session?.user?.role
-              ? session.user.role.charAt(0).toUpperCase() +
-                session.user.role.slice(1) +
-                ' Account'
-              : ''}
-          </span>
+          {session?.user?.name ? (
+            <>
+              <span className='block text-sm'>{session?.user?.name}</span>
+              <span className='block text-sm font-medium'>
+                {session?.user?.role
+                  ? session.user.role.charAt(0).toUpperCase() +
+                    session.user.role.slice(1) +
+                    ' Account'
+                  : ''}
+              </span>
+            </>
+          ) : (
+            <span>Not logged in</span>
+          )}
         </div>
       </div>
       <li className={'divider h-1'} />
