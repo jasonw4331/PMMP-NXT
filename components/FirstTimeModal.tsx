@@ -11,7 +11,10 @@ export default function FirstTimeModal() {
     localStorage.setItem('isFirstTimeUser', JSON.stringify(isFirstTimeUser))
     // show the modal if it's the first time the user is visiting the site
     if (isFirstTimeUser) {
-      document.getElementById('FirstTimeModal').showModal()
+      const element = document.getElementById(
+        'FirstTimeModal'
+      ) as HTMLDialogElement
+      element.showModal()
       setIsFirstTimeUser(false)
     }
   }, [isFirstTimeUser])
