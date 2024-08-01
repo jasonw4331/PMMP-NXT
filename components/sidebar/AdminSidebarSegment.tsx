@@ -1,12 +1,12 @@
 import Link from 'next/link'
 import { MdAdminPanelSettings, MdAssignment } from 'react-icons/md'
 import { auth } from '@/auth'
-import SignInButton from '@/components/auth/SignInButton'
+import { SignInButton } from '@/components/auth/SignInButton'
 
 export default async function AdminSidebarSegment() {
   const session = await auth()
 
-  return !session?.user.role ? (
+  return !session?.user?.role ? (
     <>
       <p className={'text-center'}>
         Sign in to like plugins, leave comments, and follow authors!

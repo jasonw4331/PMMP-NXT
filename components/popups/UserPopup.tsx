@@ -11,7 +11,7 @@ import {
 import Link from 'next/link'
 import ThemeSwapper from '@/components/popups/ThemeSwapper'
 import { auth, signOut } from '@/auth'
-import SignInButton from '@/components/auth/SignInButton'
+import { SignInButton } from '@/components/auth/SignInButton'
 
 export default async function UserPopup() {
   const session = await auth()
@@ -45,7 +45,7 @@ export default async function UserPopup() {
         </div>
       </div>
       <li className={'divider h-1'} />
-      {session?.user?.name != null && (
+      {session?.user?.name && (
         <li>
           <Link href={'/user/' + encodeURI(session.user.name)} prefetch={false}>
             <MdOutlinePerson size={24} />
