@@ -90,8 +90,14 @@ export default function Sidebar() {
         <footer className={'font-normal text-sm text-base-content text-center'}>
           <h2>&copy; {new Date().getFullYear()} PMMP-NXT</h2>
           <h5>
-            Some Icons by <Link href='https://freepik.com'>freepik.com</Link>{' '}
-            and <Link href='https://icons8.com'>icons8.com</Link>
+            Some Icons by{' '}
+            <Link href='https://freepik.com' prefetch={false}>
+              freepik.com
+            </Link>{' '}
+            and{' '}
+            <Link href='https://icons8.com' prefetch={false}>
+              icons8.com
+            </Link>
           </h5>
         </footer>
       </div>
