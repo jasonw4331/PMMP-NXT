@@ -4,6 +4,7 @@ import { Linefont, Noto_Sans, Roboto_Mono, Wavefont } from 'next/font/google'
 import Sidebar from '@/components/sidebar/Sidebar'
 import AuthWrapper from '@/components/auth/AuthWrapper'
 import FirstTimeModal from '@/components/FirstTimeModal'
+import { ThemeSetup } from '@/components/themeSetup'
 
 const noto_sans = Noto_Sans({
   weight: ['400'],
@@ -45,6 +46,7 @@ export default async function RootLayout({
       lang={'en'}
       className={`${noto_sans.variable} ${roboto_mono.variable} ${linefont.variable} ${wavefont.variable} font-sans`}>
       <AuthWrapper>
+        <ThemeSetup />
         <body>
           <div className='drawer'>
             <input id='SideBar' type='checkbox' className='drawer-toggle' />
