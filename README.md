@@ -1,28 +1,34 @@
 # PMMP-NXT
-A Poggit replacement written with NextJS 13
+A Poggit replacement written with NextJS 15, Supabase, and Corbado
 
 ## TODO List
 
 ### Backend
-- [ ] Vercel Edge functions for dynamic pages
-- [ ] Firebase db design
-- [ ] Firebase notifications/messaging in PWA
+- [ ] Corbado user authentication
+  - [ ] Sync to supabase
+- [ ] Supabase db design
+- [ ] Notifications via PWA
 - [ ] GitHub Application
   - [ ] GitHub Action for phpstan testing
-  - [ ] GitHub Action for posting github releases
+  - [ ] GitHub Action for posting github releases onto GitHub
   - [ ] GitHub Action for posting release information to site
 
 ### Frontend
-- [ ] NextAuth user authentication
+- [x] Corbado user authentication
+  - [x] Username-based logins
+  - [x] Third Party Auth
+  - [x] Passkeys
 - [ ] TSX React Pages
   - [x] Front page
   - [ ] Rules, TOS, and Privacy Policy Pages
   - [ ] Plugin Publication Flow
-  - [ ] ISR-based RSS feeds
+  - [x] RSS feeds
   - [ ] Search Results
   - [ ] User profiles
   - [ ] Plugin release
-  - [x] Plugin review Page
+    - [ ] Comments system
+    - [ ] Recommended Plugins
+  - [ ] Plugin review Page
   - [ ] Developer tools page
     - [ ] GitHub Action installation flow
     - [ ] Plugin release version management
@@ -33,6 +39,7 @@ A Poggit replacement written with NextJS 13
   - [ ] Admin Pages
     - [ ] Admin tools
     - [ ] Backend metrics
+    - [ ] Grafana?
   - [ ] Help Pages
     - [ ] FAQ
     - [ ] PocketMine related FAQ
@@ -43,9 +50,10 @@ A Poggit replacement written with NextJS 13
     - [x] Admin segment
   - [x] Popups
     - [x] User menu
-    - [x] notifications
+    - [x] Notifications
     - [x] Related websites
-  - [ ] Plugin Release page comments
-  - [ ] Recommended Plugin sidebar
-  - [ ] Recommended plugin sidebar card
-  - [ ] Search result cards
+  - [ ] Page Cards
+    - [x] Release Cards
+    - [ ] Review Cards
+    - [ ] Search Results
+    - [ ] Recommendations
