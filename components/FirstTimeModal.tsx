@@ -1,10 +1,12 @@
 'use client'
+import 'client-only'
 import { useEffect, useState } from 'react'
-import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 export default function FirstTimeModal() {
+  const router = useRouter()
   const [isFirstTimeUser, setIsFirstTimeUser] = useState(
-    JSON.parse(localStorage.getItem('isFirstTimeUser') ?? JSON.stringify(true))
+    JSON.parse(localStorage?.getItem('isFirstTimeUser') ?? JSON.stringify(true))
   )
   useEffect(() => {
     // save the first time check to localStorage so we can retain it across page loads
@@ -28,8 +30,9 @@ export default function FirstTimeModal() {
         </p>
         <div className='modal-action'>
           <form method='dialog'>
-            {/* any button will close the modal */}
-            <button className='btn btn-primary' onClick={() => signIn()}>
+            <button
+              className='btn btn-primary'
+              onClick={() => router.push('/login')}>
               Create an Account
             </button>
           </form>

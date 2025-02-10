@@ -1,3 +1,4 @@
+'use client'
 import Link from 'next/link'
 import {
   MdExplore,
@@ -8,6 +9,7 @@ import {
   MdSettings,
 } from 'react-icons/md'
 import dynamic from 'next/dynamic'
+import { useCorbado } from '@corbado/react'
 
 const AdminSidebarSegmentLazy = dynamic(
   () => import('@/components/sidebar/AdminSidebarSegment')
@@ -17,6 +19,7 @@ const SignedInSidebarSegmentLazy = dynamic(
 )
 
 export default function Sidebar() {
+  const { isAuthenticated } = useCorbado()
   return (
     <ul
       className={

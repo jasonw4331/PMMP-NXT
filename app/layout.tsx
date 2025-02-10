@@ -2,6 +2,7 @@ import '@/app/globals.css'
 import Navbar from '@/components/navbar/Navbar'
 import { Linefont, Noto_Sans, Roboto_Mono, Wavefont } from 'next/font/google'
 import Sidebar from '@/components/sidebar/Sidebar'
+import AuthWrapper from '@/components/auth/AuthWrapper'
 import FirstTimeModal from '@/components/FirstTimeModal'
 
 const noto_sans = Noto_Sans({
@@ -43,23 +44,25 @@ export default async function RootLayout({
     <html
       lang={'en'}
       className={`${noto_sans.variable} ${roboto_mono.variable} ${linefont.variable} ${wavefont.variable} font-sans`}>
-      <body>
-        <div className='drawer'>
-          <input id='SideBar' type='checkbox' className='drawer-toggle' />
-          <div className='drawer-content flex flex-col'>
-            <Navbar />
-            <main>{children}</main>
+      <AuthWrapper>
+        <body>
+          <div className='drawer'>
+            <input id='SideBar' type='checkbox' className='drawer-toggle' />
+            <div className='drawer-content flex flex-col'>
+              <Navbar />
+              <main>{children}</main>
+            </div>
+            <div className='drawer-side'>
+              <label
+                htmlFor='SideBar'
+                aria-label='close sidebar'
+                className='drawer-overlay'></label>
+              <Sidebar />
+            </div>
           </div>
-          <div className='drawer-side'>
-            <label
-              htmlFor='SideBar'
-              aria-label='close sidebar'
-              className='drawer-overlay'></label>
-            <Sidebar />
-          </div>
-        </div>
-        <FirstTimeModal />
-      </body>
+          <FirstTimeModal />
+        </body>
+      </AuthWrapper>
     </html>
   )
 }

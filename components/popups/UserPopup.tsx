@@ -4,17 +4,18 @@ import {
   MdAdminPanelSettings,
   MdHelpOutline,
   MdOutlineFeedback,
-  MdOutlineLogout,
   MdOutlinePerson,
   MdSettings,
 } from 'react-icons/md'
 import Link from 'next/link'
 import ThemeSwapper from '@/components/popups/ThemeSwapper'
-import { auth, signOut } from '@/auth'
 import { SignInButton } from '@/components/auth/SignInButton'
+import { useCorbado } from '@corbado/react'
+import { SignOutButton } from '@/components/auth/SignOutButton'
 
-export default async function UserPopup() {
-  const session = await auth()
+export default function UserPopup() {
+  const { user, isAuthenticated, logout } = useCorbado()
+  const session = null
 
   return (
     <ul
@@ -32,9 +33,9 @@ export default async function UserPopup() {
           </div>
         </div>
         <div>
-          {session?.user?.name ? (
+          {isAuthenticated ? (
             <>
-              <span className='block text-sm'>{session?.user?.name}</span>
+              <span className='block text-sm'>{user?.name}</span>
               <span className='block text-sm font-medium'>
                 {session?.user?.role
                   ? session.user.role.charAt(0).toUpperCase() +
@@ -65,18 +66,7 @@ export default async function UserPopup() {
           </Link>
         </li>
       )}
-      <li>
-        {!session?.user ? (
-          <SignInButton />
-        ) : (
-          <button
-            onClick={() => signOut()}
-            onContextMenu={e => e.preventDefault()}>
-            <MdOutlineLogout size={24} />
-            <span>Sign Out</span>
-          </button>
-        )}
-      </li>
+      <li>{!isAuthenticated ? <SignInButton /> : <SignOutButton />}</li>
       <li className={'divider h-1'} />
       <li>
         <ThemeSwapper />

@@ -1,9 +1,10 @@
 import { MdOutlinePerson } from 'react-icons/md'
-import { signOut } from 'next-auth/react'
+import { useCorbado } from '@corbado/react'
 
 export function SignOutButton() {
+  const { logout } = useCorbado()
   return (
-    <button onClick={() => signOut()}>
+    <button onClick={() => logout()}>
       <MdOutlinePerson size={24} />
       <span>Sign In</span>
     </button>

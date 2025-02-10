@@ -1,12 +1,13 @@
 import Link from 'next/link'
 import { MdAdminPanelSettings, MdAssignment } from 'react-icons/md'
-import { auth } from '@/auth'
 import { SignInButton } from '@/components/auth/SignInButton'
+import { useCorbado } from '@corbado/react'
 
-export default async function AdminSidebarSegment() {
-  const session = await auth()
+export default function AdminSidebarSegment() {
+  const { loading, isAuthenticated, logout } = useCorbado()
+  const session = null
 
-  return !session?.user?.role ? (
+  return !isAuthenticated ? (
     <>
       <p className={'text-center'}>
         Sign in to like plugins, leave comments, and follow authors!

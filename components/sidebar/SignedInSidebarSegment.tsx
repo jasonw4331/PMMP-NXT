@@ -1,10 +1,8 @@
 import Link from 'next/link'
 import { MdBookmarks, MdHistory, MdLibraryAdd } from 'react-icons/md'
-import { auth } from '@/auth'
 
-export default async function SignedInSidebarSegment() {
-  const session = await auth()
-  return session?.user ? (
+export default function SignedInSidebarSegment() {
+  return (
     <>
       <li>
         <Link href={'/feed/following'} className={'pl-3'} prefetch={false}>
@@ -26,5 +24,5 @@ export default async function SignedInSidebarSegment() {
         </Link>
       </li>
     </>
-  ) : null
+  )
 }
