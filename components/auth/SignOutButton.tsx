@@ -6,7 +6,7 @@ export function SignOutButton() {
   return (
     <button onClick={() => logout()}>
       <MdOutlinePerson size={24} />
-      <span>Sign In</span>
+      <span>Sign Out</span>
     </button>
   )
 }
