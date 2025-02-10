@@ -12,8 +12,8 @@ export default function ReleaseCard({
   name: string
   author: string
   tagline: string
-  download_url: string
-  icon_url: string | StaticImageData
+  download_url?: string
+  icon_url?: string | StaticImageData
 }) {
   return (
     <li
