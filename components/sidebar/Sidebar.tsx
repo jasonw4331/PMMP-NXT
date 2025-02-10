@@ -56,9 +56,9 @@ export default function Sidebar() {
           <span>Explore</span>
         </Link>
       </li>
-      <SignedInSidebarSegmentLazy />
+      {isAuthenticated && <SignedInSidebarSegmentLazy />}
       <li className={'divider pl-0 h-1'} />
-      <AdminSidebarSegmentLazy />
+      {isAuthenticated && <AdminSidebarSegmentLazy />}
       <li>
         <Link href={'/settings'} className={'pl-3'} prefetch={false}>
           <MdSettings size={24} />

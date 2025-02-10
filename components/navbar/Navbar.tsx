@@ -1,21 +1,11 @@
 import Link from 'next/link'
 import SearchForm from './SearchForm'
 import { FaWrench } from 'react-icons/fa'
-import { MdApps, MdSearch } from 'react-icons/md'
-import dynamic from 'next/dynamic'
+import { MdSearch } from 'react-icons/md'
 import React from 'react'
-import NavbarProfile from '@/components/navbar/NavbarProfile'
-import UserPopup from '@/components/popups/UserPopup'
-
-// create dynamic components
-const NotificationsBadgeLazy = dynamic(
-  () => import('@/components/navbar/NotificationsBadge')
-)
-const NotificationsPopupLazy = dynamic(
-  () => import('@/components/popups/NotificationsPopup')
-)
-const AppsPopupLazy = dynamic(() => import('@/components/popups/AppsPopup'))
-//const UserPopupLazy = dynamic(() => import('@/components/popups/UserPopup'))
+import { NavAppsDropdown } from '@/components/navbar/NavAppsDropdown'
+import { NavNotificationsDropdown } from '@/components/navbar/NavNotificationsDropdown'
+import { NavUserDropdown } from '@/components/navbar/NavUserDropdown'
 
 export default function Navbar() {
   return (
@@ -51,22 +41,9 @@ export default function Navbar() {
         <button className='btn btn-ghost btn-circle w-10 md:w-12'>
           <FaWrench size={22} />
         </button>
-        <div className='dropdown dropdown-end'>
-          <label tabIndex={0} className='btn btn-ghost btn-circle w-10 md:w-12'>
-            <MdApps size={26} />
-          </label>
-          <AppsPopupLazy />
-        </div>
-        <div className='dropdown dropdown-end'>
-          <label tabIndex={0} className='btn btn-ghost btn-circle w-10 md:w-12'>
-            <NotificationsBadgeLazy />
-          </label>
-          <NotificationsPopupLazy />
-        </div>
-        <div className='dropdown dropdown-end md:pl-2'>
-          <NavbarProfile />
-          <UserPopup />
-        </div>
+        <NavAppsDropdown />
+        <NavNotificationsDropdown />
+        <NavUserDropdown />
       </div>
     </div>
   )
