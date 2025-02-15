@@ -38,11 +38,6 @@ VALUES ('Vanilla Mechanics');
 INSERT INTO public.categories (category_name)
 VALUES ('World Generation');
 
--- Seed next_auth.users table
-INSERT INTO next_auth.users (id, name, email, "emailVerified", image)
-VALUES ('00000000-0000-0000-0000-000000000000', 'jasonw4331', 'admin@example.com', '2022-07-28 22:05:29.000000', '');
-
-
 -- Seed public.software table
 INSERT INTO public.software (id, name, tagline, description, developer_id, project_url, categories)
 VALUES (0, 'PoliteTeleports', 'A plugin which allows players to politely ask for a teleport', '',
