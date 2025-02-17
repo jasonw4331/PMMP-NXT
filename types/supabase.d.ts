@@ -1,4 +1,4 @@
-export type Json =
+﻿export type Json =
   | string
   | number
   | boolean
@@ -78,7 +78,7 @@ export type Database = {
       comments: {
         Row: {
           comment: string
-          created_at: string | null
+          created_at: string
           id: number
           software_id: number
           software_release: number
@@ -86,7 +86,7 @@ export type Database = {
         }
         Insert: {
           comment: string
-          created_at?: string | null
+          created_at?: string
           id?: number
           software_id: number
           software_release: number
@@ -94,7 +94,7 @@ export type Database = {
         }
         Update: {
           comment?: string
-          created_at?: string | null
+          created_at?: string
           id?: number
           software_id?: number
           software_release?: number
@@ -113,13 +113,6 @@ export type Database = {
             columns: ["software_release"]
             isOneToOne: false
             referencedRelation: "releases"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "comments_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -159,25 +152,25 @@ export type Database = {
       }
       notifications: {
         Row: {
-          created_at: string | null
+          created_at: string
           id: number
-          is_read: boolean | null
+          is_read: boolean
           release_id: number
           software_id: number
           user_id: string
         }
         Insert: {
-          created_at?: string | null
+          created_at?: string
           id?: number
-          is_read?: boolean | null
+          is_read?: boolean
           release_id: number
           software_id: number
           user_id: string
         }
         Update: {
-          created_at?: string | null
+          created_at?: string
           id?: number
-          is_read?: boolean | null
+          is_read?: boolean
           release_id?: number
           software_id?: number
           user_id?: string
@@ -197,13 +190,6 @@ export type Database = {
             referencedRelation: "software"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "notifications_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
         ]
       }
       profiles: {
@@ -212,28 +198,31 @@ export type Database = {
           email: string
           id: string
           image: string
+          publicize_email: boolean
           role: string
           username: string
         }
         Insert: {
           bio?: string
-          email?: string
+          email: string
           id: string
-          image?: string
+          image: string
+          publicize_email?: boolean
           role?: string
-          username?: string
+          username: string
         }
         Update: {
           bio?: string
           email?: string
           id?: string
           image?: string
+          publicize_email?: boolean
           role?: string
           username?: string
         }
         Relationships: [
           {
-            foreignKeyName: "users_role_fkey"
+            foreignKeyName: "profiles_role_fkey"
             columns: ["role"]
             isOneToOne: false
             referencedRelation: "roles"
@@ -243,23 +232,23 @@ export type Database = {
       }
       ratings: {
         Row: {
-          created_at: string | null
+          created_at: string
           id: number
-          rating_type: string | null
+          rating_type: string
           software_id: number
           user_id: string
         }
         Insert: {
-          created_at?: string | null
+          created_at?: string
           id?: number
-          rating_type?: string | null
+          rating_type: string
           software_id: number
           user_id: string
         }
         Update: {
-          created_at?: string | null
+          created_at?: string
           id?: number
-          rating_type?: string | null
+          rating_type?: string
           software_id?: number
           user_id?: string
         }
@@ -271,19 +260,12 @@ export type Database = {
             referencedRelation: "software"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "ratings_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
         ]
       }
       releases: {
         Row: {
           artifact: string
-          changelog: string | null
+          changelog: string
           extra_data: Json | null
           id: number
           release_date: string
@@ -292,7 +274,7 @@ export type Database = {
         }
         Insert: {
           artifact: string
-          changelog?: string | null
+          changelog: string
           extra_data?: Json | null
           id?: number
           release_date: string
@@ -301,7 +283,7 @@ export type Database = {
         }
         Update: {
           artifact?: string
-          changelog?: string | null
+          changelog?: string
           extra_data?: Json | null
           id?: number
           release_date?: string
@@ -337,6 +319,7 @@ export type Database = {
           description: string
           developer_id: string
           id: number
+          image: string
           name: string
           project_url: string
           tagline: string
@@ -347,6 +330,7 @@ export type Database = {
           description: string
           developer_id: string
           id?: number
+          image: string
           name: string
           project_url: string
           tagline: string
@@ -357,19 +341,12 @@ export type Database = {
           description?: string
           developer_id?: string
           id?: number
+          image?: string
           name?: string
           project_url?: string
           tagline?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "software_developer_id_fkey"
-            columns: ["developer_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       software_categories: {
         Row: {
@@ -422,13 +399,6 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "software_followers_follower_id_fkey"
-            columns: ["follower_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "software_followers_software_id_fkey"
             columns: ["software_id"]
             isOneToOne: false
@@ -456,22 +426,7 @@ export type Database = {
           follower_id?: string
           id?: number
         }
-        Relationships: [
-          {
-            foreignKeyName: "user_followers_developer_id_fkey"
-            columns: ["developer_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_followers_follower_id_fkey"
-            columns: ["follower_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
     }
     Views: {
