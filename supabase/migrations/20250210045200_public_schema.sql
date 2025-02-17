@@ -71,6 +71,7 @@ create table if not exists public.software
 (
     id           serial not null,
     name         text   not null,
+    image        text   not null,
     tagline      text   not null,
     description  text   not null,
     developer_id uuid   not null,
