@@ -13,64 +13,31 @@ create policy "None can update roles." on public.roles for update using (false);
 create policy "None can delete roles." on public.roles for delete using (false);
 
 -- Note: This table contains user data. Users should only be able to view and update their own data.
-create table public.users
+create table public.profiles
 (
-    id             uuid not null primary key, -- UUID from auth.users
-    username       text,
-    email          text,
-    image          text,
-    bio            text default '',
-    role           text default 'User',
-    constraint "users_id_fkey" foreign key ("id")
+    id              uuid not null primary key,
+    username        text,
+    email           text,
+    publicize_email boolean default false,
+    image           text,
+    bio             text    default '',
+    role            text    default 'User',
+    constraint "profiles_id_fkey" foreign key ("id")
         references auth.users (id) match simple
         on update no action
-        on delete cascade, -- if a user is deleted in auth they will also be deleted in our public table. TODO: Make sure this is recoverable within 30 days of deletion.
-    constraint users_role_fkey foreign key (role)
+        on delete cascade,                                                                            -- if a user is deleted in auth they will also be deleted in our public table. TODO: Make sure this is recoverable within 30 days of deletion.
+    constraint "profiles_role_fkey" foreign key ("role")
         references public.roles (role_name) match simple
         on update no action
         on delete no action,
     constraint check_email_format check (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$') -- Email format check
 );
-alter table public.users
+alter table public.profiles
     enable row level security;
-create policy "Can view own user data." on public.users for select using ((select auth.uid()) = id);
-create policy "Can create new user data." on public.users for insert with check ((select auth.uid()) = id);
-create policy "Can update own user data." on public.users for update using ((select auth.uid()) = id);
-create policy "Can delete own user data." on public.users for delete using ((select auth.uid()) = id);
-
--- This trigger automatically creates a user entry when a new user signs up via NextAuth.
-create function public.handle_new_user()
-    returns trigger as
-$$
-begin
-    insert into public.users (id, name, image)
-    values (new.id, new.name, new.image); -- TODO: Default Profile Image. Sof3 generator?
-    return new;
-end;
-$$ language plpgsql security DEFINER set search_path = '';
-create trigger on_auth_user_created
-    after insert
-    on auth.users
-    for each row
-execute procedure public.handle_new_user();
-
--- This trigger syncs user data between Supabase Auth and our public.users table.
-create function public.sync_user_data()
-    returns trigger as
-$$
-begin
-    update public.users
-    set name = new.name,
-        image = new.image
-    where id = new.id;
-    return new;
-end;
-$$ language plpgsql SECURITY DEFINER set search_path = '';
-create trigger on_auth_user_updated
-    after update
-    on auth.users
-    for each row
-execute procedure public.sync_user_data();
+create policy "Can view own user data." on public.profiles for select using ((select auth.uid()) = id);
+create policy "Can create new user data." on public.profiles for insert with check ((select auth.uid()) = id);
+create policy "Can update own user data." on public.profiles for update using ((select auth.uid()) = id);
+create policy "Can delete own user data." on public.profiles for delete using ((select auth.uid()) = id);
 
 -- Table: categories
 create table if not exists public.categories
@@ -112,7 +79,7 @@ create table if not exists public.software
     categories   text[] not null,
     constraint software_id_pkey primary key (id),
     constraint software_developer_id_fkey foreign key (developer_id)
-        references public.users (id) MATCH SIMPLE
+        references auth.users (id) MATCH SIMPLE
         on update no action
         on delete cascade,
     constraint software_check_categories check (validate_categories(categories))
@@ -187,9 +154,15 @@ create table if not exists public.releases
 alter table public.releases
     enable row level security;
 create policy "Anyone can view releases." on public.releases for select using (true);
-create policy "Can create new releases if a developer role." on public.releases for insert with check ((select auth.uid()) = (select developer_id from public.software where id = software_id) and (select roles from public.users where id = (select auth.uid())) = 'developer');
-create policy "Can update own releases." on public.releases for update using ((select auth.uid()) = (select developer_id from public.software where id = software_id));
-create policy "Can delete own releases." on public.releases for delete using ((select auth.uid()) = (select developer_id from public.software where id = software_id));
+create policy "Can create new releases if not a user role." on public.releases for insert with check (
+    (select auth.uid()) = (select developer_id from public.software where id = software_id) and
+    (exists (select 1 from public.profiles where profiles.id = (select auth.uid()) and profiles.role != 'User')));
+create policy "Can update own releases." on public.releases for update using ((select auth.uid()) = (select developer_id
+                                                                                                     from public.software
+                                                                                                     where id = software_id));
+create policy "Can delete own releases." on public.releases for delete using ((select auth.uid()) = (select developer_id
+                                                                                                     from public.software
+                                                                                                     where id = software_id));
 
 -- Table: user_followers
 create table if not exists public.user_followers
@@ -200,11 +173,11 @@ create table if not exists public.user_followers
     followed_at  timestamp default CURRENT_TIMESTAMP,
     constraint user_followers_id_pkey primary key (id),
     constraint user_followers_follower_id_fkey foreign key (follower_id)
-        references public.users (id) MATCH SIMPLE
+        references auth.users (id) MATCH SIMPLE
         on update no action
         on delete cascade,
     constraint user_followers_developer_id_fkey foreign key (developer_id)
-        references public.users (id) MATCH SIMPLE
+        references auth.users (id) MATCH SIMPLE
         on update no action
         on delete cascade,
     constraint user_followers_follower_id_developer_id_unique unique (follower_id, developer_id)
@@ -225,7 +198,7 @@ create table if not exists public.software_followers
     followed_at timestamp default CURRENT_TIMESTAMP,
     constraint software_followers_id_pkey primary key (id),
     constraint software_followers_follower_id_fkey foreign key (follower_id)
-        references public.users (id) MATCH SIMPLE
+        references auth.users (id) MATCH SIMPLE
         on update no action
         on delete cascade,
     constraint software_followers_software_id_fkey foreign key (software_id)
@@ -252,7 +225,7 @@ create table if not exists public.notifications
     is_read     boolean   default false,
     constraint notifications_id_pkey primary key (id),
     constraint notifications_user_id_fkey foreign key (user_id)
-        references public.users (id) MATCH SIMPLE
+        references auth.users (id) MATCH SIMPLE
         on update no action
         on delete cascade,
     constraint notifications_software_id_fkey foreign key (software_id)
@@ -294,7 +267,7 @@ create table if not exists public.ratings
     created_at  timestamp default CURRENT_TIMESTAMP,
     constraint ratings_id_pkey primary key (id),
     constraint ratings_user_id_fkey foreign key (user_id)
-        references public.users (id) MATCH SIMPLE
+        references auth.users (id) MATCH SIMPLE
         on update no action
         on delete cascade,
     constraint ratings_software_id_fkey foreign key (software_id)
@@ -324,7 +297,7 @@ create table if not exists public.comments
     created_at       timestamp default CURRENT_TIMESTAMP,
     constraint comments_id_pkey primary key (id),
     constraint comments_user_id_fkey foreign key (user_id)
-        references public.users (id) MATCH SIMPLE
+        references auth.users (id) MATCH SIMPLE
         on update no action
         on delete cascade,
     constraint comments_software_id_fkey foreign key (software_id)
