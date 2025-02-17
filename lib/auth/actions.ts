@@ -24,6 +24,6 @@ export async function getUser() {
     return { user: { name: user.fullName, userID: user.userId } }
   } catch (e) {
     // session cookie was invalid
-    redirect("/")
+    redirect("/error")
   }
 }
