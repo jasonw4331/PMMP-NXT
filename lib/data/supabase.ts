@@ -1,15 +1,22 @@
-import "server-only"
 import { createServerClient } from "@supabase/ssr"
-import { cookies } from "next/headers"
+import { cookies as nextCookies } from "next/headers"
 import { type Database } from "@/types/supabase"
+import type { SupabaseClientOptions } from "@supabase/supabase-js/dist/module/lib/types"
+import type {
+  CookieMethodsServerDeprecated,
+  CookieOptionsWithName,
+} from "@supabase/ssr/src/types"
 
-export async function createClient() {
-  const cookieStore = await cookies()
+export async function createClient(
+  url: string | null = null,
+  key: string | null = null,
+  clientOptions: object = {}
+) {
+  const cookieStore = await nextCookies()
 
-  return createServerClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
+  var saveCookiesOption = {}
+  if (url == null) {
+    saveCookiesOption = {
       cookies: {
         getAll() {
           return cookieStore.getAll()
@@ -26,6 +33,20 @@ export async function createClient() {
           }
         },
       },
+    }
+  }
+
+  // noinspection JSDeprecatedSymbols
+  return createServerClient<Database>(
+    url ?? process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    key ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      ...saveCookiesOption,
+      ...clientOptions,
+    } as SupabaseClientOptions<"public"> & {
+      cookieOptions?: CookieOptionsWithName
+      cookies: CookieMethodsServerDeprecated
+      cookieEncoding?: "raw" | "base64url"
     }
   )
 }
