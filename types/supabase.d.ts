@@ -46,27 +46,59 @@ export type Database = {
         }
         Relationships: []
       }
-      comments: {
+      commands: {
         Row: {
-          content: string
-          created_at: string | null
+          arguments: string | null
+          command: string
           id: number
-          software_id: number | null
-          user_id: string | null
+          software_id: number
         }
         Insert: {
-          content: string
-          created_at?: string | null
+          arguments?: string | null
+          command: string
           id?: number
-          software_id?: number | null
-          user_id?: string | null
+          software_id: number
         }
         Update: {
-          content?: string
+          arguments?: string | null
+          command?: string
+          id?: number
+          software_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commands_software_id_fkey"
+            columns: ["software_id"]
+            isOneToOne: false
+            referencedRelation: "software"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      comments: {
+        Row: {
+          comment: string
+          created_at: string | null
+          id: number
+          software_id: number
+          software_release: number
+          user_id: string
+        }
+        Insert: {
+          comment: string
           created_at?: string | null
           id?: number
-          software_id?: number | null
-          user_id?: string | null
+          software_id: number
+          software_release: number
+          user_id: string
+        }
+        Update: {
+          comment?: string
+          created_at?: string | null
+          id?: number
+          software_id?: number
+          software_release?: number
+          user_id?: string
         }
         Relationships: [
           {
@@ -77,97 +109,159 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "comments_software_release_fkey"
+            columns: ["software_release"]
+            isOneToOne: false
+            referencedRelation: "releases"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "comments_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
-      followers: {
+      namespaces: {
         Row: {
+          namespace: string
           software_id: number
-          user_id: string
+          software_release: number
         }
         Insert: {
+          namespace: string
           software_id: number
-          user_id: string
+          software_release: number
         }
         Update: {
+          namespace?: string
           software_id?: number
-          user_id?: string
+          software_release?: number
         }
         Relationships: [
           {
-            foreignKeyName: "followers_software_id_fkey"
+            foreignKeyName: "namespaces_software_id_fkey"
             columns: ["software_id"]
             isOneToOne: false
             referencedRelation: "software"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "followers_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: "namespaces_software_release_fkey"
+            columns: ["software_release"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "releases"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       notifications: {
         Row: {
           created_at: string | null
           id: number
-          message: string
-          user_id: string | null
+          is_read: boolean | null
+          release_id: number
+          software_id: number
+          user_id: string
         }
         Insert: {
           created_at?: string | null
           id?: number
-          message: string
-          user_id?: string | null
+          is_read?: boolean | null
+          release_id: number
+          software_id: number
+          user_id: string
         }
         Update: {
           created_at?: string | null
           id?: number
-          message?: string
-          user_id?: string | null
+          is_read?: boolean | null
+          release_id?: number
+          software_id?: number
+          user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "notifications_release_id_fkey"
+            columns: ["release_id"]
+            isOneToOne: false
+            referencedRelation: "releases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notifications_software_id_fkey"
+            columns: ["software_id"]
+            isOneToOne: false
+            referencedRelation: "software"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "notifications_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
-          }
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          bio: string
+          email: string
+          id: string
+          image: string
+          role: string
+          username: string
+        }
+        Insert: {
+          bio?: string
+          email?: string
+          id: string
+          image?: string
+          role?: string
+          username?: string
+        }
+        Update: {
+          bio?: string
+          email?: string
+          id?: string
+          image?: string
+          role?: string
+          username?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "users_role_fkey"
+            columns: ["role"]
+            isOneToOne: false
+            referencedRelation: "roles"
+            referencedColumns: ["role_name"]
+          },
         ]
       }
       ratings: {
         Row: {
-          comment: string | null
           created_at: string | null
           id: number
-          rating: number | null
-          software_id: number | null
-          user_id: string | null
+          rating_type: string | null
+          software_id: number
+          user_id: string
         }
         Insert: {
-          comment?: string | null
           created_at?: string | null
           id?: number
-          rating?: number | null
-          software_id?: number | null
-          user_id?: string | null
+          rating_type?: string | null
+          software_id: number
+          user_id: string
         }
         Update: {
-          comment?: string | null
           created_at?: string | null
           id?: number
-          rating?: number | null
-          software_id?: number | null
-          user_id?: string | null
+          rating_type?: string | null
+          software_id?: number
+          user_id?: string
         }
         Relationships: [
           {
@@ -181,31 +275,37 @@ export type Database = {
             foreignKeyName: "ratings_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       releases: {
         Row: {
+          artifact: string
           changelog: string | null
+          extra_data: Json | null
           id: number
-          released_at: string | null
-          software_id: number | null
+          release_date: string
+          software_id: number
           version: string
         }
         Insert: {
+          artifact: string
           changelog?: string | null
+          extra_data?: Json | null
           id?: number
-          released_at?: string | null
-          software_id?: number | null
+          release_date: string
+          software_id: number
           version: string
         }
         Update: {
+          artifact?: string
           changelog?: string | null
+          extra_data?: Json | null
           id?: number
-          released_at?: string | null
-          software_id?: number | null
+          release_date?: string
+          software_id?: number
           version?: string
         }
         Relationships: [
@@ -215,7 +315,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "software"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       roles: {
@@ -232,53 +332,62 @@ export type Database = {
       }
       software: {
         Row: {
-          created_at: string | null
-          created_by: string | null
-          description: string | null
+          categories: string[]
+          created_at: string
+          description: string
+          developer_id: string
           id: number
           name: string
+          project_url: string
+          tagline: string
         }
         Insert: {
-          created_at?: string | null
-          created_by?: string | null
-          description?: string | null
+          categories: string[]
+          created_at?: string
+          description: string
+          developer_id: string
           id?: number
           name: string
+          project_url: string
+          tagline: string
         }
         Update: {
-          created_at?: string | null
-          created_by?: string | null
-          description?: string | null
+          categories?: string[]
+          created_at?: string
+          description?: string
+          developer_id?: string
           id?: number
           name?: string
+          project_url?: string
+          tagline?: string
         }
         Relationships: [
           {
-            foreignKeyName: "software_created_by_fkey"
-            columns: ["created_by"]
+            foreignKeyName: "software_developer_id_fkey"
+            columns: ["developer_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       software_categories: {
         Row: {
-          category_id: string
+          category: string
           software_id: number
         }
         Insert: {
-          category_id: string
+          category: string
           software_id: number
         }
         Update: {
-          category_id?: string
+          category?: string
           software_id?: number
         }
         Relationships: [
           {
-            foreignKeyName: "software_categories_category_id_fkey"
-            columns: ["category_id"]
+            foreignKeyName: "software_categories_category_fkey"
+            columns: ["category"]
             isOneToOne: false
             referencedRelation: "categories"
             referencedColumns: ["category_name"]
@@ -289,56 +398,80 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "software"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
-      user_roles: {
+      software_followers: {
         Row: {
-          role_id: string
-          user_id: string
+          followed_at: string
+          follower_id: string
+          id: number
+          software_id: number
         }
         Insert: {
-          role_id: string
-          user_id: string
+          followed_at?: string
+          follower_id: string
+          id?: number
+          software_id: number
         }
         Update: {
-          role_id?: string
-          user_id?: string
+          followed_at?: string
+          follower_id?: string
+          id?: number
+          software_id?: number
         }
         Relationships: [
           {
-            foreignKeyName: "user_roles_role_id_fkey"
-            columns: ["role_id"]
+            foreignKeyName: "software_followers_follower_id_fkey"
+            columns: ["follower_id"]
             isOneToOne: false
-            referencedRelation: "roles"
-            referencedColumns: ["role_name"]
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "user_roles_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: "software_followers_software_id_fkey"
+            columns: ["software_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "software"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
-      users: {
+      user_followers: {
         Row: {
-          created_at: string | null
-          id: string
-          name: string | null
+          developer_id: string
+          followed_at: string
+          follower_id: string
+          id: number
         }
         Insert: {
-          created_at?: string | null
-          id?: string
-          name?: string | null
+          developer_id: string
+          followed_at?: string
+          follower_id: string
+          id?: number
         }
         Update: {
-          created_at?: string | null
-          id?: string
-          name?: string | null
+          developer_id?: string
+          followed_at?: string
+          follower_id?: string
+          id?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "user_followers_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_followers_follower_id_fkey"
+            columns: ["follower_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
@@ -352,6 +485,12 @@ export type Database = {
         Returns: {
           id: string
         }[]
+      }
+      validate_categories: {
+        Args: {
+          categories: string[]
+        }
+        Returns: boolean
       }
     }
     Enums: {
@@ -372,7 +511,7 @@ export type Tables<
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
         Database[PublicTableNameOrOptions["schema"]]["Views"])
-    : never = never
+    : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
       Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
@@ -381,14 +520,14 @@ export type Tables<
     ? R
     : never
   : PublicTableNameOrOptions extends keyof (PublicSchema["Tables"] &
-      PublicSchema["Views"])
-  ? (PublicSchema["Tables"] &
-      PublicSchema["Views"])[PublicTableNameOrOptions] extends {
-      Row: infer R
-    }
-    ? R
+        PublicSchema["Views"])
+    ? (PublicSchema["Tables"] &
+        PublicSchema["Views"])[PublicTableNameOrOptions] extends {
+        Row: infer R
+      }
+      ? R
+      : never
     : never
-  : never
 
 export type TablesInsert<
   PublicTableNameOrOptions extends
@@ -396,7 +535,7 @@ export type TablesInsert<
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
-    : never = never
+    : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I
@@ -404,12 +543,12 @@ export type TablesInsert<
     ? I
     : never
   : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
-  ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
-      Insert: infer I
-    }
-    ? I
+    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
+        Insert: infer I
+      }
+      ? I
+      : never
     : never
-  : never
 
 export type TablesUpdate<
   PublicTableNameOrOptions extends
@@ -417,7 +556,7 @@ export type TablesUpdate<
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
-    : never = never
+    : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U
@@ -425,12 +564,12 @@ export type TablesUpdate<
     ? U
     : never
   : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
-  ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
-      Update: infer U
-    }
-    ? U
+    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
+        Update: infer U
+      }
+      ? U
+      : never
     : never
-  : never
 
 export type Enums<
   PublicEnumNameOrOptions extends
@@ -438,12 +577,12 @@ export type Enums<
     | { schema: keyof Database },
   EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
     ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
-    : never = never
+    : never = never,
 > = PublicEnumNameOrOptions extends { schema: keyof Database }
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
-  ? PublicSchema["Enums"][PublicEnumNameOrOptions]
-  : never
+    ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+    : never
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
@@ -453,9 +592,10 @@ export type CompositeTypes<
     schema: keyof Database
   }
     ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
-    : never = never
+    : never = never,
 > = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
   ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
   : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
-  ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
-  : never
+    ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+    : never
+
