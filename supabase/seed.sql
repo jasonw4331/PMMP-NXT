@@ -39,8 +39,8 @@ INSERT INTO public.categories (category_name)
 VALUES ('World Generation');
 
 -- Seed public.software table
-INSERT INTO public.software (id, name, tagline, description, developer_id, project_url, categories)
-VALUES (0, 'PoliteTeleports', 'A plugin which allows players to politely ask for a teleport', '',
+INSERT INTO public.software (id, name, tagline, image, description, developer_id, project_url, categories)
+VALUES (0, 'PoliteTeleports', 'A plugin which allows players to politely ask for a teleport', '', '',
         '00000000-0000-0000-0000-000000000000', 'https://github.com/jasonw4331/PoliteTeleports',
         ARRAY ['Chat Interaction', 'Miscellaneous']);
 

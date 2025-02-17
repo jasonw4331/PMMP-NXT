@@ -1,7 +1,7 @@
 -- Table: roles
 create table public.roles
 (
-    role_name text   not null,
+    role_name text not null,
     constraint roles_role_pkey primary key (role_name)
 );
 
@@ -15,13 +15,13 @@ create policy "None can delete roles." on public.roles for delete using (false);
 -- Note: This table contains user data. Users should only be able to view and update their own data.
 create table public.profiles
 (
-    id              uuid not null primary key,
-    username        text,
-    email           text,
-    publicize_email boolean default false,
-    image           text,
-    bio             text    default '',
-    role            text    default 'User',
+    id              uuid                   not null primary key,
+    username        text                   not null,
+    email           text                   not null,
+    publicize_email boolean default false  not null,
+    image           text                   not null,
+    bio             text    default ''     not null,
+    role            text    default 'User' not null,
     constraint "profiles_id_fkey" foreign key ("id")
         references auth.users (id) match simple
         on update no action
@@ -64,20 +64,21 @@ BEGIN
                      LEFT JOIN public.categories c ON c.category_name = cat
             WHERE c.category_name IS NOT NULL);
 END;
-$$ LANGUAGE plpgsql SECURITY INVOKER set search_path = '';
+$$ LANGUAGE plpgsql SECURITY INVOKER
+                    set search_path = '';
 
 -- Table: software
 create table if not exists public.software
 (
-    id           serial not null,
-    name         text   not null,
-    image        text   not null,
-    tagline      text   not null,
-    description  text   not null,
-    developer_id uuid   not null,
-    created_at   timestamp default CURRENT_TIMESTAMP,
-    project_url  text   not null,
-    categories   text[] not null,
+    id           serial                              not null,
+    name         text                                not null,
+    image        text                                not null,
+    tagline      text                                not null,
+    description  text                                not null,
+    developer_id uuid                                not null,
+    created_at   timestamp default CURRENT_TIMESTAMP not null,
+    project_url  text                                not null,
+    categories   text[]                              not null,
     constraint software_id_pkey primary key (id),
     constraint software_developer_id_fkey foreign key (developer_id)
         references auth.users (id) MATCH SIMPLE
@@ -112,9 +113,19 @@ create table if not exists public.software_categories
 alter table public.software_categories
     enable row level security;
 create policy "Can view software categories." on public.software_categories for select using (true);
-create policy "Can create new software categories." on public.software_categories for insert with check ((select auth.uid()) = (select developer_id from public.software where id = software_id));
+create policy "Can create new software categories." on public.software_categories
+    for insert
+    with check (
+    (select auth.uid()) = (select developer_id
+                           from public.software
+                           where id = software_id));
 create policy "None can update software categories." on public.software_categories for update using (false);
-create policy "Can delete own software categories." on public.software_categories for delete using ((select auth.uid()) = (select developer_id from public.software where id = software_id));
+create policy "Can delete own software categories." on public.software_categories
+    for delete
+    using (
+    (select auth.uid()) = (select developer_id
+                           from public.software
+                           where id = software_id));
 
 
 -- This trigger automatically registers software categories when a new software entry is created.
@@ -128,22 +139,24 @@ BEGIN
 
     RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY INVOKER set search_path = '';
+$$ LANGUAGE plpgsql SECURITY INVOKER
+                    set search_path = '';
 CREATE TRIGGER after_new_software
-    AFTER INSERT ON public.software
+    AFTER INSERT
+    ON public.software
     FOR EACH ROW
 EXECUTE FUNCTION register_software_categories();
 
 -- Table: releases
 create table if not exists public.releases
 (
-    id            serial  not null,
-    software_id   integer not null,
-    version       text    not null,
-    changelog     text,
-    artifact      text    not null,
-    release_date  date    not null,
-    extra_data    jsonb,
+    id           serial  not null,
+    software_id  integer not null,
+    version      text    not null,
+    changelog    text    not null,
+    artifact     text    not null,
+    release_date date    not null,
+    extra_data   jsonb,
     constraint releases_id_pkey primary key (id),
     constraint releases_software_id_fkey foreign key (software_id)
         references public.software (id)
@@ -155,23 +168,36 @@ create table if not exists public.releases
 alter table public.releases
     enable row level security;
 create policy "Anyone can view releases." on public.releases for select using (true);
-create policy "Can create new releases if not a user role." on public.releases for insert with check (
-    (select auth.uid()) = (select developer_id from public.software where id = software_id) and
-    (exists (select 1 from public.profiles where profiles.id = (select auth.uid()) and profiles.role != 'User')));
-create policy "Can update own releases." on public.releases for update using ((select auth.uid()) = (select developer_id
-                                                                                                     from public.software
-                                                                                                     where id = software_id));
-create policy "Can delete own releases." on public.releases for delete using ((select auth.uid()) = (select developer_id
-                                                                                                     from public.software
-                                                                                                     where id = software_id));
+create policy "Can create new releases if not a user role." on public.releases
+    for insert
+    with check (
+    (select auth.uid()) = (select developer_id
+                           from public.software
+                           where id = software_id) and
+    (
+        exists (select 1
+                from public.profiles
+                where profiles.id = (select auth.uid())
+                  and profiles.role != 'User')
+        ));
+create policy "Can update own releases." on public.releases
+    for update
+    using ((select auth.uid()) = (select developer_id
+                                  from public.software
+                                  where id = software_id));
+create policy "Can delete own releases." on public.releases
+    for delete
+    using ((select auth.uid()) = (select developer_id
+                                  from public.software
+                                  where id = software_id));
 
 -- Table: user_followers
 create table if not exists public.user_followers
 (
-    id           serial not null,
-    follower_id  uuid   not null,
-    developer_id uuid   not null,
-    followed_at  timestamp default CURRENT_TIMESTAMP,
+    id           serial                              not null,
+    follower_id  uuid                                not null,
+    developer_id uuid                                not null,
+    followed_at  timestamp default CURRENT_TIMESTAMP not null,
     constraint user_followers_id_pkey primary key (id),
     constraint user_followers_follower_id_fkey foreign key (follower_id)
         references auth.users (id) MATCH SIMPLE
@@ -193,10 +219,10 @@ create policy "Can unfollow other users." on public.user_followers for delete us
 -- Table: software_followers
 create table if not exists public.software_followers
 (
-    id          serial  not null,
-    follower_id uuid    not null,
-    software_id integer not null,
-    followed_at timestamp default CURRENT_TIMESTAMP,
+    id          serial                              not null,
+    follower_id uuid                                not null,
+    software_id integer                             not null,
+    followed_at timestamp default CURRENT_TIMESTAMP not null,
     constraint software_followers_id_pkey primary key (id),
     constraint software_followers_follower_id_fkey foreign key (follower_id)
         references auth.users (id) MATCH SIMPLE
@@ -218,12 +244,12 @@ create policy "Can unfollow software releases." on public.software_followers for
 -- Table: notifications
 create table if not exists public.notifications
 (
-    id          serial  not null,
-    user_id     uuid    not null,
-    software_id integer not null,
-    release_id  integer not null,
-    created_at  timestamp default CURRENT_TIMESTAMP,
-    is_read     boolean   default false,
+    id          serial                              not null,
+    user_id     uuid                                not null,
+    software_id integer                             not null,
+    release_id  integer                             not null,
+    created_at  timestamp default CURRENT_TIMESTAMP not null,
+    is_read     boolean   default false             not null,
     constraint notifications_id_pkey primary key (id),
     constraint notifications_user_id_fkey foreign key (user_id)
         references auth.users (id) MATCH SIMPLE
@@ -252,20 +278,22 @@ BEGIN
     DELETE FROM public.notifications WHERE is_read = TRUE AND created_at < NOW() - INTERVAL '30 days';
     RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY INVOKER set search_path = '';
+$$ LANGUAGE plpgsql SECURITY INVOKER
+                    set search_path = '';
 CREATE TRIGGER delete_old_read_notifications_trigger
-    AFTER INSERT ON notifications -- TODO: debounce trigger on update is_read
+    AFTER INSERT
+    ON notifications -- TODO: debounce trigger on update is_read
     FOR EACH ROW
 EXECUTE FUNCTION delete_old_notifications();
 
 -- Table: ratings
 create table if not exists public.ratings
 (
-    id          serial  not null,
-    user_id     uuid    not null,
-    software_id integer not null,
-    rating_type char,
-    created_at  timestamp default CURRENT_TIMESTAMP,
+    id          serial                              not null,
+    user_id     uuid                                not null,
+    software_id integer                             not null,
+    rating_type char                                not null,
+    created_at  timestamp default CURRENT_TIMESTAMP not null,
     constraint ratings_id_pkey primary key (id),
     constraint ratings_user_id_fkey foreign key (user_id)
         references auth.users (id) MATCH SIMPLE
@@ -290,12 +318,12 @@ create policy "Can delete own ratings." on public.ratings for delete using ((sel
 -- Table: comments
 create table if not exists public.comments
 (
-    id               serial  not null,
-    user_id          uuid    not null,
-    software_id      integer not null,
-    software_release integer not null,
-    comment          text    not null,
-    created_at       timestamp default CURRENT_TIMESTAMP,
+    id               serial                              not null,
+    user_id          uuid                                not null,
+    software_id      integer                             not null,
+    software_release integer                             not null,
+    comment          text                                not null,
+    created_at       timestamp default CURRENT_TIMESTAMP not null,
     constraint comments_id_pkey primary key (id),
     constraint comments_user_id_fkey foreign key (user_id)
         references auth.users (id) MATCH SIMPLE
@@ -338,10 +366,30 @@ create table if not exists public.namespaces
 
 alter table public.namespaces
     enable row level security;
-create policy "Can view own namespaces." on public.namespaces for select using ((select auth.uid()) = (select developer_id from public.software where id = software_id));
-create policy "Can create new namespaces." on public.namespaces for insert with check ((select auth.uid()) = (select developer_id from public.software where id = software_id));
-create policy "Can update own namespaces." on public.namespaces for update using ((select auth.uid()) = (select developer_id from public.software where id = software_id));
-create policy "Can delete own namespaces." on public.namespaces for delete using ((select auth.uid()) = (select developer_id from public.software where id = software_id));
+create policy "Can view own namespaces." on public.namespaces
+    for select
+    using ((select auth.uid()) =
+           (select developer_id
+            from public.software
+            where id = software_id));
+create policy "Can create new namespaces." on public.namespaces
+    for insert
+    with check ((select auth.uid()) =
+                (select developer_id
+                 from public.software
+                 where id = software_id));
+create policy "Can update own namespaces." on public.namespaces
+    for update
+    using ((select auth.uid()) =
+           (select developer_id
+            from public.software
+            where id = software_id));
+create policy "Can delete own namespaces." on public.namespaces
+    for delete
+    using ((select auth.uid()) =
+           (select developer_id
+            from public.software
+            where id = software_id));
 
 -- Table: commands
 create table if not exists public.commands
@@ -360,7 +408,24 @@ create table if not exists public.commands
 
 alter table public.commands
     enable row level security;
-create policy "Can view own commands." on public.commands for select using ((select auth.uid()) = (select developer_id from public.software where id = software_id));
-create policy "Can create new commands." on public.commands for insert with check ((select auth.uid()) = (select developer_id from public.software where id = software_id));
-create policy "Can update own commands." on public.commands for update using ((select auth.uid()) = (select developer_id from public.software where id = software_id));
-create policy "Can delete own commands." on public.commands for delete using ((select auth.uid()) = (select developer_id from public.software where id = software_id));
+create policy "Can view own commands." on public.commands
+    for select
+    using ((select auth.uid()) = (select developer_id
+                                  from public.software
+                                  where id = software_id));
+create policy "Can create new commands." on public.commands
+    for insert
+    with check ((select auth.uid()) =
+                (select developer_id
+                 from public.software
+                 where id = software_id));
+create policy "Can update own commands." on public.commands
+    for update
+    using ((select auth.uid()) = (select developer_id
+                                  from public.software
+                                  where id = software_id));
+create policy "Can delete own commands." on public.commands
+    for delete
+    using ((select auth.uid()) = (select developer_id
+                                  from public.software
+                                  where id = software_id));
