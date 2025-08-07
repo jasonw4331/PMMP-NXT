@@ -3,7 +3,8 @@ import { z } from 'zod';
 import type { Context } from '@/server/trpc/context';
 import webpush from 'web-push';
 import { env } from '@/lib/env';
-import { prisma } from '@/server/utils/prisma';
+import { db } from '@/server/db';
+import { pushSubscriptions } from '@/server/db/schema';
 
 const t = initTRPC.context<Context>().create();
 
@@ -20,16 +21,20 @@ export const pushRouter = t.router({
     .output(z.object({ success: z.boolean() }))
     .mutation(async ({ input, ctx }) => {
       if (!ctx.session?.user) throw new Error('Unauthorized');
-      await prisma.pushSubscription.upsert({
-        where: { endpoint: input.endpoint },
-        update: { p256dh: input.keys.p256dh, auth: input.keys.auth, userId: ctx.session.user.id },
-        create: {
+      const existing = await db.query.pushSubscriptions.findFirst({ where: (t, { eq }) => eq(t.endpoint, input.endpoint) });
+      if (existing) {
+        await db.update(pushSubscriptions)
+          .set({ p256dh: input.keys.p256dh, auth: input.keys.auth, userId: ctx.session.user.id })
+          .where((t, { eq }) => eq(t.endpoint, input.endpoint));
+      } else {
+        await db.insert(pushSubscriptions).values({
+          id: `ps_${Math.random().toString(36).slice(2)}`,
           endpoint: input.endpoint,
           p256dh: input.keys.p256dh,
           auth: input.keys.auth,
           userId: ctx.session.user.id,
-        },
-      });
+        });
+      }
       return { success: true };
     }),
 
@@ -38,7 +43,7 @@ export const pushRouter = t.router({
     .output(z.object({ success: z.boolean() }))
     .mutation(async ({ input, ctx }) => {
       if (!ctx.session?.user) throw new Error('Unauthorized');
-      await prisma.pushSubscription.deleteMany({ where: { endpoint: input.endpoint, userId: ctx.session.user.id } });
+      await db.delete(pushSubscriptions).where((t, { and, eq }) => and(eq(t.endpoint, input.endpoint), eq(t.userId, ctx.session.user.id)));
       return { success: true };
     }),
 });

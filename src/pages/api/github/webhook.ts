@@ -1,8 +1,24 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import crypto from 'crypto';
-import { prisma } from '@/server/utils/prisma';
+import { db } from '@/server/db';
+import { productVersions } from '@/server/db/schema';
 
-function verifySignature(secret: string, payload: string, signature: string): boolean {
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
+function buffer(readable: any) {
+  return new Promise<Buffer>((resolve, reject) => {
+    const chunks: any[] = [];
+    readable.on('data', (chunk: any) => chunks.push(Buffer.from(chunk)));
+    readable.on('end', () => resolve(Buffer.concat(chunks)));
+    readable.on('error', reject);
+  });
+}
+
+function verifySignature(secret: string, payload: Buffer, signature: string): boolean {
   const hmac = crypto.createHmac('sha256', secret);
   const digest = `sha256=${hmac.update(payload).digest('hex')}`;
   return crypto.timingSafeEqual(Buffer.from(digest), Buffer.from(signature));
@@ -11,39 +27,34 @@ function verifySignature(secret: string, payload: string, signature: string): bo
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const secret = process.env.GITHUB_WEBHOOK_SECRET ?? '';
   const sig = req.headers['x-hub-signature-256'];
-  const rawBody = JSON.stringify(req.body);
-  if (!sig || Array.isArray(sig) || !verifySignature(secret, rawBody, sig)) {
+  const raw = await buffer(req);
+  if (!sig || Array.isArray(sig) || !verifySignature(secret, raw, sig)) {
     return res.status(401).json({ error: 'Invalid signature' });
   }
-  if (req.headers['x-github-event'] === 'release' && req.body.action === 'published') {
-    const repoFull = req.body.repository.full_name as string; // owner/repo
-    const tag = req.body.release.tag_name as string;
-    const asset = req.body.release.assets?.[0];
-    const product = await prisma.product.findFirst({ where: { githubRepo: repoFull } });
+  const body = JSON.parse(raw.toString('utf8'));
+  if (req.headers['x-github-event'] === 'release' && body.action === 'published') {
+    const repoFull = body.repository.full_name as string;
+    const tag = body.release.tag_name as string;
+    const asset = body.release.assets?.[0];
+    const product = await db.query.products.findFirst({ where: (t, { eq }) => eq(t.githubRepo, repoFull) });
     if (product) {
-      await prisma.productVersion.upsert({
-        where: { productId_versionTag: { productId: product.id, versionTag: tag } },
-        update: {},
-        create: {
+      const exists = await db.query.productVersions.findFirst({
+        where: (t, { and, eq }) => and(eq(t.productId, product.id), eq(t.versionTag, tag)),
+      });
+      if (!exists) {
+        await db.insert(productVersions).values({
+          id: `v_${Math.random().toString(36).slice(2)}`,
           productId: product.id,
           versionTag: tag,
-          changelog: req.body.release.body ?? '',
+          changelog: body.release.body ?? '',
           fileUrl: asset?.browser_download_url ?? '',
           fileSizeBytes: asset?.size ?? 0,
           isReleased: true,
-          releaseDate: req.body.release.published_at ? new Date(req.body.release.published_at) : new Date(),
+          releaseDate: body.release.published_at ? new Date(body.release.published_at) : new Date(),
           source: 'GITHUB',
-        },
-      });
+        });
+      }
     }
   }
   return res.json({ ok: true });
 }
-
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: '1mb',
-    },
-  },
-};

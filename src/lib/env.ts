@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
 const envSchema = z.object({
-  DATABASE_URL: z.string().url(),
-  REDIS_URL: z.string().url(),
+  DATABASE_URL: z.string().min(1),
+  REDIS_URL: z.string().min(1),
   NEXTAUTH_SECRET: z.string().min(16),
   NEXT_PUBLIC_APP_URL: z.string().url(),
   GITHUB_CLIENT_ID: z.string().optional(),

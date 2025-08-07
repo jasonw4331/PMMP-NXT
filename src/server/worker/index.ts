@@ -1,7 +1,7 @@
 import { Worker } from 'bullmq';
 import { env } from '@/lib/env';
 import webpush from 'web-push';
-import { prisma } from '@/server/utils/prisma';
+import { db } from '@/server/db';
 
 webpush.setVapidDetails(env.NEXT_PUBLIC_APP_URL, env.VAPID_PUBLIC_KEY ?? '', env.VAPID_PRIVATE_KEY ?? '');
 
@@ -9,7 +9,7 @@ const worker = new Worker(
   'notifications',
   async (job) => {
     const { userId, title, body, url } = job.data as { userId: string; title: string; body: string; url: string };
-    const subs = await prisma.pushSubscription.findMany({ where: { userId } });
+    const subs = await db.query.pushSubscriptions.findMany({ where: (t, { eq }) => eq(t.userId, userId) });
     await Promise.all(
       subs.map((s) =>
         webpush.sendNotification(

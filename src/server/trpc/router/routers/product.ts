@@ -1,8 +1,9 @@
 import { initTRPC } from '@trpc/server';
 import { z } from 'zod';
 import type { Context } from '@/server/trpc/context';
-import { prisma } from '@/server/utils/prisma';
+import { db } from '@/server/db';
 import { Octokit } from '@octokit/rest';
+import { products, productVersions } from '@/server/db/schema';
 
 const t = initTRPC.context<Context>().create();
 
@@ -67,30 +68,13 @@ export const productRouter = t.router({
     .input(ProductFilterInput)
     .output(z.object({ items: z.array(ProductSummary), nextCursor: z.string().nullish() }))
     .query(async ({ input }) => {
-      const items = await prisma.product.findMany({
-        where: {
-          AND: [
-            input.categoryId ? { categoryId: input.categoryId } : {},
-            input.query
-              ? {
-                  OR: [
-                    { title: { contains: input.query, mode: 'insensitive' } },
-                    { description: { contains: input.query, mode: 'insensitive' } },
-                  ],
-                }
-              : {},
-          ],
-        },
-        orderBy: { createdAt: 'desc' },
-        take: input.limit + 1,
-        cursor: input.cursor ? { id: input.cursor } : undefined,
-        select: {
-          id: true,
-          slug: true,
-          title: true,
-          description: true,
-          ratingAvg: true,
-        },
+      const items = await db.query.products.findMany({
+        where: (t, { and, eq }) => and(
+          input.categoryId ? eq(t.categoryId, input.categoryId) : undefined,
+        ),
+        columns: { id: true, slug: true, title: true, description: true, ratingAvg: true },
+        limit: input.limit + 1,
+        offset: 0,
       });
       let nextCursor: string | null = null;
       if (items.length > input.limit) {
@@ -104,20 +88,11 @@ export const productRouter = t.router({
     .input(z.object({ slug: z.string() }))
     .output(ProductDetail)
     .query(async ({ input }) => {
-      const prod = await prisma.product.findUnique({
-        where: { slug: input.slug },
-        include: {
+      const prod = await db.query.products.findFirst({
+        where: (t, { eq }) => eq(t.slug, input.slug),
+        with: {
           versions: {
-            where: { isReleased: true },
-            orderBy: { releaseDate: 'desc' },
-            select: {
-              id: true,
-              versionTag: true,
-              changelog: true,
-              fileUrl: true,
-              isReleased: true,
-              releaseDate: true,
-            },
+            where: (t, { eq }) => eq(t.isReleased, true),
           },
         },
       });
@@ -134,7 +109,7 @@ export const productRouter = t.router({
           changelog: v.changelog,
           fileUrl: v.fileUrl,
           isReleased: v.isReleased,
-          releaseDate: v.releaseDate,
+          releaseDate: v.releaseDate ?? null,
         })),
       };
     }),
@@ -144,18 +119,17 @@ export const productRouter = t.router({
     .output(z.object({ id: z.string() }))
     .mutation(async ({ input, ctx }) => {
       if (!ctx.session?.user) throw new Error('Unauthorized');
-      const created = await prisma.product.create({
-        data: {
-          slug: input.slug,
-          title: input.title,
-          description: input.description,
-          categoryId: input.categoryId,
-          githubRepo: input.githubRepo,
-          developerId: ctx.session.user.id,
-        },
-        select: { id: true },
+      const id = `p_${Math.random().toString(36).slice(2)}`;
+      await db.insert(products).values({
+        id,
+        slug: input.slug,
+        title: input.title,
+        description: input.description,
+        categoryId: input.categoryId,
+        githubRepo: input.githubRepo,
+        developerId: ctx.session.user.id,
       });
-      return created;
+      return { id };
     }),
 
   edit: t.procedure
@@ -163,15 +137,14 @@ export const productRouter = t.router({
     .output(z.object({ success: z.boolean() }))
     .mutation(async ({ input, ctx }) => {
       if (!ctx.session?.user) throw new Error('Unauthorized');
-      await prisma.product.update({
-        where: { id: input.id },
-        data: {
+      await db.update(products)
+        .set({
           title: input.title ?? undefined,
           description: input.description ?? undefined,
           isPublished: input.isPublished ?? undefined,
-          categoryId: input.categoryId === undefined ? undefined : input.categoryId,
-        },
-      });
+          categoryId: input.categoryId === undefined ? undefined : input.categoryId ?? null,
+        })
+        .where((t, { eq }) => eq(t.id, input.id));
       return { success: true };
     }),
 
@@ -180,7 +153,7 @@ export const productRouter = t.router({
     .output(z.object({ success: z.boolean() }))
     .mutation(async ({ input, ctx }) => {
       if (!ctx.session?.user) throw new Error('Unauthorized');
-      await prisma.product.delete({ where: { id: input.id } });
+      await db.delete(products).where((t, { eq }) => eq(t.id, input.id));
       return { success: true };
     }),
 
@@ -189,7 +162,7 @@ export const productRouter = t.router({
     .output(z.object({ imported: z.boolean(), releaseCount: z.number() }))
     .mutation(async ({ input }) => {
       const octokit = new Octokit({
-        auth: process.env.GITHUB_TOKEN, // optional; document secure storage
+        auth: process.env.GITHUB_TOKEN,
       });
       const releases = await octokit.repos.listReleases({
         owner: input.owner,
@@ -200,10 +173,12 @@ export const productRouter = t.router({
       for (const r of releases.data) {
         const tag = r.tag_name ?? 'unknown';
         const asset = r.assets[0];
-        await prisma.productVersion.upsert({
-          where: { productId_versionTag: { productId: input.productId, versionTag: tag } },
-          update: {},
-          create: {
+        const exists = await db.query.productVersions.findFirst({
+          where: (t, { and, eq }) => and(eq(t.productId, input.productId), eq(t.versionTag, tag)),
+        });
+        if (!exists) {
+          await db.insert(productVersions).values({
+            id: `v_${Math.random().toString(36).slice(2)}`,
             productId: input.productId,
             versionTag: tag,
             changelog: r.body ?? '',
@@ -212,9 +187,9 @@ export const productRouter = t.router({
             isReleased: true,
             releaseDate: r.published_at ? new Date(r.published_at) : new Date(),
             source: 'GITHUB',
-          },
-        });
-        count++;
+          });
+          count++;
+        }
       }
       return { imported: true, releaseCount: count };
     }),

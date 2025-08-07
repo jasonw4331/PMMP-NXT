@@ -2,7 +2,7 @@ import type { NextAuthOptions } from 'next-auth';
 import GitHubProvider from 'next-auth/providers/github';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { env } from '@/lib/env';
-import { prisma } from '@/server/utils/prisma';
+import { db } from '@/server/db';
 import { verifyRegistrationResponseForUser, verifyAuthenticationResponseForUser } from '@/server/auth/passkeys/webauthn';
 
 export const authOptions: NextAuthOptions = {
@@ -24,13 +24,13 @@ export const authOptions: NextAuthOptions = {
         const kind = parsed?.type;
         if (kind === 'attestation') {
           const result = await verifyRegistrationResponseForUser(parsed.data);
-          const user = await prisma.user.findUnique({ where: { id: result.userId } });
-          return user ? { id: user.id, email: user.email } as any : null;
+          const user = await db.query.users.findFirst({ where: (t, { eq }) => eq(t.id, result.userId) });
+          return user ? ({ id: user.id, email: user.email } as any) : null;
         }
         if (kind === 'assertion') {
           const result = await verifyAuthenticationResponseForUser(parsed.data);
-          const user = await prisma.user.findUnique({ where: { id: result.userId } });
-          return user ? { id: user.id, email: user.email } as any : null;
+          const user = await db.query.users.findFirst({ where: (t, { eq }) => eq(t.id, result.userId) });
+          return user ? ({ id: user.id, email: user.email } as any) : null;
         }
         return null;
       },

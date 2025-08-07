@@ -10,10 +10,11 @@ import type {
   GenerateAuthenticationOptionsOpts,
   VerifyAuthenticationResponseOpts,
 } from '@simplewebauthn/server';
-import { prisma } from '@/server/utils/prisma';
+import { db } from '@/server/db';
+import { users, authenticators } from '@/server/db/schema';
 import { storeChallenge, getAndDeleteChallenge } from './challengeStore';
 
-const rpID = process.env.RP_ID || 'localhost';
+const rpID = process.env.RP_ID || new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000').hostname;
 const rpName = 'Freeshare';
 
 export async function generateRegistrationOptionsForUser(userId: string | null) {
@@ -46,21 +47,21 @@ export async function verifyRegistrationResponseForUser(attestationResponse: any
   if (!verification.verified || !verification.registrationInfo) {
     throw new Error('Invalid attestation');
   }
-  const { credentialPublicKey, credentialID, counter, credentialDeviceType, credentialBackedUp } = verification.registrationInfo;
-  const user = await prisma.user.upsert({
-    where: { email: `anon-${credentialID.toString('base64url')}@example.com` },
-    update: {},
-    create: { email: `anon-${credentialID.toString('base64url')}@example.com` },
+  const { credentialPublicKey, credentialID, counter } = verification.registrationInfo;
+  const anonEmail = `anon-${credentialID.toString('base64url')}@example.com`;
+  const existing = await db.query.users.findFirst({ where: (t, { eq }) => eq(t.email, anonEmail) });
+  const userId = existing?.id ?? `u_${Math.random().toString(36).slice(2)}`;
+  if (!existing) {
+    await db.insert(users).values({ id: userId, email: anonEmail });
+  }
+  await db.insert(authenticators).values({
+    id: `a_${Math.random().toString(36).slice(2)}`,
+    userId,
+    credentialID: Buffer.from(credentialID).toString('base64url'),
+    publicKey: Buffer.from(credentialPublicKey).toString('base64url'),
+    counter,
   });
-  await prisma.authenticator.create({
-    data: {
-      userId: user.id,
-      credentialID: Buffer.from(credentialID).toString('base64url'),
-      publicKey: Buffer.from(credentialPublicKey).toString('base64url'),
-      counter,
-    },
-  });
-  return { success: true, userId: user.id };
+  return { success: true, userId };
 }
 
 export async function generateAuthenticationOptionsForUser() {
@@ -79,7 +80,7 @@ export async function verifyAuthenticationResponseForUser(assertionResponse: any
   if (!expectedChallenge) throw new Error('Challenge expired');
 
   const credentialID = assertionResponse?.id;
-  const authr = await prisma.authenticator.findUnique({ where: { credentialID } });
+  const authr = await db.query.authenticators.findFirst({ where: (t, { eq }) => eq(t.credentialID, credentialID) });
   if (!authr) throw new Error('Unknown authenticator');
 
   const verifyOpts: VerifyAuthenticationResponseOpts = {
@@ -99,10 +100,7 @@ export async function verifyAuthenticationResponseForUser(assertionResponse: any
   const verification = await verifyAuthenticationResponse(verifyOpts);
   if (!verification.verified || !verification.authenticationInfo) throw new Error('Invalid assertion');
 
-  await prisma.authenticator.update({
-    where: { id: authr.id },
-    data: { counter: verification.authenticationInfo.newCounter },
-  });
+  await db.update(authenticators).set({ counter: verification.authenticationInfo.newCounter }).where((t, { eq }) => eq(t.id, authr.id));
 
   return { success: true, userId: authr.userId };
 }
