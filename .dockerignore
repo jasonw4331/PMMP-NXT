@@ -1,8 +1,12 @@
-.env
-Dockerfile
-.dockerignore
 node_modules
 npm-debug.log
-README.md
+Dockerfile*
+.dockerignore
 .next
+out
+dist
 .git
+.gitignore
+.vscode
+.env
+coverage

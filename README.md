@@ -1,61 +1,60 @@
-# PMMP-NXT
+# Freeshare – Free Software Distribution Platform
 
-A Poggit replacement written with NextJS 15, Supabase, and Corbado
+Self-hostable Next.js 14+ TypeScript app (App Router) for publishing and discovering freely distributed software, with GitHub integration, WebAuthn passkeys, tRPC + Zod, PWA, and push notifications.
 
-## TODO List
+## Stack
+- Next.js 14 (App Router), TypeScript, Tailwind CSS
+- next-auth (JWT) with GitHub OAuth + custom WebAuthn Credentials provider
+- tRPC + Zod, Prisma (Postgres), Redis (ioredis)
+- @simplewebauthn/server & browser
+- BullMQ worker + web-push (VAPID)
+- PWA via next-pwa
+- Vitest + Testing Library
 
-### Backend
+## Quick start (Docker Compose)
+1. Copy `.env.example` to `.env` and fill values.
+2. Generate VAPID keys: `npx web-push generate-vapid-keys`.
+3. Build & run: `docker compose up --build -d`.
+4. Run migrations: `docker compose exec app npx prisma migrate deploy`.
+5. Seed data: `docker compose exec app npm run prisma:seed`.
+6. Visit `${NEXT_PUBLIC_APP_URL}`.
 
-- [ ] Passkey-first user authentication
-    - [ ] Sync to postgres
-- [ ] postgres db design
-- [ ] Notifications via PWA
-- [ ] GitHub Application
-    - [ ] GitHub Action for phpstan testing
-    - [ ] GitHub Action for posting github releases onto GitHub
-    - [ ] GitHub Action for posting release information to site
+Adminer: http://localhost:8080 (server: postgres, user: postgres, pass: postgres, db: freeshare).
 
-### Frontend
+## Development
+- Install deps: `npm ci`
+- Start dev server: `npm run dev`
+- Generate Prisma client & Zod: `npm run prisma:generate`
+- Run tests: `npm test`
 
-- [ ] Passkey user authentication
-    - [ ] Username-based logins
-    - [ ] Email-based logins
-- [ ] TSX React Pages
-    - [x] Front page
-    - [ ] Rules, TOS, and Privacy Policy Pages
-    - [ ] Plugin Publication Flow
-    - [x] RSS feeds
-    - [x] Search Results
-    - [ ] User profiles
-    - [ ] Plugin release
-        - [ ] Comments system
-        - [ ] Recommended Plugins
-    - [ ] Plugin review Page
-    - [ ] Developer tools page
-        - [ ] GitHub Action installation flow
-        - [ ] Plugin release version management
-    - [ ] Settings Pages
-        - [ ] Profile settings
-        - [ ] Cookie settings
-        - [ ] Privacy options
-    - [ ] Admin Pages
-        - [ ] Admin tools
-        - [ ] Backend metrics
-        - [ ] Grafana?
-    - [ ] Help Pages
-        - [ ] FAQ
-        - [ ] PocketMine related FAQ
-        - [ ] API Documentation
-- [ ] TSX React Components
-    - [x] Navbar
-    - [x] Sidebar
-        - [x] Admin segment
-    - [x] Popups
-        - [x] User menu
-        - [x] Notifications
-        - [x] Related websites
-    - [x] Page Cards
-        - [x] Release Cards
-        - [ ] Review Cards
-        - [x] Search Results
-        - [ ] Recommendations
+## Auth and sessions
+- next-auth JWT sessions; cookies are `Secure` and `SameSite=Lax` in prod.
+- GitHub OAuth handled by built-in provider (link accounts in session UI).
+- WebAuthn: client requests options via tRPC; performs `navigator.credentials.create/get` via `@simplewebauthn/browser`; sends payload to custom Credentials provider (`id: 'webauthn'`) with `{ type: 'attestation'|'assertion', data: ... }`.
+- Server verifies with `@simplewebauthn/server` comparing against Redis-stored `expectedChallenge` (removed on use) and persists authenticators, updating `counter` to prevent replay.
+
+## tRPC + Zod
+- Client hooks via `createTRPCNext` in `src/lib/trpc.ts` (SSR disabled by default). Enable SSR per-route if needed.
+- Zod inputs/outputs declared and exported in each router; consider using `prisma-zod-generator` to mirror Prisma models.
+
+## GitHub integration
+- Link GitHub via next-auth provider.
+- Import releases via `product.importFromGitHub` or webhook at `src/pages/api/github/webhook.ts` (X-Hub-Signature-256 verified).
+
+## Push notifications & PWA
+- Subscriptions stored per user; worker sends notifications on new versions.
+- Service worker/manifest provided by next-pwa; ensure HTTPS in production for push.
+
+## Prisma data model
+Matches spec: `User`, `Authenticator`, `Product`, `ProductVersion`, `Review`, `Category`, `Tag`, `ProductTag`, `PushSubscription`, `Follow`, `PersistedChallenge` (optionally replace with Redis-only storage).
+
+## Security notes
+- Do not store plaintext GitHub tokens; if needed, encrypt at rest (see `ENCRYPTION_SECRET`).
+- Webhook signatures verified. Ensure strong `NEXTAUTH_SECRET`.
+- Persist and validate WebAuthn `signCount` (counter) to mitigate replay.
+
+## Worker
+- Built to `dist/worker/index.js`. Compose service `worker` runs it.
+
+## Make it your own
+- Update UI, add role checks via `ctx.session` in tRPC, and consider enabling SSR for product pages.

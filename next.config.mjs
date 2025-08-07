@@ -1,71 +1,24 @@
-/**
- * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially useful
- * for Docker builds.
- */
-import "./src/env.js";
-import nextMDX from "@next/mdx";
-import remarkGfm from "remark-gfm";
-import withSerwistInit from "@serwist/next";
+import withPWA from 'next-pwa';
 
-// You may want to use a more robust revision to cache
-// files more efficiently.
-// A viable option is `git rev-parse HEAD`.
-const revision = crypto.randomUUID();
+const isProd = process.env.NODE_ENV === 'production';
 
-const withSerwist = withSerwistInit({
-    cacheOnNavigation: true,
-    swSrc: "@/app/sw.ts",
-    swDest: "public/sw.js",
-    additionalPrecacheEntries: [{url: "/~offline", revision}],
+const withPwa = withPWA({
+  dest: 'public',
+  disable: !isProd,
 });
 
-const withMDX = nextMDX({
-    remarkPlugins: [remarkGfm],
-});
-
-/** @type {import("next").NextConfig} */
-const config = {
-    async headers() {
-        return [
-            {
-                source: '/(.*)',
-                headers: [
-                    {
-                        key: 'X-Content-Type-Options',
-                        value: 'nosniff',
-                    },
-                    {
-                        key: 'X-Frame-Options',
-                        value: 'DENY',
-                    },
-                    {
-                        key: 'Referrer-Policy',
-                        value: 'strict-origin-when-cross-origin',
-                    },
-                ],
-            },
-            {
-                source: '/sw.js',
-                headers: [
-                    {
-                        key: 'Content-Type',
-                        value: 'application/javascript; charset=utf-8',
-                    },
-                    /*{
-                        key: 'Cache-Control',
-                        value: 'no-cache, no-store, must-revalidate',
-                    },*/
-                    {
-                        key: 'Content-Security-Policy',
-                        value: "default-src 'self'; script-src 'self'",
-                    },
-                ],
-            },
-        ]
-    },
-    reactStrictMode: true,
-    swcMinify: true,
-    output: "standalone",
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  output: 'standalone',
+  experimental: {
+    appDir: true,
+  },
+  images: {
+    remotePatterns: [
+      { protocol: 'https', hostname: 'avatars.githubusercontent.com' },
+    ],
+  },
 };
 
-export default withSerwist(withMDX(config));
+export default withPwa(nextConfig);
